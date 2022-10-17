@@ -1,8 +1,18 @@
-import React from 'react';
-
+import React, { useState, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import Modal from './Modal';
 
-export default function MindMapCard() {
+export default function MindMapCard({ title, author, access, headNode }) {
+  const [modalRight, setModalRight] = useState(0);
+  const [modalBottom, setModalBottom] = useState(0);
+  const dotBotton = useRef();
+
+  useEffect(() => {
+    setModalRight(dotBotton.current.getBoundingClientRect().right);
+    setModalBottom(dotBotton.current.getBoundingClientRect().bottom);
+  }, [dotBotton]);
+
   return (
     <Card>
       <Thumbnail
@@ -20,11 +30,22 @@ export default function MindMapCard() {
           <div className="infoTitle">Title</div>
           <div className="infoAuthor">Created by </div>
         </ShortInfo>
-        <SettingButton>•••</SettingButton>
+        <Option>
+          <AccessIcon>Public</AccessIcon>
+          <DotButton ref={dotBotton}>•••</DotButton>
+        </Option>
       </Footer>
+      {Modal({ right: modalRight, bottom: modalBottom })}
     </Card>
   );
 }
+
+MindMapCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  author: PropTypes.string.isRequired,
+  access: PropTypes.string.isRequired,
+  headNode: PropTypes.string.isRequired,
+};
 
 const Card = styled.div`
   display: flex;
@@ -62,7 +83,7 @@ const DocIcon = styled.div`
 const ShortInfo = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 65%;
   justify-content: flex-start;
 
   .infoTitle {
@@ -74,7 +95,22 @@ const ShortInfo = styled.div`
   }
 `;
 
-const SettingButton = styled.div`
+const Option = styled.div`
+  width: 25%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const AccessIcon = styled.div`
+  border-radius: 10%;
+  background-color: #02bb02;
+  border: 2px solid brown;
+  font-size: 80%;
+  color: black;
+`;
+
+const DotButton = styled.div`
   cursor: pointer;
   align-self: center;
   border-radius: 10%;
