@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
-import Button from "../shared/Button";
-import MindMapInfo from "../MindMapInfo";
+import Button from '../shared/Button';
+import MindMapInfo from '../MindMapInfo';
 
 export default function Header() {
   return (

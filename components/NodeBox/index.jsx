@@ -1,5 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import * as d3 from "d3";
+import React, { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+
+import * as d3 from 'd3';
 
 function makeDraggable(ref, position, setPosition) {
   let translateX = position.x;
@@ -7,21 +9,20 @@ function makeDraggable(ref, position, setPosition) {
 
   const handleDrag = d3
     .drag()
-    .subject(function () {
-      const me = d3.select(this);
+    .subject(() => {
       return { x: translateX, y: translateY };
     })
-    .on("drag", function (d) {
+    .on('drag', d => {
       const me = d3.select(this);
       translateX = d.x;
       translateY = d.y;
-      setPosition((prev) => ({
+      setPosition(prev => ({
         ...prev,
         x: d.x,
         y: d.y,
       }));
-      me.attr("x", translateX);
-      me.attr("y", translateY);
+      me.attr('x', translateX);
+      me.attr('y', translateY);
     });
 
   handleDrag(ref);
@@ -48,10 +49,10 @@ function ChildRectLine({ parentPosition }) {
       childPosition.y + childPosition.height / 2,
     ];
     line
-      .attr("x1", parentCenter[0])
-      .attr("y1", parentCenter[1])
-      .attr("x2", childCenter[0])
-      .attr("y2", childCenter[1]);
+      .attr('x1', parentCenter[0])
+      .attr('y1', parentCenter[1])
+      .attr('x2', childCenter[0])
+      .attr('y2', childCenter[1]);
   }, [parentPosition, childPosition]);
 
   return (
@@ -64,7 +65,7 @@ function ChildRectLine({ parentPosition }) {
         position={childPosition}
         setPosition={setChildPosition}
       />
-      <line ref={lineRef} style={{ stroke: "red" }} />
+      <line ref={lineRef} style={{ stroke: 'red' }} />
     </>
   );
 }
@@ -89,7 +90,7 @@ export default function Test() {
   });
 
   return (
-    <svg style={{ border: "1px solid" }} width={500} height={500}>
+    <svg style={{ border: '1px solid' }} width={500} height={500}>
       <Rect
         x={parentPosition.x}
         y={parentPosition.y}
@@ -102,3 +103,16 @@ export default function Test() {
     </svg>
   );
 }
+
+ChildRectLine.propTypes = {
+  parentPosition: PropTypes.node.isRequired,
+};
+
+Rect.propTypes = {
+  x: PropTypes.node.isRequired,
+  y: PropTypes.node.isRequired,
+  width: PropTypes.node.isRequired,
+  height: PropTypes.node.isRequired,
+  position: PropTypes.node.isRequired,
+  setPosition: PropTypes.node.isRequired,
+};

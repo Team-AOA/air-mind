@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import CommentInputBox from "../CommentInputBox";
-import CommentList from "../CommentList";
+import CommentInputBox from '../CommentInputBox';
+import CommentList from '../CommentList';
 
 export default function CommentBox() {
   return (
