@@ -1,44 +1,46 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 
+import Image from 'next/image';
 import styled from 'styled-components';
-
+import useDarkMode from 'use-dark-mode';
 import Button from '../shared/Button';
 import MindMapInfo from '../MindMapInfo';
 import GlobalStyle from '../shared/GlobalStyle';
 
 export default function Header() {
-  const router = useRouter();
+  const darkMode = useDarkMode(true);
 
+  const router = useRouter();
   return (
     <HeaderWrapper>
       <GlobalStyle />
-      <HeaderButton
-        onClick={() => {
-          router.push('/');
-        }}
-      >
-        Home
-      </HeaderButton>
+      <Image src="/images/air_mind_logo.png" width="80px" height="80px" />
+      <HeaderButton onClick={darkMode.toggle}>air-mind</HeaderButton>
       <MindMapInfo />
-      <HeaderButton
-        onClick={() => {
-          router.push('/my-works');
-        }}
-      >
-        My Work
-      </HeaderButton>
-      <HeaderButton
-        onClick={() => {
-          router.push('/login');
-        }}
-      >
-        Login
-      </HeaderButton>
-      <HeaderButton>Logout</HeaderButton>
+      <HeaderRightSide>
+        <HeaderButton
+          onClick={() => {
+            router.push('/my-works');
+          }}
+        >
+          My Work
+        </HeaderButton>
+        <HeaderButton
+          onClick={() => {
+            router.push('/login');
+          }}
+        >
+          Login
+        </HeaderButton>
+      </HeaderRightSide>
     </HeaderWrapper>
   );
 }
+
+const HeaderRightSide = styled.div`
+  width: 40%;
+`;
 
 const HeaderWrapper = styled.div`
   position: relative;
@@ -48,17 +50,17 @@ const HeaderWrapper = styled.div`
   align-items: center;
   height: 80px;
   width: 100%;
-  background-color: royalBlue;
+  background-color: ${({ theme }) => theme.text.primary};
 `;
 
 const HeaderButton = styled(Button)`
   border: none;
-  color: #2c2c2c;
   cursor: pointer;
-  width: 10rem;
+  width: 8rem;
   height: 3rem;
-  color: white;
-  background-color: royalBlue;
   font-family: 'Open Sans', sans-serif;
   font-size: 20px;
+  margin: 0;
+  background-color: ${({ theme }) => theme.text.primary};
+  color: ${({ theme }) => theme.bg.primary};
 `;

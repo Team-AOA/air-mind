@@ -45,21 +45,21 @@ const NavBarWrapper = styled.div`
   height: 80px;
   width: 90%;
   margin: 30px;
-  background-color: white;
-  border-bottom: 5px solid royalBlue;
+  border-bottom: 3px solid ${({ theme }) => theme.text.primary};
 `;
 
 const NavBarButton = styled(Button)`
-  background-color: royalBlue
-  color: white;
   width: 10rem;
   height: 3rem;
   font-size: 20px;
   margin: 0px;
-  &:hover{
-    transition: all .3s ease-out;
-    background-color: royalBlue;
-    color: white;
+  border-color: ${({ theme }) => theme.bg.primary};
+  color: ${({ theme }) => theme.text.primary};
+  background-color: ${({ theme }) => theme.bg.primary};
+  &:hover {
+    transition: all 0.3s ease-out;
+    background-color: #2c2c2c;
+    color: royalBlue;
     transition: 250ms;
-}
+  }
 `;
