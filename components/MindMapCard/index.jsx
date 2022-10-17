@@ -4,21 +4,29 @@ import styled from 'styled-components';
 
 export default function MindMapCard() {
   return (
-    <Wrapper>
-      <Body>스냅샷</Body>
+    <Card>
+      <Thumbnail
+        src="https://nulab.com/static/6127951160c31e3ed297bb12d2e2201e/2d083/mindmap.png"
+        alt="mindmapThumb"
+      />
       <Footer>
-        <div>내용</div>
-        <ButtonWrapper>
-          <MindMapPublicChangeButton>퍼블릭 전환</MindMapPublicChangeButton>
-          <MindMapDeleteButton>삭제</MindMapDeleteButton>
-        </ButtonWrapper>
-        <SettingButton>버튼</SettingButton>
+        <DocIcon>
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/177/177256.png"
+            alt="docIcon"
+          />
+        </DocIcon>
+        <ShortInfo>
+          <div className="infoTitle">Title</div>
+          <div className="infoAuthor">Created by </div>
+        </ShortInfo>
+        <SettingButton>•••</SettingButton>
       </Footer>
-    </Wrapper>
+    </Card>
   );
 }
 
-const Wrapper = styled.div`
+const Card = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -26,10 +34,7 @@ const Wrapper = styled.div`
   border: 1px solid black;
 `;
 
-const Body = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const Thumbnail = styled.img`
   width: 100%;
   height: 90%;
 `;
@@ -38,24 +43,40 @@ const Footer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 100%;
   height: 10%;
+  padding: 3%;
 `;
 
-const SettingButton = styled.button`
-  font: inherit;
-  padding: 0.5rem 1.5rem;
-  border: 1px solid white;
-  color: white;
-  background-color: royalBlue;
-  cursor: pointer;
+const DocIcon = styled.div`
+  width: 15%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 50%;
+  }
 `;
 
-const ButtonWrapper = styled.div`
+const ShortInfo = styled.div`
   display: flex;
   flex-direction: column;
+  width: 70%;
+  justify-content: flex-start;
+
+  .infoTitle {
+    overflow: hidden;
+  }
+  .infoAuthor {
+    font-size: 80%;
+    overflow: hidden;
+  }
 `;
 
-const MindMapPublicChangeButton = styled.button``;
-
-const MindMapDeleteButton = styled.button``;
+const SettingButton = styled.div`
+  cursor: pointer;
+  align-self: center;
+  border-radius: 10%;
+  background-color: #eeeeee;
+`;
