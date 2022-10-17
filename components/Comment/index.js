@@ -10,7 +10,7 @@ export default function Comment() {
         <CommentAuthorName>사용자이름</CommentAuthorName>
         <CommentTimeStamp>댓글작성시간</CommentTimeStamp>
       </CommentHeader>
-      <CommentContent>댓글내용:목업은 생각보다 오래걸립니다</CommentContent>
+      <CommentContent>댓글내용</CommentContent>
     </CommentWrapper>
   );
 }

@@ -2,13 +2,6 @@ import React from "react";
 
 import styled from "styled-components";
 
-// import Header from "../Layout/Header/Header";
-// import CommentBox from "../CommentBox/CommentBox";
-// import NodeBox from "../NodeBox/NodeBox";
-// import NodeDetail from "../NodeDetail";
-// import NodeButtonBox from "../NodeBox/NodeButtonBox";
-// import SearchBar from "../SearchBar";
-
 import Header from "../Header";
 import CommentBox from "../CommentBox";
 import NodeBox from "../NodeBox"

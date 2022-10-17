@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 
-// 좌표값을 변경해주는 이벤트 함수
 function makeDraggable(ref, position, setPosition) {
   let translateX = position.x;
   let translateY = position.y;
@@ -28,7 +27,6 @@ function makeDraggable(ref, position, setPosition) {
   handleDrag(ref);
 }
 
-// 자식 사각형 + 선
 function ChildRectLine({ parentPosition }) {
   const lineRef = useRef();
 

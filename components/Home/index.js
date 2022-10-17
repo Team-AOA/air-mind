@@ -2,9 +2,6 @@ import React from "react";
 
 import styled from "styled-components";
 
-// import Header from "../Layout/Header/Header";
-// import NavBar from "../Layout/NavBar/NavBar";
-// import MindMapCard from "../MindMapCard";
 import Header from "../Header";
 import NavBar from "../Navbar";
 import MindMapCard from "../MindMapCard";

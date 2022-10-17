@@ -1,11 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-// import LoginButton from "./LoginButton";
-// import LogoutButton from "./LogoutButton";
-// import MainPageButton from "./MainPageButton";
-// import MindMapInfo from "./MindMapInfo";
-// import MyWorkButton from "./MyWorkButton";
 import Button from "../shared/Button";
 import MindMapInfo from "../MindMapInfo";
 

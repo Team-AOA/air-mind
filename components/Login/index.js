@@ -2,8 +2,6 @@ import React from "react";
 
 import styled from "styled-components";
 
-// import Header from "../Layout/Header/Header";
-// import Button from "../Layout/Button";
 import Header from "../Header";
 import Button from "../shared/Button";
 

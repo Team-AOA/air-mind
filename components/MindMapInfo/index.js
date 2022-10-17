@@ -18,9 +18,11 @@ const MindMapInfoWrapper = styled.div`
   display: flex;
   flex-direction: row;
 `;
+
 const MindMapTitle = styled.div`
   color: white;
 `;
+
 const MindMapPublicSelect = styled.select``;
 const MindMapPublicOption = styled.option``;
 const MindMapPrivateOption = styled.option``;

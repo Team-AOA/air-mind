@@ -2,9 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 import Button from "../shared/Button";
-// import CreateButton from "./CreateButton";
-// import PublicButton from "./PublicButton";
-// import YourWorkButton from "./YourWorkButton";
 
 export default function NavBar() {
   return (
