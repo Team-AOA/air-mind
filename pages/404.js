@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const NotFound = () => {
+function NotFoundPage() {
   return (
     <Container>
       <Title>404</Title>
@@ -9,7 +9,8 @@ const NotFound = () => {
       <span>the page you are looking for not avaible!</span>
     </Container>
   );
-};
+}
+
 const Container = styled.div`
   display: flex;
   -webkit-box-pack: center;
@@ -25,8 +26,8 @@ const Title = styled.h1`
 `;
 
 const Line = styled.div`
-  border-bottom: 1px solid white;
   width: 30%;
+  border-bottom: 1px solid white;
 `;
 
-export default NotFound;
+export default NotFoundPage;
