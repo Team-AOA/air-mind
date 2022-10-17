@@ -2,7 +2,7 @@ import React from "react";
 
 import styled from "styled-components";
 
-import Comment from "./Comment";
+import Comment from "../Comment";
 
 export default function CommentList() {
   return (
