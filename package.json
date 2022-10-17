@@ -6,11 +6,20 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "pre-commit": "lint-staged && rm -rf .git/hooks && ln -s ../.husky .git/hooks",
+    "prepare": "husky install && husky add .husky/pre-commit 'npm run pre-commit'"
+  },
+  "lint-staged": {
+    "**/*.{js, jsx, html, css, json}": [
+      "prettier --write .",
+      "eslint --fix .",
+      "git add ."
+    ]
   },
   "dependencies": {
     "d3": "^7.6.1",
     "next": "12.3.1",
+    "prop-types": "^15.8.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "^6.4.2",
@@ -18,7 +27,16 @@
     "styled-components": "^5.3.6"
   },
   "devDependencies": {
-    "eslint": "8.25.0",
-    "eslint-config-next": "12.3.1"
+    "eslint": "^8.25.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-next": "12.3.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.10",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3"
   }
 }
