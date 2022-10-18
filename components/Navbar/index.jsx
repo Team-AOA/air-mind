@@ -1,26 +1,68 @@
 import React from 'react';
+
+import { useRouter } from 'next/router';
+
 import styled from 'styled-components';
 
-import Button from '../shared/Button';
+import { NavBarButton } from '../shared/Button';
 
 export default function NavBar() {
+  const router = useRouter();
+
   return (
     <NavBarWrapper>
-      <Button>CreateButton</Button>
-      <Button>PublicButton</Button>
-      <Button>YourWorkButton</Button>
+      <NavBarCreateButton
+        onClick={() => {
+          router.push('/mind-map/:{nodeId}');
+        }}
+      >
+        Create
+      </NavBarCreateButton>
+      <NavBarPublicButton
+        onClick={() => {
+          router.push('/');
+        }}
+      >
+        Public
+      </NavBarPublicButton>
+      <NavBarMyWorkButton
+        onClick={() => {
+          router.push('/my-works');
+        }}
+      >
+        My Work
+      </NavBarMyWorkButton>
     </NavBarWrapper>
   );
 }
 
 const NavBarWrapper = styled.div`
-  position: relative;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  position: sticky;
   justify-content: start;
-  height: 80px;
+  align-items: center;
+  top: 100px;
+  background-color: white;
+  border-bottom: 3px solid #2c2c2c;
+  height: 100px;
   width: 90%;
-  margin: 30px;
-  background-color: royalBlue;
+`;
+
+const NavBarCreateButton = styled(NavBarButton)`
+  &:hover {
+    color: #e64c82;
+  }
+`;
+
+const NavBarPublicButton = styled(NavBarButton)`
+  &:hover {
+    color: #82c91e;
+  }
+`;
+
+const NavBarMyWorkButton = styled(NavBarButton)`
+  &:hover {
+    color: #fab004;
+  }
 `;

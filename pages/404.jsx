@@ -6,7 +6,7 @@ function NotFoundPage() {
     <Container>
       <Title>404</Title>
       <Line />
-      <h2>Look like you&#39;re lost</h2>
+      <h2>Look like you`re lost</h2>
       <span>the page you are looking for not avaible!</span>
     </Container>
   );
