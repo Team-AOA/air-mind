@@ -20,36 +20,36 @@ const MindMapInfoWrapper = styled.div`
 `;
 
 const MindMapTitle = styled.div`
-  color: white;
   width: 100%;
+  color: white;
   font-size: 20px;
 `;
 
 const MindMapPublicSelect = styled.select`
   width: 100%;
   height: 35px;
+  border: none;
   background: white;
   color: gray;
-  padding-left: 5px;
   font-size: 14px;
-  border: none;
+  padding-left: 5px;
   margin-left: 10px;
 `;
 
 const MindMapPublicOption = styled.option`
-  color: black;
-  background: white;
   display: flex;
+  background: white;
+  padding: 0px 2px 1px;
+  color: black;
   white-space: pre;
   min-height: 20px;
-  padding: 0px 2px 1px;
 `;
 
 const MindMapPrivateOption = styled.option`
-  color: black;
-  background: white;
   display: flex;
+  background: white;
+  padding: 0px 2px 1px;
+  color: black;
   white-space: pre;
   min-height: 20px;
-  padding: 0px 2px 1px;
 `;

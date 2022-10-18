@@ -1,15 +1,11 @@
 import React from 'react';
 
 import PropTypes from 'prop-types';
+
 import '../styles/globals.css';
-import Providers from '../components/DarkMode/Provider';
 
 function MyApp({ Component, pageProps }) {
-  return (
-    <Providers>
-      <Component {...pageProps} />;
-    </Providers>
-  );
+  return <Component {...pageProps} />;
 }
 
 export default MyApp;

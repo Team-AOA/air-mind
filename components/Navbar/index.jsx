@@ -11,55 +11,79 @@ export default function NavBar() {
 
   return (
     <NavBarWrapper>
-      <NavBarButton
+      <NavBarCreateButton
         onClick={() => {
           router.push('/mind-map/:{nodeId}');
         }}
       >
         Create
-      </NavBarButton>
-      <NavBarButton
+      </NavBarCreateButton>
+      <NavBarPublicButton
         onClick={() => {
           router.push('/');
         }}
       >
         Public
-      </NavBarButton>
-      <NavBarButton
+      </NavBarPublicButton>
+      <NavBarMyWorkButton
         onClick={() => {
           router.push('/my-works');
         }}
       >
         My Work
-      </NavBarButton>
+      </NavBarMyWorkButton>
     </NavBarWrapper>
   );
 }
 
 const NavBarWrapper = styled.div`
-  position: relative;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  position: sticky;
   justify-content: start;
-  height: 80px;
+  align-items: center;
+  top: 100px;
+  background-color: white;
+  border-bottom: 3px solid #2c2c2c;
+  height: 100px;
   width: 90%;
-  margin: 30px;
-  border-bottom: 3px solid ${({ theme }) => theme.text.primary};
 `;
 
-const NavBarButton = styled(Button)`
+const NavBarCreateButton = styled(Button)`
   width: 10rem;
   height: 3rem;
   font-size: 20px;
+  color: #2c2c2c;
   margin: 0px;
-  border-color: ${({ theme }) => theme.bg.primary};
-  color: ${({ theme }) => theme.text.primary};
-  background-color: ${({ theme }) => theme.bg.primary};
   &:hover {
     transition: all 0.3s ease-out;
-    background-color: #2c2c2c;
-    color: royalBlue;
+    color: #e64c82;
+    transition: 250ms;
+  }
+`;
+
+const NavBarPublicButton = styled(Button)`
+  width: 10rem;
+  height: 3rem;
+  font-size: 20px;
+  color: #2c2c2c;
+  margin: 0px;
+  &:hover {
+    transition: all 0.3s ease-out;
+    color: #82c91e;
+    transition: 250ms;
+  }
+`;
+
+const NavBarMyWorkButton = styled(Button)`
+  width: 10rem;
+  height: 3rem;
+  font-size: 20px;
+  color: #2c2c2c;
+  margin: 0px;
+  &:hover {
+    transition: all 0.3s ease-out;
+    color: #fab004;
     transition: 250ms;
   }
 `;
