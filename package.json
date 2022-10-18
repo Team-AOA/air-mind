@@ -17,6 +17,7 @@
     ]
   },
   "dependencies": {
+    "@babel/eslint-parser": "^7.19.1",
     "d3": "^7.6.1",
     "next": "12.3.1",
     "prop-types": "^15.8.1",
