@@ -4,7 +4,10 @@ import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 import Node from '../Node';
 
-export default function NodeChildren({ parentNodePosition }) {
+export default function NodeChildren({
+  parentNodePosition,
+  // childNodeInitialPosition,
+}) {
   const lineRef = useRef();
 
   const [childNodePosition, setChildNodePosition] = useState({
@@ -13,6 +16,13 @@ export default function NodeChildren({ parentNodePosition }) {
     width: parentNodePosition.width,
     height: parentNodePosition.height,
   });
+
+  // const [childNodePosition, setChildNodePosition] = useState({
+  //   x: childNodeInitialPosition.x,
+  //   y: childNodeInitialPosition.y,
+  //   width: childNodeInitialPosition.width,
+  //   height: childNodeInitialPosition.height,
+  // })
 
   useEffect(() => {
     const line = d3.select(lineRef.current);
