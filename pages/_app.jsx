@@ -10,6 +10,6 @@ function MyApp({ Component, pageProps }) {
 export default MyApp;
 
 MyApp.propTypes = {
-  Component: PropTypes.node.isRequired,
-  pageProps: PropTypes.node.isRequired,
+  Component: PropTypes.oneOfType([PropTypes.func, PropTypes.object]).isRequired,
+  pageProps: PropTypes.oneOfType([PropTypes.func, PropTypes.object]).isRequired,
 };

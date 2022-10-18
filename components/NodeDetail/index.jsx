@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export default function NodeDetail() {
   return (
     <NodeDetailWrapper>
       <NodeDetailForm>
         <NodeTitleLabel>Title</NodeTitleLabel>
-        <NodeTitleInput></NodeTitleInput>
+        <NodeTitleInput />
         <NodeDescriptionLabel>Description</NodeDescriptionLabel>
-        <NodeDescriptionTextArea></NodeDescriptionTextArea>
+        <NodeDescriptionTextArea />
         <ImageUpload>Drag and Drop</ImageUpload>
         <DeleteButton>Delete button</DeleteButton>
       </NodeDetailForm>

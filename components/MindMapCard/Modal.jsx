@@ -3,23 +3,28 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 
-export default function Modal({ right, bottom }) {
-  console.log(right, bottom);
+export default function Modal({ right, bottom, setModalShow }) {
+  const modalShowOff = () => {
+    setModalShow(false);
+  };
+
   return (
-    <ModalBackground>
+    <>
+      <ModalBackground onClick={modalShowOff} />
       <ModalContents style={{ right, bottom }}>
-        <div>Open</div>
-        <div>Rename</div>
-        <div>Make public</div>
-        <div>Delete</div>
+        <div className="options">Open</div>
+        <div className="options">Rename</div>
+        <div className="options">Make public</div>
+        <div className="options">Delete</div>
       </ModalContents>
-    </ModalBackground>
+    </>
   );
 }
 
 Modal.propTypes = {
   right: PropTypes.number.isRequired,
   bottom: PropTypes.number.isRequired,
+  setModalShow: PropTypes.func.isRequired,
 };
 
 const ModalContents = styled.div`
@@ -27,14 +32,27 @@ const ModalContents = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 1;
-  background-color: red;
+  background-color: #dddddd;
+  z-index: 2;
 
-  div:hover,
-  div:focus,
-  div:active {
+  .options {
+    text-align: center;
+    width: 100%;
+  }
+
+  .options:hover {
     cursor: pointer;
+    border-radius: 10%;
+    background-color: #bbbbbb;
+    color: #fab004;
   }
 `;
 
-const ModalBackground = styled.div``;
+const ModalBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+`;

@@ -4,17 +4,32 @@ import styled from 'styled-components';
 import Modal from './Modal';
 
 export default function MindMapCard({ title, author, access, headNode }) {
+  console.log(title, author, access, headNode);
   const [modalRight, setModalRight] = useState(0);
   const [modalBottom, setModalBottom] = useState(0);
-  const dotBotton = useRef();
+  const [modalShow, setModalShow] = useState(false);
+  const card = useRef();
+  const dotButton = useRef();
 
   useEffect(() => {
-    setModalRight(dotBotton.current.getBoundingClientRect().right);
-    setModalBottom(dotBotton.current.getBoundingClientRect().bottom);
-  }, [dotBotton]);
+    setModalRight(
+      card.current.getBoundingClientRect().right -
+        dotButton.current.getBoundingClientRect().right +
+        dotButton.current.getBoundingClientRect().width / 2,
+    );
+    setModalBottom(
+      card.current.getBoundingClientRect().bottom -
+        dotButton.current.getBoundingClientRect().bottom +
+        dotButton.current.getBoundingClientRect().height / 2,
+    );
+  }, [dotButton]);
+
+  const modalShowOn = () => {
+    setModalShow(!modalShow);
+  };
 
   return (
-    <Card>
+    <Card ref={card}>
       <Thumbnail
         src="https://nulab.com/static/6127951160c31e3ed297bb12d2e2201e/2d083/mindmap.png"
         alt="mindmapThumb"
@@ -32,13 +47,25 @@ export default function MindMapCard({ title, author, access, headNode }) {
         </ShortInfo>
         <Option>
           <AccessIcon>Public</AccessIcon>
-          <DotButton ref={dotBotton}>•••</DotButton>
+          <DotButton ref={dotButton} onClick={modalShowOn}>
+            •••
+          </DotButton>
         </Option>
       </Footer>
-      {Modal({ right: modalRight, bottom: modalBottom })}
+      <TestModule />
+      {modalShow &&
+        Modal({ right: modalRight, bottom: modalBottom, setModalShow })}
     </Card>
   );
 }
+
+const TestModule = styled.div`
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  left: 0;
+  top: 0;
+`;
 
 MindMapCard.propTypes = {
   title: PropTypes.string.isRequired,
@@ -48,6 +75,7 @@ MindMapCard.propTypes = {
 };
 
 const Card = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;

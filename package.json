@@ -1,6 +1,6 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "air-mind",
+  "version": "0.4.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,7 +10,7 @@
     "prepare": "husky install && husky add .husky/pre-commit 'npm run pre-commit'"
   },
   "lint-staged": {
-    "**/*.{js, jsx, html, css, json}": [
+    "**/*.{js,jsx,html,css}": [
       "prettier --write .",
       "eslint --fix .",
       "git add ."
