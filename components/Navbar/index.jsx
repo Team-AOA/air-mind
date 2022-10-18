@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 import styled from 'styled-components';
 
-import Button from '../shared/Button';
+import { NavBarButton } from '../shared/Button';
 
 export default function NavBar() {
   const router = useRouter();
@@ -49,41 +49,20 @@ const NavBarWrapper = styled.div`
   width: 90%;
 `;
 
-const NavBarCreateButton = styled(Button)`
-  width: 10rem;
-  height: 3rem;
-  font-size: 20px;
-  color: #2c2c2c;
-  margin: 0px;
+const NavBarCreateButton = styled(NavBarButton)`
   &:hover {
-    transition: all 0.3s ease-out;
     color: #e64c82;
-    transition: 250ms;
   }
 `;
 
-const NavBarPublicButton = styled(Button)`
-  width: 10rem;
-  height: 3rem;
-  font-size: 20px;
-  color: #2c2c2c;
-  margin: 0px;
+const NavBarPublicButton = styled(NavBarButton)`
   &:hover {
-    transition: all 0.3s ease-out;
     color: #82c91e;
-    transition: 250ms;
   }
 `;
 
-const NavBarMyWorkButton = styled(Button)`
-  width: 10rem;
-  height: 3rem;
-  font-size: 20px;
-  color: #2c2c2c;
-  margin: 0px;
+const NavBarMyWorkButton = styled(NavBarButton)`
   &:hover {
-    transition: all 0.3s ease-out;
     color: #fab004;
-    transition: 250ms;
   }
 `;

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 
 import styled from 'styled-components';
-import Button from '../shared/Button';
+import { HeaderButton } from '../shared/Button';
 import MindMapInfo from '../MindMapInfo';
 
 export default function Header() {
@@ -51,54 +51,20 @@ const HeaderWrapper = styled.div`
   background-color: #2c2c2c;
 `;
 
-const HeaderHomeButton = styled(Button)`
-  border: none;
-  cursor: pointer;
-  width: 8rem;
-  height: 3rem;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 20px;
-  margin: 0;
-  background-color: #2c2c2c;
-  color: #eff0f5;
+const HeaderHomeButton = styled(HeaderButton)`
   &:hover {
-    transition: all 0.3s ease-out;
-    background-color: #2c2c2c;
     color: #e64c82;
-    transition: 250ms;
   }
 `;
 
-const HeaderMyWorkButton = styled(Button)`
-  border: none;
-  cursor: pointer;
-  width: 8rem;
-  height: 3rem;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 20px;
-  margin: 0;
-  background-color: #2c2c2c;
-  color: #eff0f5;
+const HeaderMyWorkButton = styled(HeaderButton)`
   &:hover {
-    transition: all 0.3s ease-out;
     color: #82c91e;
-    transition: 250ms;
   }
 `;
 
-const HeaderLoginButton = styled(Button)`
-  border: none;
-  cursor: pointer;
-  width: 8rem;
-  height: 3rem;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 20px;
-  margin: 0;
-  background-color: #2c2c2c;
-  color: #eff0f5;
+const HeaderLoginButton = styled(HeaderButton)`
   &:hover {
-    transition: all 0.3s ease-out;
     color: #fab004;
-    transition: 250ms;
   }
 `;
