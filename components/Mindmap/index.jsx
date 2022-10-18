@@ -1,37 +1,45 @@
-import React from 'react';
-
+import React, { useEffect, useRef } from 'react';
+import * as d3 from 'd3';
 import styled from 'styled-components';
 
 import Header from '../Header';
-import CommentBox from '../CommentBox';
 import NodeBox from '../NodeBox';
 import SearchBar from '../SearchBar';
-import NodeDetail from '../NodeDetail';
-import NodeButtonBox from '../NodeButtonBox';
 
 export default function MindMap() {
+  const svgRef = useRef();
+  const groupRef = useRef();
+
+  useEffect(() => {
+    const group = d3.select(groupRef.current);
+
+    const handleZoom = e => group.attr('transform', e.transform);
+
+    const zoom = d3.zoom().on('zoom', handleZoom);
+
+    d3.select('svg').call(zoom);
+  }, []);
+
   return (
-    <MindMapWrapper>
+    <Container>
       <Header />
       <SearchBar />
-      <MindMapBody>
-        <CommentBox />
-        <NodeBox />
-        <NodeButtonBox />
-        <NodeDetail />
-      </MindMapBody>
-    </MindMapWrapper>
+      <SVG ref={svgRef}>
+        <g ref={groupRef}>
+          <NodeBox />
+        </g>
+      </SVG>
+    </Container>
   );
 }
 
-const MindMapWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
+const Container = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background-color: #f5f5f5;
 `;
 
-const MindMapBody = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin: 10px;
+const SVG = styled.svg`
+  width: 100%;
+  height: 100%;
 `;
