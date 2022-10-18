@@ -1,11 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import dynamic from 'next/dynamic';
 import styled from 'styled-components';
-
-const Nodes = dynamic(() => import('../Nodes'), {
-  ssr: false,
-});
+import Nodes from '../Nodes';
 
 export default function NodeContainer() {
   const svgRef = useRef();

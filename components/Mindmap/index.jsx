@@ -1,8 +1,12 @@
 import React from 'react';
+import dynamic from 'next/dynamic';
 
 import Header from '../Header';
 import SearchBar from '../SearchBar';
-import NodeContainer from '../NodeContainer';
+
+const NodeContainer = dynamic(() => import('../NodeContainer'), {
+  ssr: false,
+});
 
 export default function MindMap() {
   return (
