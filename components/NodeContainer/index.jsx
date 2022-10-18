@@ -1,10 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
+import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 
-import NodeBox from '../NodeBox';
+const Nodes = dynamic(() => import('../Nodes'), {
+  ssr: false,
+});
 
-export default function MindMapWrapper() {
+export default function NodeContainer() {
   const svgRef = useRef();
   const groupRef = useRef();
 
@@ -22,7 +25,7 @@ export default function MindMapWrapper() {
     <Container>
       <SVG ref={svgRef}>
         <g ref={groupRef}>
-          <NodeBox />
+          <Nodes />
         </g>
       </SVG>
     </Container>
