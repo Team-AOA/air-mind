@@ -12,8 +12,14 @@ export default function Header() {
 
   return (
     <HeaderWrapper>
-      <Image src="/images/air_mind_logo.png" width="80px" height="80px" />
-      <HeaderHomeButton>air-mind</HeaderHomeButton>
+      <HeaderLeftSide
+        onClick={() => {
+          router.push('/');
+        }}
+      >
+        <Image src="/images/air_mind_logo.png" width="80px" height="80px" />
+        <HeaderHomeButton>air-mind</HeaderHomeButton>
+      </HeaderLeftSide>
       <MindMapInfo />
       <HeaderRightSide>
         <HeaderMyWorkButton
@@ -35,17 +41,26 @@ export default function Header() {
   );
 }
 
+const HeaderLeftSide = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: auto;
+`;
+
 const HeaderRightSide = styled.div`
-  width: 40%;
+  margin-left: auto;
+  width: 20%;
 `;
 
 const HeaderWrapper = styled.div`
   position: sticky;
-  top: 0px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  top: 0px;
+  z-index: 1;
   height: 100px;
   width: 100%;
   background-color: #2c2c2c;

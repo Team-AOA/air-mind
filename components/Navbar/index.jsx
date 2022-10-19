@@ -42,10 +42,11 @@ const NavBarWrapper = styled.div`
   position: sticky;
   justify-content: start;
   align-items: center;
+  z-index: 1;
   top: 100px;
   background-color: white;
   border-bottom: 3px solid #2c2c2c;
-  height: 100px;
+  height: 80px;
   width: 90%;
 `;
 

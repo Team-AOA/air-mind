@@ -1,11 +1,18 @@
 import React from 'react';
 
+import { RecoilRoot } from 'recoil';
 import PropTypes from 'prop-types';
+import GlobalStyle from '../components/shared/GlobalStyle';
 
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+  return (
+    <RecoilRoot>
+      <GlobalStyle />
+      <Component {...pageProps} />;
+    </RecoilRoot>
+  );
 }
 
 export default MyApp;
