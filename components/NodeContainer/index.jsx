@@ -1,10 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import styled from 'styled-components';
+import Nodes from '../Nodes';
 
-import NodeBox from '../NodeBox';
-
-export default function MindMapWrapper() {
+export default function NodeContainer() {
   const svgRef = useRef();
   const groupRef = useRef();
 
@@ -22,7 +21,7 @@ export default function MindMapWrapper() {
     <Container>
       <SVG ref={svgRef}>
         <g ref={groupRef}>
-          <NodeBox />
+          <Nodes />
         </g>
       </SVG>
     </Container>
