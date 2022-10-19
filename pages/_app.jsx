@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <RecoilRoot>
       <GlobalStyle />
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </RecoilRoot>
   );
 }

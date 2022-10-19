@@ -1,36 +1,44 @@
-import React, { useEffect, useRef } from 'react';
-import * as d3 from 'd3';
+import React, { useEffect, useRef, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Nodes from '../Nodes';
 
-export default function NodeCanvas() {
-  const svgRef = useRef();
+import zoomPanning from '../../utils/d3/zoomPanning';
+import makeNodeComponentList from '../../utils/d3/makeNodeComponentList';
+import { nodesInfo } from '../../store/states';
+
+export default function NodeCanvas({ headNode }) {
   const groupRef = useRef();
+  const wrapperRef = useRef();
+  const [nodeData, setNodeData] = useRecoilState(nodesInfo);
+  const [nodeComponentList, setNodeComponentList] = useState([]);
 
   useEffect(() => {
-    const group = d3.select(groupRef.current);
-
-    const handleZoom = e => group.attr('transform', e.transform);
-
-    const zoom = d3.zoom().on('zoom', handleZoom);
-
-    d3.select('svg').call(zoom);
+    zoomPanning(groupRef);
   }, []);
 
+  useEffect(() => {
+    setNodeComponentList(
+      makeNodeComponentList(nodeData, setNodeData, headNode),
+    );
+  }, [nodeData]);
+
   return (
-    <Container>
-      <SVG ref={svgRef}>
-        <g ref={groupRef}>
-          <Nodes />
-        </g>
+    <Container ref={wrapperRef}>
+      <SVG>
+        <g ref={groupRef}>{nodeComponentList}</g>
       </SVG>
     </Container>
   );
 }
 
+NodeCanvas.propTypes = {
+  headNode: PropTypes.string.isRequired,
+};
+
 const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: #f5f5f5;
 `;
 

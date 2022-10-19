@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 import Node from '../Node';
 
-export default function NodeChildren({
+export default function NodeWithLine({
   parentNodePosition,
   // childNodeInitialPosition,
 }) {
@@ -56,6 +56,6 @@ export default function NodeChildren({
   );
 }
 
-NodeChildren.propTypes = {
+NodeWithLine.propTypes = {
   parentNodePosition: PropTypes.object.isRequired,
 };
