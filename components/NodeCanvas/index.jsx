@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import styled from 'styled-components';
 import Nodes from '../Nodes';
 
-export default function NodeContainer() {
+export default function NodeCanvas() {
   const svgRef = useRef();
   const groupRef = useRef();
 
