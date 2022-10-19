@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as d3 from 'd3';
@@ -7,20 +7,21 @@ import NodeHoverOption from '../NodeHoverOption';
 import NODE_COLOR from '../../constants/nodeColor';
 import setMovePosition from '../../utils/d3/setMovePosition';
 
-export default function Node({ x, y, width, height, position, setPosition }) {
-  const nodeRef = useRef();
+export default function Node({ selector, x, y, width, height, setNodeData }) {
+  console.log('aaa', x, y, width, height);
   const [isOptionMode, setIsOptionMode] = useState(false);
   const [selectedColor, setSelectedColor] = useState(NODE_COLOR.YELLOW);
 
   useEffect(() => {
-    const node = d3.select(nodeRef.current);
+    const node = d3.select(`#node${selector}`);
+    console.log(node, x, y);
 
-    setMovePosition(node, position, setPosition);
-  }, [position, setPosition]);
+    setMovePosition(node, x, y, selector, setNodeData);
+  }, []);
 
   return (
     <g
-      ref={nodeRef}
+      id={`node${selector}`}
       x={x}
       y={y}
       onMouseOver={() => setIsOptionMode(true)}
@@ -55,10 +56,10 @@ const RectSvg = styled.rect`
 `;
 
 Node.propTypes = {
-  x: PropTypes.node.isRequired,
-  y: PropTypes.node.isRequired,
-  width: PropTypes.node.isRequired,
-  height: PropTypes.node.isRequired,
-  position: PropTypes.object.isRequired,
-  setPosition: PropTypes.func.isRequired,
+  selector: PropTypes.string.isRequired,
+  x: PropTypes.number.isRequired,
+  y: PropTypes.number.isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  setNodeData: PropTypes.func.isRequired,
 };

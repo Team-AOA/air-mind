@@ -53,7 +53,11 @@ export default function MindMap() {
   return (
     <Wrapper>
       <Header />
-      <NodeCanvas headNode={mindMapData.headNode.toString()} />
+      <NodeCanvas
+        headNode={
+          mindMapData.headNode?.toString() || '634e4e47475c008330626937'
+        }
+      />
     </Wrapper>
   );
 }

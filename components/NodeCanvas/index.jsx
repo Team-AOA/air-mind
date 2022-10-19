@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import zoomPanning from '../../utils/d3/zoomPanning';
+// import zoomPanning from '../../utils/d3/zoomPanning';
 import makeNodeComponentList from '../../utils/d3/makeNodeComponentList';
 import { nodesInfo } from '../../store/states';
 
@@ -14,13 +14,15 @@ export default function NodeCanvas({ headNode }) {
   const [nodeComponentList, setNodeComponentList] = useState([]);
 
   useEffect(() => {
-    zoomPanning(groupRef);
+    // zoomPanning(groupRef);
   }, []);
 
   useEffect(() => {
-    setNodeComponentList(
-      makeNodeComponentList(nodeData, setNodeData, headNode),
-    );
+    if (nodeData) {
+      setNodeComponentList(
+        makeNodeComponentList(nodeData, setNodeData, headNode),
+      );
+    }
   }, [nodeData]);
 
   return (
