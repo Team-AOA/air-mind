@@ -11,9 +11,7 @@ const currentUserInfo = atom({
 
 const errorInfo = atom({
   key: 'errorInfo',
-  default: {
-    content: 'error 발생',
-  },
+  default: '',
 });
 
 const mindMapListInfo = atom({
