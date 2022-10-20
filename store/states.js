@@ -2,30 +2,27 @@ import { atom } from 'recoil';
 
 const currentUserInfo = atom({
   key: 'currentUserInfo',
-  default: {
-    id: '',
-    userName: '',
-    token: '',
-  },
+  default: {},
 });
 
 const errorInfo = atom({
   key: 'errorInfo',
-  default: '',
+  default: {},
+});
+
+const mindMapInfo = atom({
+  key: 'mindMapInfo',
+  default: {},
 });
 
 const mindMapListInfo = atom({
-  key: 'mindMapList',
-  default: [
-    { id: 1, title: 'mindMap title' },
-    { id: 2, title: 'mindMap title' },
-    { id: 3, title: 'mindMap title' },
-    { id: 4, title: 'mindMap title' },
-    { id: 5, title: 'mindMap title' },
-    { id: 6, title: 'mindMap title' },
-    { id: 7, title: 'mindMap title' },
-    { id: 8, title: 'mindMap title' },
-  ],
+  key: 'mindMapListInfo',
+  default: [],
 });
 
-export { currentUserInfo, errorInfo, mindMapListInfo };
+const nodesInfo = atom({
+  key: 'nodesInfo',
+  default: {},
+});
+
+export { currentUserInfo, errorInfo, mindMapInfo, mindMapListInfo, nodesInfo };

@@ -16,6 +16,7 @@
 /build
 
 # misc
+.husky/
 .DS_Store
 *.pem
 

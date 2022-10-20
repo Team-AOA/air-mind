@@ -1,0 +1,74 @@
+import React, { useEffect, useRef } from 'react';
+import * as d3 from 'd3';
+
+import PropTypes from 'prop-types';
+import Node from '../Node';
+import NODE_SIZE from '../../constants/nodeSize';
+
+export default function NodeWithLine({
+  parentNodeData,
+  childNodeData,
+  setNodeData,
+}) {
+  const lineRef = useRef();
+  let parentX;
+  let parentY;
+  let parentWidth;
+  let parentHeight;
+  let childX;
+  let childY;
+  let childWidth;
+  let childHeight;
+
+  if (
+    parentNodeData &&
+    Object.keys(parentNodeData)?.length > 0 &&
+    childNodeData &&
+    Object.keys(childNodeData)?.length > 0
+  ) {
+    ({ cordX: parentX, cordY: parentY } = parentNodeData.attribute);
+    ({ cordX: childX, cordY: childY } = childNodeData.attribute);
+    ({ width: parentWidth, height: parentHeight } =
+      NODE_SIZE[parentNodeData.attribute.size]);
+    ({ width: childWidth, height: childHeight } =
+      NODE_SIZE[childNodeData.attribute.size]);
+  }
+
+  useEffect(() => {
+    if (
+      parentNodeData &&
+      Object.keys(parentNodeData)?.length > 0 &&
+      childNodeData &&
+      Object.keys(childNodeData)?.length > 0
+    ) {
+      const line = d3.select(lineRef.current);
+      const parentCenter = [
+        parentX + parentWidth / 2,
+        parentY + parentHeight / 2,
+      ];
+      const childCenter = [childX + childWidth / 2, childY + childHeight / 2];
+      line
+        .attr('x1', parentCenter[0])
+        .attr('y1', parentCenter[1])
+        .attr('x2', childCenter[0])
+        .attr('y2', childCenter[1]);
+    }
+  }, [parentNodeData, childNodeData]);
+
+  return (
+    <>
+      <line ref={lineRef} style={{ stroke: 'red' }} />
+      <Node nodeData={childNodeData} setNodeData={setNodeData} />
+    </>
+  );
+}
+
+NodeWithLine.propTypes = {
+  parentNodeData: PropTypes.object,
+  childNodeData: PropTypes.object.isRequired,
+  setNodeData: PropTypes.func.isRequired,
+};
+
+NodeWithLine.defaultProps = {
+  parentNodeData: {},
+};

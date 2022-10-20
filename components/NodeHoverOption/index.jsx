@@ -15,12 +15,22 @@ export default function NodeHoverOption({
   y,
   setIsOptionMode,
   selectedColor,
-  setSelectedColor,
+  nodeId,
+  setNodeData,
 }) {
   const [isSelectColorMode, setIsSelectColorMode] = useState(false);
 
   const onClickColorPalette = item => {
-    setSelectedColor(item);
+    setNodeData(prev => {
+      const temp = { ...prev };
+      const tempSel = { ...temp[nodeId] };
+      tempSel.attribute = {
+        ...tempSel.attribute,
+        color: item,
+      };
+      temp[nodeId] = tempSel;
+      return temp;
+    });
     setIsSelectColorMode(prev => !prev);
   };
 
@@ -35,10 +45,10 @@ export default function NodeHoverOption({
       <HoverContainer>
         {isSelectColorMode && (
           <ColorPalette>
-            {Object.values(NODE_COLOR).map(item => (
+            {Object.keys(NODE_COLOR).map(item => (
               <ColorButton
                 key={item}
-                selectedColor={item}
+                selectedColor={NODE_COLOR[item]}
                 onClick={() => onClickColorPalette(item)}
               />
             ))}
@@ -142,5 +152,6 @@ NodeHoverOption.propTypes = {
   y: PropTypes.node.isRequired,
   setIsOptionMode: PropTypes.func.isRequired,
   selectedColor: PropTypes.string.isRequired,
-  setSelectedColor: PropTypes.func.isRequired,
+  nodeId: PropTypes.string.isRequired,
+  setNodeData: PropTypes.func.isRequired,
 };
