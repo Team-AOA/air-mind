@@ -1,50 +1,76 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as d3 from 'd3';
 
 import NodeHoverOption from '../NodeHoverOption';
 import NODE_COLOR from '../../constants/nodeColor';
+import NODE_SIZE from '../../constants/nodeSize';
 import setMovePosition from '../../utils/d3/setMovePosition';
 
-export default function Node({ selector, x, y, width, height, setNodeData }) {
-  console.log('aaa', x, y, width, height);
+export default function Node({ nodeData, setNodeData }) {
   const [isOptionMode, setIsOptionMode] = useState(false);
-  const [selectedColor, setSelectedColor] = useState(NODE_COLOR.YELLOW);
+  const groupRef = useRef();
+  const textRef = useRef();
+  let nodeId;
+  let nodeAttribute;
+  let nodeTitle;
+  let nodeX;
+  let nodeY;
+  let nodeWidth;
+  let nodeHeight;
+  let nodeColor;
+  let textX;
+  let textY;
+
+  if (nodeData && Object.keys(nodeData)?.length > 0) {
+    ({ _id: nodeId, attribute: nodeAttribute, title: nodeTitle } = nodeData);
+    ({ cordX: nodeX, cordY: nodeY } = nodeAttribute);
+    ({ width: nodeWidth, height: nodeHeight } = NODE_SIZE[nodeAttribute.size]);
+    nodeColor = NODE_COLOR[nodeAttribute.color];
+
+    const textRect = textRef.current?.getBoundingClientRect();
+    textX = textRef.current ? nodeX + (nodeWidth - textRect.width) / 2 : nodeX;
+    textY = textRef.current
+      ? nodeY + nodeHeight - (nodeHeight - (textRect.height - 5)) / 2
+      : nodeY;
+  }
 
   useEffect(() => {
-    const node = d3.select(`#node${selector}`);
-    console.log(node, x, y);
+    if (nodeData && Object.keys(nodeData)?.length > 0) {
+      const node = d3.select(groupRef.current);
 
-    setMovePosition(node, x, y, selector, setNodeData);
-  }, []);
+      setMovePosition(node, nodeX, nodeY, nodeId, setNodeData);
+    }
+  }, [nodeData]);
 
   return (
     <g
-      id={`node${selector}`}
-      x={x}
-      y={y}
+      ref={groupRef}
+      x={nodeX}
+      y={nodeY}
       onMouseOver={() => setIsOptionMode(true)}
       onMouseOut={() => setIsOptionMode(false)}
     >
       <RectSvg
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-        rx={30}
-        selectedColor={selectedColor}
+        x={nodeX}
+        y={nodeY}
+        width={nodeWidth}
+        height={nodeHeight}
+        rx={20}
+        selectedColor={nodeColor}
       />
-      <text x={x + 50} y={y + 30}>
-        title
+      <text ref={textRef} x={textX} y={textY}>
+        {nodeTitle}
       </text>
       {isOptionMode && (
         <NodeHoverOption
-          x={x}
-          y={y}
+          x={nodeX}
+          y={nodeY}
           setIsOptionMode={setIsOptionMode}
-          selectedColor={selectedColor}
-          setSelectedColor={setSelectedColor}
+          selectedColor={nodeColor}
+          nodeId={nodeId}
+          setNodeData={setNodeData}
         />
       )}
     </g>
@@ -56,10 +82,10 @@ const RectSvg = styled.rect`
 `;
 
 Node.propTypes = {
-  selector: PropTypes.string.isRequired,
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
+  nodeData: PropTypes.object,
   setNodeData: PropTypes.func.isRequired,
+};
+
+Node.defaultProps = {
+  nodeData: {},
 };

@@ -4,7 +4,6 @@ const server = 'http://localhost:8000';
 
 export async function getNodesData(userId, mindMapId, nodeId, max = 30) {
   try {
-    console.log('req!!');
     const response = await axios({
       method: 'get',
       baseURL: server,

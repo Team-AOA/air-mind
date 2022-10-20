@@ -22,13 +22,11 @@ export default function MindMap() {
     const pageLoader = async () => {
       try {
         const response = await getNodesData(
-          mindMapData.author?.toString() || '123',
+          mindMapData.author || '123',
           mindMapData.id || '456',
-          mindMapData.headNode?.toString() || '634e4e47475c008330626937',
+          mindMapData.headNode || '634e4e47475c008330626937',
           50,
         );
-
-        console.log(response);
 
         if (response.result === 'ok') {
           setNodeData(response.node);

@@ -3,50 +3,33 @@ import React from 'react';
 import Node from '../../components/Node';
 import NodeWithLine from '../../components/NodeWithLine';
 
-import { MEDIUM } from '../../constants/nodeSize';
-
 const makeNodeComponentList = (nodeData, setNodeData, headNode) => {
   const nodeComponentList = [];
 
-  const headNodeInfo = {
-    x: nodeData[headNode].attribute.cordX,
-    y: nodeData[headNode].attribute.cordY,
-    width: MEDIUM.width,
-    height: MEDIUM.height,
-    selector: headNode,
-    setNodeData,
-  };
+  nodeComponentList.push(
+    <Node
+      key={headNode}
+      nodeData={nodeData[headNode]}
+      setNodeData={setNodeData}
+    />,
+  );
 
-  let parentNodeInfo = headNodeInfo;
-
-  nodeComponentList.push(<Node {...headNodeInfo} />);
-
-  const nodeQueue = nodeData[headNode].children.map(child => child.toString());
+  const nodeQueue = [...nodeData[headNode].children];
 
   while (nodeQueue.length > 0) {
     const tempNode = nodeQueue.shift();
+    const tempParentNode = nodeData[tempNode].parent;
 
-    nodeQueue.push(
-      ...nodeData[tempNode].children.map(child => child.toString()),
-    );
-
-    const childNodeInfo = {
-      x: nodeData[tempNode].attribute.cordX,
-      y: nodeData[tempNode].attribute.cordY,
-      width: MEDIUM.width,
-      height: MEDIUM.height,
-      selector: tempNode,
-      setNodeData,
-    };
+    nodeQueue.push(...nodeData[tempNode].children);
 
     nodeComponentList.unshift(
       <NodeWithLine
-        parentNodeInfo={parentNodeInfo}
-        childNodeInfo={childNodeInfo}
+        key={tempNode}
+        parentNodeData={nodeData[tempParentNode]}
+        childNodeData={nodeData[tempNode]}
+        setNodeData={setNodeData}
       />,
     );
-
-    parentNodeInfo = childNodeInfo;
   }
 
   return nodeComponentList;
