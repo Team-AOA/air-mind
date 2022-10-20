@@ -57,3 +57,58 @@ export async function putNodesData(userId, mindMapId, nodeId, nodeData) {
     };
   }
 }
+
+export async function getCommentsData(userId, mindMapId, nodeId) {
+  try {
+    const response = await axios({
+      method: 'get',
+      baseURL: server,
+      url: `/users/${userId}/mind-maps/${mindMapId}/nodes/${nodeId}/comments`,
+    });
+
+    if (!response.data) {
+      throw new Error('No data transferred');
+    }
+
+    return response.data;
+  } catch (error) {
+    error.message = `Error during connection to server in nodeRequests.js : ${error.message}`;
+
+    if (process.env.NODE_ENV === 'development') {
+      console.error(error);
+    }
+
+    return {
+      result: 'error',
+      error,
+    };
+  }
+}
+
+export async function postCommentsData(userId, mindMapId, nodeId, commentData) {
+  try {
+    const response = await axios({
+      method: 'get',
+      baseURL: server,
+      url: `/users/${userId}/mind-maps/${mindMapId}/nodes/${nodeId}/comments`,
+      data: commentData,
+    });
+
+    if (!response.data) {
+      throw new Error('No data transferred');
+    }
+
+    return response.data;
+  } catch (error) {
+    error.message = `Error during connection to server in nodeRequests.js : ${error.message}`;
+
+    if (process.env.NODE_ENV === 'development') {
+      console.error(error);
+    }
+
+    return {
+      result: 'error',
+      error,
+    };
+  }
+}

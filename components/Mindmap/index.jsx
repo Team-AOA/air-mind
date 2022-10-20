@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 
 import Header from '../Header';
+import NodeComment from '../NodeComment';
 import { getNodesData } from '../../utils/api/nodeRequests';
 import { errorInfo, mindMapInfo, nodesInfo } from '../../store/states';
 
@@ -17,6 +18,8 @@ export default function MindMap() {
   const mindMapData = useRecoilValue(mindMapInfo);
   const setError = useSetRecoilState(errorInfo);
   const router = useRouter();
+
+  const [isOpenCommentModal, setIsOpenCommentModal] = useState(true);
 
   useEffect(() => {
     const pageLoader = async () => {
@@ -51,6 +54,9 @@ export default function MindMap() {
   return (
     <Wrapper>
       <Header />
+      {isOpenCommentModal && (
+        <NodeComment closeComment={() => setIsOpenCommentModal(false)} />
+      )}
       <NodeCanvas
         headNode={
           mindMapData.headNode?.toString() || '634e4e47475c008330626937'
