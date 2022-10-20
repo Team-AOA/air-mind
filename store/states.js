@@ -7,7 +7,7 @@ const currentUserInfo = atom({
 
 const errorInfo = atom({
   key: 'errorInfo',
-  default: {},
+  default: '',
 });
 
 const mindMapInfo = atom({
