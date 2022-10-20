@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 
-import Header from '../Header';
-import NodeComment from '../NodeComment';
 import { getNodesData } from '../../utils/api/nodeRequests';
 import { errorInfo, mindMapInfo, nodesInfo } from '../../store/states';
+import Header from '../Header';
+import NodeComment from '../NodeComment';
+import NodeDetail from '../NodeDetail';
+import flexCenter from '../shared/FlexCenterContainer';
 
 const NodeCanvas = dynamic(() => import('../NodeCanvas'), {
   ssr: false,
@@ -20,6 +23,7 @@ export default function MindMap() {
   const router = useRouter();
 
   const [isOpenCommentModal, setIsOpenCommentModal] = useState(true);
+  const [isOpenOptionModal, setIsOpenOptionModal] = useState(true);
 
   useEffect(() => {
     const pageLoader = async () => {
@@ -52,23 +56,69 @@ export default function MindMap() {
   }, []);
 
   return (
-    <Wrapper>
+    <Container>
       <Header />
       {isOpenCommentModal && (
         <NodeComment closeComment={() => setIsOpenCommentModal(false)} />
       )}
+      <RightMenu>
+        <RightMenuContainer>
+          <RightMenuWrapper>
+            <SearchBar>
+              <Image
+                src="/images/noun-search-5247523.png"
+                width="50px"
+                height="50px"
+                className="dragIcon"
+              />
+            </SearchBar>
+            {isOpenOptionModal && (
+              <NodeDetail
+                closeNodeOption={() => setIsOpenCommentModal(false)}
+              />
+            )}
+          </RightMenuWrapper>
+        </RightMenuContainer>
+      </RightMenu>
       <NodeCanvas
         headNode={
           mindMapData.headNode?.toString() || '634e4e47475c008330626937'
         }
+        openComment={() => setIsOpenCommentModal(true)}
+        openNodeDetail={setIsOpenOptionModal}
       />
-    </Wrapper>
+    </Container>
   );
 }
 
-const Wrapper = styled.div`
+const Container = styled.div`
+  height: 100vh;
+  border: 1px solid black;
+`;
+
+const RightMenu = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const RightMenuContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100vw;
+  align-items: flex-end;
+  justify-content: flex-start;
+  position: absolute;
+`;
+
+const RightMenuWrapper = styled(flexCenter)`
+  justify-content: flex-start;
+  width: 300px;
   height: 100vh;
+  z-index: 1000;
+`;
+
+const SearchBar = styled.div`
+  flex-grow: 0;
+  width: 300px;
+  height: 50px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 `;

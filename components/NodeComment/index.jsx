@@ -42,6 +42,18 @@ export default function NodeComment({ closeComment }) {
     }
   };
 
+  const createCommentElement = () => {
+    allComments.map(item => {
+      const { _id: id } = item;
+      return (
+        <div key={id}>
+          <Author>{item.author}</Author>
+          <Content>{item.content}</Content>
+        </div>
+      );
+    });
+  };
+
   useEffect(() => {
     scrollToBottom();
   }, [allComments]);
@@ -52,17 +64,7 @@ export default function NodeComment({ closeComment }) {
         <CloseButton onClick={closeComment}>X</CloseButton>
       </ButtonWrapper>
       <CommentBody>
-        <CommentList ref={commentList}>
-          {allComments.map(item => {
-            const { _id: id } = item;
-            return (
-              <div key={id}>
-                <Author>{item.author}</Author>
-                <Content>{item.content}</Content>
-              </div>
-            );
-          })}
-        </CommentList>
+        <CommentList ref={commentList}>{createCommentElement()}</CommentList>
         <CommentTextBar>
           <CommentTextArea placeholder="Add to the discussion" />
           <Button className="submitButton" onClick={createCommentHandler}>
