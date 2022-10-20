@@ -6,7 +6,14 @@ import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 
 import { getNodesData } from '../../utils/api/nodeRequests';
-import { errorInfo, mindMapInfo, nodesInfo } from '../../store/states';
+import preventBodyScrolling from '../../utils/preventBodyScrolling';
+import {
+  errorInfo,
+  mindMapInfo,
+  nodesInfo,
+  isOpenNodeCommentModal,
+  isOpenNodeOptionModal,
+} from '../../store/states';
 import Header from '../Header';
 import NodeComment from '../NodeComment';
 import NodeDetail from '../NodeDetail';
@@ -20,10 +27,17 @@ export default function MindMap() {
   const setNodeData = useSetRecoilState(nodesInfo);
   const mindMapData = useRecoilValue(mindMapInfo);
   const setError = useSetRecoilState(errorInfo);
+  const isOpenNodeCommentMenu = useRecoilValue(isOpenNodeCommentModal);
+  const isOpenNodeOptionMenu = useRecoilValue(isOpenNodeOptionModal);
   const router = useRouter();
 
-  const [isOpenCommentModal, setIsOpenCommentModal] = useState(true);
-  const [isOpenOptionModal, setIsOpenOptionModal] = useState(true);
+  const [isSearchMode, setIsSearchMode] = useState(false);
+
+  // Todo: search
+  // Todo: 모달 클릭
+  useEffect(() => {
+    preventBodyScrolling();
+  }, []);
 
   useEffect(() => {
     const pageLoader = async () => {
@@ -58,9 +72,7 @@ export default function MindMap() {
   return (
     <Container>
       <Header />
-      {isOpenCommentModal && (
-        <NodeComment closeComment={() => setIsOpenCommentModal(false)} />
-      )}
+      {isOpenNodeCommentMenu && <NodeComment />}
       <RightMenu>
         <RightMenuContainer>
           <RightMenuWrapper>
@@ -70,13 +82,11 @@ export default function MindMap() {
                 width="50px"
                 height="50px"
                 className="dragIcon"
+                onClick={() => setIsSearchMode(!isSearchMode)}
               />
+              <SearchInput searchMode={isSearchMode} />
             </SearchBar>
-            {isOpenOptionModal && (
-              <NodeDetail
-                closeNodeOption={() => setIsOpenCommentModal(false)}
-              />
-            )}
+            {isOpenNodeOptionMenu && <NodeDetail />}
           </RightMenuWrapper>
         </RightMenuContainer>
       </RightMenu>
@@ -84,8 +94,6 @@ export default function MindMap() {
         headNode={
           mindMapData.headNode?.toString() || '634e4e47475c008330626937'
         }
-        openComment={() => setIsOpenCommentModal(true)}
-        openNodeDetail={setIsOpenOptionModal}
       />
     </Container>
   );
@@ -94,11 +102,13 @@ export default function MindMap() {
 const Container = styled.div`
   height: 100vh;
   border: 1px solid black;
+  overflow: hidden;
 `;
 
 const RightMenu = styled.div`
   display: flex;
   justify-content: flex-end;
+  overflow: hidden;
 `;
 
 const RightMenuContainer = styled.div`
@@ -107,6 +117,8 @@ const RightMenuContainer = styled.div`
   align-items: flex-end;
   justify-content: flex-start;
   position: absolute;
+
+  overflow: hidden;
 `;
 
 const RightMenuWrapper = styled(flexCenter)`
@@ -118,7 +130,19 @@ const RightMenuWrapper = styled(flexCenter)`
 
 const SearchBar = styled.div`
   flex-grow: 0;
+  display: flex;
+  justify-content: flex-end;
   width: 300px;
   height: 50px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  transition: all 2s;
+  cursor: pointer;
+`;
+
+const SearchInput = styled.input`
+  border: none;
+  border-bottom: ${props => (props.searchMode ? '1px solid black' : 'none')};
+  width: ${props => (props.searchMode ? '250px' : '-0')};
+  transition: all 1.5s ease-in-out;
+  background-color: none;
 `;

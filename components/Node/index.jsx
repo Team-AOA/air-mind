@@ -3,13 +3,19 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as d3 from 'd3';
 
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import NodeHoverOption from '../NodeHoverOption';
 import NODE_COLOR from '../../constants/nodeColor';
 import NODE_SIZE from '../../constants/nodeSize';
 import setMovePosition from '../../utils/d3/setMovePosition';
+import { isOpenNodeOptionModal, clickedNodeId } from '../../store/states';
 
 export default function Node({ nodeData, setNodeData }) {
   const [isOptionMode, setIsOptionMode] = useState(false);
+  const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
+  const setClickedNodeId = useSetRecoilState(clickedNodeId);
+  const isOpenRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
+
   const groupRef = useRef();
   const textRef = useRef();
   let nodeId;
@@ -44,6 +50,11 @@ export default function Node({ nodeData, setNodeData }) {
     }
   }, [nodeData]);
 
+  const onClickHandler = () => {
+    setNodeRightOptionMode(!isOpenRightOptionMenu);
+    setClickedNodeId(nodeId);
+  };
+
   return (
     <g
       ref={groupRef}
@@ -59,6 +70,7 @@ export default function Node({ nodeData, setNodeData }) {
         height={nodeHeight}
         rx={20}
         selectedColor={nodeColor}
+        onClick={onClickHandler}
       />
       <text ref={textRef} x={textX} y={textY}>
         {nodeTitle}

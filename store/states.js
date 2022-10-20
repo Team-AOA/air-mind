@@ -25,4 +25,28 @@ const nodesInfo = atom({
   default: {},
 });
 
-export { currentUserInfo, errorInfo, mindMapInfo, mindMapListInfo, nodesInfo };
+const isOpenNodeCommentModal = atom({
+  key: 'isOpenNodeCommentModal',
+  default: false,
+});
+
+const isOpenNodeOptionModal = atom({
+  key: 'isOpenNodeOptionModal',
+  default: false,
+});
+
+const clickedNodeId = atom({
+  key: 'clickedNodeId',
+  default: '',
+});
+
+export {
+  currentUserInfo,
+  errorInfo,
+  mindMapInfo,
+  mindMapListInfo,
+  nodesInfo,
+  isOpenNodeCommentModal,
+  isOpenNodeOptionModal,
+  clickedNodeId,
+};

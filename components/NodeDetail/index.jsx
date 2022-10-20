@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { isOpenNodeOptionModal } from '../../store/states';
+
 import flexCenter from '../shared/FlexCenterContainer';
 
 export default function NodeDetail() {
   const [title, setTitle] = useState('');
   const [memo, setMemo] = useState('');
+  const setNodeOptionMode = useSetRecoilState(isOpenNodeOptionModal);
+  const isOpenRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
 
   const writeTitleHandler = e => {
     setTitle(e.target.value);
@@ -16,7 +21,16 @@ export default function NodeDetail() {
   };
 
   return (
-    <TestWrapper>
+    <Wrapper isOpen={isOpenRightOptionMenu}>
+      <MenuBody className="closeButton">
+        <Image
+          src="/images/fast-forward.png"
+          width="20px"
+          height="20px"
+          className="closeIcon"
+          onClick={() => setNodeOptionMode(false)}
+        />
+      </MenuBody>
       <MenuBody className="title">
         <MenuTitle>Title</MenuTitle>
         <TitleInput value={title} onChange={writeTitleHandler} />
@@ -37,14 +51,33 @@ export default function NodeDetail() {
         </ImageDropArea>
       </MenuBody>
       <MenuBody />
-    </TestWrapper>
+    </Wrapper>
   );
 }
 
-const TestWrapper = styled(flexCenter)`
+const Wrapper = styled(flexCenter)`
   flex-grow: 1;
   width: 100%;
   min-height: 500px;
+  z-index: 100;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.7);
+  transform: ${props => (props.isOpen ? 'translateX(0)' : 'translateX(400px)')};
+  transition: all 0.6s ease-in-out;
+
+  .closeButton {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-grow: 0;
+    min-height: 30px;
+    max-height: 30px;
+    cursor: pointer;
+  }
+
+  .closeIcon:hover {
+    border-bottom: 1px solid black;
+  }
 
   .title {
     justify-content: space-between;
@@ -129,7 +162,3 @@ const MenuBody = styled(flexCenter)`
   min-height: 150px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 `;
-
-// NodeDetail.propTypes = {
-//   closeNodeOption: PropTypes.func.isRequired,
-// };

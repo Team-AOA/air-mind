@@ -7,6 +7,8 @@ import {
   BiPlusMedical as PlusIcon,
 } from 'react-icons/bi';
 import { RiDeleteBin6Line as RecycleBinIcon } from 'react-icons/ri';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { isOpenNodeCommentModal } from '../../store/states';
 import NODE_COLOR from '../../constants/nodeColor';
 import flexCenter from '../shared/FlexCenterContainer';
 
@@ -19,6 +21,8 @@ export default function NodeHoverOption({
   setNodeData,
 }) {
   const [isSelectColorMode, setIsSelectColorMode] = useState(false);
+  const setNodeCommentMode = useSetRecoilState(isOpenNodeCommentModal);
+  const isOpenCommentMenu = useRecoilValue(isOpenNodeCommentModal);
 
   const onClickColorPalette = item => {
     setNodeData(prev => {
@@ -37,8 +41,6 @@ export default function NodeHoverOption({
   const createNode = () => {};
 
   const deleteNode = () => {};
-
-  const onCommentModal = () => {};
 
   return (
     <foreignObject x={x + 20} y={y - 180} width={125} height={180}>
@@ -67,7 +69,7 @@ export default function NodeHoverOption({
           <Icon onClick={createNode}>
             <PlusIcon size="24" className="icon" />
           </Icon>
-          <Icon onClick={onCommentModal}>
+          <Icon onClick={() => setNodeCommentMode(!isOpenCommentMenu)}>
             <CommentIcon size="24" className="icon" />
           </Icon>
           <Icon className="rightIcon" onClick={deleteNode}>
