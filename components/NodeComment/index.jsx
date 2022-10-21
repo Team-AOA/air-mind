@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 // import axios from 'axios';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import flexCenter from '../shared/FlexCenterContainer';
@@ -49,13 +48,13 @@ export default function NodeComment() {
     }
   };
 
-  const createCommentElement = () => {
-    allComments.map(item => {
-      const { _id: id } = item;
+  const createCommentElement = commentsArray => {
+    return commentsArray.map(comment => {
+      const { _id: id } = comment;
       return (
         <div key={id}>
-          <Author>{item.author}</Author>
-          <Content>{item.content}</Content>
+          <Author>{comment.author}</Author>
+          <Content>{comment.content}</Content>
         </div>
       );
     });
@@ -71,7 +70,9 @@ export default function NodeComment() {
         <CloseButton onClick={() => setNodeCommentModal(false)}>X</CloseButton>
       </ButtonWrapper>
       <CommentBody>
-        <CommentList ref={commentList}>{createCommentElement()}</CommentList>
+        <CommentList ref={commentList}>
+          {createCommentElement(allComments)}
+        </CommentList>
         <CommentTextBar>
           <CommentTextArea placeholder="Add to the discussion" />
           <Button className="submitButton" onClick={createCommentHandler}>
