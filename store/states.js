@@ -1,8 +1,8 @@
 import { atom } from 'recoil';
 
 const userInfo = atom({
-  key: 'userInfo',
-  default: {},
+  key: 'currentUserInfo',
+  default: { userId: '634ed0452b20f15c36b9a028' },
 });
 
 const errorInfo = atom({

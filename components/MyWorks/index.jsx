@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { useRecoilValue } from 'recoil';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -8,23 +6,35 @@ import Header from '../Header';
 import NavBar from '../Navbar';
 import MindMapCard from '../MindMapCard';
 
-import { errorInfo, mindMapListInfo } from '../../store/states';
-
-import ErrorMessage from '../shared/ErrorMessage';
+import { getMyMindMapData } from '../../service/mindMapRequests';
 
 export default function MyWorks() {
-  const mindMapList = useRecoilValue(mindMapListInfo);
-  const errMessage = useRecoilValue(errorInfo);
+  const [myMindMapData, setMyMindMapData] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
+  const { _id: id, title } = myMindMapData;
+
+  useEffect(() => {
+    async function fetchMyMindMapData() {
+      try {
+        const data = await getMyMindMapData();
+        setMyMindMapData(data.mindMap);
+      } catch (error) {
+        setErrorMessage(error);
+      }
+    }
+    fetchMyMindMapData();
+  }, []);
 
   return (
     <Wrapper>
       <Header />
       <NavBar />
-      <ErrorMessage>{errMessage}</ErrorMessage>
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       <MindMapsWrapper>
-        {mindMapList.map(mindMap => {
-          return <MindMapCard key={mindMap.id} title={mindMap.title} />;
-        })}
+        {myMindMapData[0] &&
+          myMindMapData.map(() => {
+            return <MindMapCard key={id} title={title} />;
+          })}
       </MindMapsWrapper>
     </Wrapper>
   );
@@ -50,3 +60,5 @@ const MindMapsWrapper = styled.div`
   column-gap: 20px;
   row-gap: 20px;
 `;
+
+const ErrorMessage = styled.div``;

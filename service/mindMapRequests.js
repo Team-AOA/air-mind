@@ -14,10 +14,18 @@ export async function postMindMapData(userId) {
   });
 }
 
-export default async function getPublicMindMapsData() {
+export default async function getPublicMindMapData() {
   return axiosMindMap({
     method: 'get',
     url: '/mind-maps',
     params: { access: 'public', max: 15 },
+  });
+}
+
+export async function getMyMindMapData() {
+  return axiosMindMap({
+    method: 'get',
+    url: `/users/634ed0452b20f15c36b9a028/mind-maps`,
+    params: { access: 'mixed', max: 15 },
   });
 }

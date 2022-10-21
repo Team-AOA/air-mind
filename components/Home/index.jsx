@@ -6,24 +6,35 @@ import Header from '../Header';
 import NavBar from '../Navbar';
 import MindMapCard from '../MindMapCard';
 
-import getPublicMindMapsData from '../../service/mindMapRequests';
+import getPublicMindMapData from '../../service/mindMapRequests';
 
 export default function Home() {
   const [mindMapData, setMindMapData] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  useEffect(async () => {
-    const data = await getPublicMindMapsData();
-    setMindMapData(data.mindMap);
+  const { _id: id } = mindMapData;
+
+  useEffect(() => {
+    async function fetchPublicMindMapData() {
+      try {
+        const data = await getPublicMindMapData();
+        setMindMapData(data.mindMap);
+      } catch (error) {
+        setErrorMessage(error);
+      }
+    }
+    fetchPublicMindMapData();
   }, []);
 
   return (
     <Wrapper>
       <Header />
       <NavBar />
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       <MindMapsWrapper>
-        {mindMapData &&
+        {mindMapData[0] &&
           mindMapData.map(mindMap => {
-            return <MindMapCard mindMap={mindMap} />;
+            return <MindMapCard key={id} mindMap={mindMap} />;
           })}
       </MindMapsWrapper>
     </Wrapper>
@@ -50,3 +61,5 @@ const MindMapsWrapper = styled.div`
   column-gap: 20px;
   row-gap: 20px;
 `;
+
+const ErrorMessage = styled.div``;
