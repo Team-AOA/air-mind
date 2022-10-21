@@ -12,9 +12,9 @@ import { isOpenNodeOptionModal, clickedNodeId } from '../../store/states';
 
 export default function Node({ nodeData, setNodeData }) {
   const [isOptionMode, setIsOptionMode] = useState(false);
+  const isOpenNodeRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
   const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
   const setClickedNodeId = useSetRecoilState(clickedNodeId);
-  const isOpenRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
 
   const groupRef = useRef();
   const textRef = useRef();
@@ -51,7 +51,7 @@ export default function Node({ nodeData, setNodeData }) {
   }, [nodeData]);
 
   const onClickHandler = () => {
-    setNodeRightOptionMode(!isOpenRightOptionMenu);
+    setNodeRightOptionMode(!isOpenNodeRightOptionMenu);
     setClickedNodeId(nodeId);
   };
 

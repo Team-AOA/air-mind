@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 // import axios from 'axios';
 import styled from 'styled-components';
+
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import flexCenter from '../shared/FlexCenterContainer';
 import { Button } from '../shared/Button';
@@ -15,7 +16,7 @@ export default function NodeComment() {
   const [allComments, setAllComments] = useState([]);
   // const [newComment, setNewComment] = useState('');
   const isOpenCommentMenu = useRecoilValue(isOpenNodeCommentModal);
-  const setNodeCommentModal = useSetRecoilState(isOpenNodeCommentModal);
+  const setNodeCommentMode = useSetRecoilState(isOpenNodeCommentModal);
 
   const nodeId = useRecoilValue(clickedNodeId);
 
@@ -67,7 +68,7 @@ export default function NodeComment() {
   return (
     <CommentContainer isOpen={isOpenCommentMenu}>
       <ButtonWrapper>
-        <CloseButton onClick={() => setNodeCommentModal(false)}>X</CloseButton>
+        <CloseButton onClick={() => setNodeCommentMode(false)}>X</CloseButton>
       </ButtonWrapper>
       <CommentBody>
         <CommentList ref={commentList}>

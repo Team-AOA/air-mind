@@ -1,34 +1,34 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
+
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { isOpenNodeOptionModal } from '../../store/states';
-
 import flexCenter from '../shared/FlexCenterContainer';
 
 export default function NodeDetail() {
   const [title, setTitle] = useState('');
   const [memo, setMemo] = useState('');
-  const setNodeOptionMode = useSetRecoilState(isOpenNodeOptionModal);
-  const isOpenRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
+  const isOpenNodeRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
+  const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
 
   const writeTitleHandler = e => {
     setTitle(e.target.value);
   };
 
-  const writeMemoHandler = e => {
+  const writeDescriptionHandler = e => {
     setMemo(e.target.value);
   };
 
   return (
-    <Wrapper isOpen={isOpenRightOptionMenu}>
+    <Wrapper isOpen={isOpenNodeRightOptionMenu}>
       <MenuBody className="closeButton">
         <Image
           src="/images/fast-forward.png"
           width="20px"
           height="20px"
           className="closeIcon"
-          onClick={() => setNodeOptionMode(false)}
+          onClick={() => setNodeRightOptionMode(false)}
         />
       </MenuBody>
       <MenuBody className="title">
@@ -36,8 +36,8 @@ export default function NodeDetail() {
         <TitleInput value={title} onChange={writeTitleHandler} />
       </MenuBody>
       <MenuBody className="memo">
-        <MenuTitle>Memo</MenuTitle>
-        <MemoTextArea value={memo} onChange={writeMemoHandler} />
+        <MenuTitle>Description</MenuTitle>
+        <MemoTextArea value={memo} onChange={writeDescriptionHandler} />
       </MenuBody>
       <MenuBody className="image">
         <MenuTitle>Image</MenuTitle>
