@@ -36,13 +36,7 @@ export default function MindMap() {
   // Todo: search
   // Todo: 모달 클릭
   useEffect(() => {
-    preventBodyScrolling();
-
-    return () => {
-      const scrollY = document.body.style.top;
-      document.body.style.cssText = '';
-      window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
-    };
+    return preventBodyScrolling();
   }, []);
 
   useEffect(() => {
