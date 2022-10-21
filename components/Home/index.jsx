@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -6,27 +6,25 @@ import Header from '../Header';
 import NavBar from '../Navbar';
 import MindMapCard from '../MindMapCard';
 
+import getPublicMindMapsData from '../../service/mindMapRequests';
+
 export default function Home() {
+  const [mindMapData, setMindMapData] = useState([]);
+
+  useEffect(async () => {
+    const data = await getPublicMindMapsData();
+    setMindMapData(data.mindMap);
+  }, []);
+
   return (
     <Wrapper>
       <Header />
       <NavBar />
       <MindMapsWrapper>
-        <MindMapCard />
-        <MindMapCard />
-        <MindMapCard />
-        <MindMapCard />
-        <MindMapCard />
-        <MindMapCard />
-        <MindMapCard />
-        <MindMapCard />
-        <MindMapCard />
-        <MindMapCard />
-        <MindMapCard />
-        <MindMapCard />
-        <MindMapCard />
-        <MindMapCard />
-        <MindMapCard />
+        {mindMapData &&
+          mindMapData.map(mindMap => {
+            return <MindMapCard mindMap={mindMap} />;
+          })}
       </MindMapsWrapper>
     </Wrapper>
   );
