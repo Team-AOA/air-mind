@@ -5,10 +5,8 @@ import styled from 'styled-components';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import flexCenter from '../shared/FlexCenterContainer';
 import { Button } from '../shared/Button';
-import {
-  getCommentsData,
-  postCommentsData,
-} from '../../utils/api/nodeRequests';
+import { getCommentsData, postCommentsData } from '../../service/nodeRequests';
+
 import { isOpenNodeCommentModal, clickedNodeId } from '../../store/states';
 
 export default function NodeComment() {
