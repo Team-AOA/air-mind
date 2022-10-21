@@ -8,9 +8,11 @@ import {
 } from 'react-icons/bi';
 import { RiDeleteBin6Line as RecycleBinIcon } from 'react-icons/ri';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { isOpenNodeCommentModal } from '../../store/states';
+import { isOpenNodeCommentModal, mindMapInfo } from '../../store/states';
 import NODE_COLOR from '../../constants/nodeColor';
 import flexCenter from '../shared/FlexCenterContainer';
+import calculateNewNodePosition from '../../utils/d3/calculateNewNodePosition';
+import { postNodesData } from '../../service/nodeRequests';
 
 export default function NodeHoverOption({
   x,
@@ -23,6 +25,7 @@ export default function NodeHoverOption({
   const [isSelectColorMode, setIsSelectColorMode] = useState(false);
   const setNodeCommentMode = useSetRecoilState(isOpenNodeCommentModal);
   const isOpenCommentMenu = useRecoilValue(isOpenNodeCommentModal);
+  const mindMap = useRecoilValue(mindMapInfo);
 
   const onClickColorPalette = item => {
     setNodeData(prev => {
@@ -38,7 +41,25 @@ export default function NodeHoverOption({
     setIsSelectColorMode(prev => !prev);
   };
 
-  const createNode = () => {};
+  const createNode = async (id, headId) => {
+    const calculated = calculateNewNodePosition(id, headId);
+    const newNode = await postNodesData('123', '456', nodeId, {
+      attribute: calculated,
+    });
+
+    setNodeData(prev => {
+      const tempData = { ...prev };
+      const { _id: newId } = newNode.node;
+
+      const newParent = {
+        ...tempData[nodeId],
+        children: [...tempData[nodeId].children, newId],
+      };
+      tempData[nodeId] = newParent;
+      tempData[newId] = newNode.node;
+      return { ...prev, ...tempData };
+    });
+  };
 
   const deleteNode = () => {};
 
@@ -66,7 +87,7 @@ export default function NodeHoverOption({
           >
             <ColorButton selectedColor={selectedColor} />
           </Icon>
-          <Icon onClick={createNode}>
+          <Icon onClick={() => createNode(nodeId, mindMap.headNode)}>
             <PlusIcon size="24" className="icon" />
           </Icon>
           <Icon onClick={() => setNodeCommentMode(!isOpenCommentMenu)}>

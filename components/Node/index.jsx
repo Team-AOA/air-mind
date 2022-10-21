@@ -57,6 +57,7 @@ export default function Node({ nodeData, setNodeData }) {
 
   return (
     <g
+      id={`node${nodeId}`}
       ref={groupRef}
       x={nodeX}
       y={nodeY}
