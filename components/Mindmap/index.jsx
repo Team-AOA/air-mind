@@ -5,7 +5,7 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 
-import { getNodesData } from '../../utils/api/nodeRequests';
+import { getNodesData } from '../../service/nodeRequests';
 import preventBodyScrolling from '../../utils/preventBodyScrolling';
 import {
   errorInfo,
