@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Modal from './Modal';
 
 export default function MindMapCard({ title, author, access, headNode }) {
-  console.log(title, author, access, headNode);
+  console.log(author, access, headNode);
   const [modalRight, setModalRight] = useState(0);
   const [modalBottom, setModalBottom] = useState(0);
   const [modalShow, setModalShow] = useState(false);
@@ -42,11 +42,11 @@ export default function MindMapCard({ title, author, access, headNode }) {
           />
         </DocIcon>
         <ShortInfo>
-          <div className="infoTitle">Title</div>
-          <div className="infoAuthor">Created by </div>
+          <div className="infoTitle">{title}</div>
+          <div className="infoAuthor">{author}</div>
         </ShortInfo>
         <Option>
-          <AccessIcon>Public</AccessIcon>
+          <AccessIcon>{access}</AccessIcon>
           <DotButton ref={dotButton} onClick={modalShowOn}>
             •••
           </DotButton>

@@ -11,17 +11,17 @@ import { getMyMindMapData } from '../../service/mindMapRequests';
 export default function MyWorks() {
   const [myMindMapData, setMyMindMapData] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const { _id: id, title } = myMindMapData;
 
   useEffect(() => {
-    async function fetchMyMindMapData() {
+    const fetchMyMindMapData = async () => {
       try {
         const data = await getMyMindMapData();
+
         setMyMindMapData(data.mindMap);
       } catch (error) {
         setErrorMessage(error);
       }
-    }
+    };
     fetchMyMindMapData();
   }, []);
 
@@ -32,8 +32,16 @@ export default function MyWorks() {
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       <MindMapsWrapper>
         {myMindMapData[0] &&
-          myMindMapData.map(() => {
-            return <MindMapCard key={id} title={title} />;
+          myMindMapData.map(mindMap => {
+            const { _id: id } = mindMap;
+            return (
+              <MindMapCard
+                key={id}
+                title={mindMap.title}
+                author={mindMap.author}
+                headNode={mindMap.headNode}
+              />
+            );
           })}
       </MindMapsWrapper>
     </Wrapper>

@@ -2,27 +2,29 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import Header from '../Header';
 import NavBar from '../Navbar';
 import MindMapCard from '../MindMapCard';
 
 import getPublicMindMapData from '../../service/mindMapRequests';
+import { errorInfo } from '../../store/states';
 
 export default function Home() {
   const [mindMapData, setMindMapData] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const { _id: id } = mindMapData;
+  const setError = useSetRecoilState(errorInfo);
+  const errorMessage = useRecoilValue(errorInfo);
 
   useEffect(() => {
-    async function fetchPublicMindMapData() {
+    const fetchPublicMindMapData = async () => {
       try {
         const data = await getPublicMindMapData();
+
         setMindMapData(data.mindMap);
       } catch (error) {
-        setErrorMessage(error);
+        setError(error);
       }
-    }
+    };
     fetchPublicMindMapData();
   }, []);
 
@@ -34,7 +36,16 @@ export default function Home() {
       <MindMapsWrapper>
         {mindMapData[0] &&
           mindMapData.map(mindMap => {
-            return <MindMapCard key={id} mindMap={mindMap} />;
+            const { _id: id } = mindMap;
+            return (
+              <MindMapCard
+                key={id}
+                title={mindMap.title}
+                access={mindMap.access}
+                author={mindMap.author}
+                headNode={mindMap.headNode}
+              />
+            );
           })}
       </MindMapsWrapper>
     </Wrapper>

@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 
 import { getNodesData } from '../../service/nodeRequests';
-import { getMindMapData } from '../../service/mindMapRequests';
+import {
+  createMindMapData,
+  getMindMapData,
+} from '../../service/mindMapRequests';
 import preventBodyScrolling from '../../utils/preventBodyScrolling';
 import {
-  userInfo,
   errorInfo,
   mindMapInfo,
   nodesInfo,
@@ -28,9 +30,10 @@ const NodeCanvas = dynamic(() => import('../NodeCanvas'), {
 
 export default function MindMap({ mindMapId }) {
   const setNodeData = useSetRecoilState(nodesInfo);
-  const userData = useRecoilValue(userInfo);
-  const [mindMapData, setMindMapData] = useRecoilState(mindMapInfo);
+  const setMindMapData = useSetRecoilState(mindMapInfo);
   const setError = useSetRecoilState(errorInfo);
+
+  const mindMapData = useRecoilValue(mindMapInfo);
   const isOpenNodeCommentMenu = useRecoilValue(isOpenNodeCommentModal);
   const isOpenNodeOptionMenu = useRecoilValue(isOpenNodeOptionModal);
   const router = useRouter();
@@ -47,11 +50,11 @@ export default function MindMap({ mindMapId }) {
     const pageLoader = async () => {
       try {
         let userId;
-        if (userData && Object.keys(userData).length > 0) {
-          ({ _id: userId } = userData);
-        } else {
-          userId = 'anonymous';
-        }
+        // if (userData && Object.keys(userData).length > 0) {
+        //   ({ _id: userId } = userData);
+        // } else {
+        //   userId = 'anonymous';
+        // }
 
         let headNodeId;
         if (mindMapData && Object.keys(mindMapData).length > 0) {
@@ -92,6 +95,18 @@ export default function MindMap({ mindMapId }) {
       pageLoader();
     }
   }, [mindMapId]);
+
+  useEffect(() => {
+    const createMindMap = async () => {
+      try {
+        const mindMap = await createMindMapData();
+        setMindMapData(mindMap);
+      } catch (error) {
+        setError(error);
+      }
+    };
+    createMindMap();
+  }, []);
 
   return (
     <Container>
