@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import NODE_SIZE from '../../constants/nodeSize';
 
 const calculateNewNodePosition = (nodeId, headNodeId) => {
   const node = d3.select(`#node${nodeId}`);
@@ -6,11 +7,29 @@ const calculateNewNodePosition = (nodeId, headNodeId) => {
     `#node${headNodeId || '634e4e47475c008330626937'}`,
   );
 
-  const nodeRect = node.node().getBoundingClientRect();
-  const headNodeRect = headNode.node().getBoundingClientRect();
+  const nodeCenterX =
+    Number(node.attr('x')) + Number(node.selectChild().attr('width')) / 2;
+  const nodeCenterY =
+    Number(node.attr('y')) + Number(node.selectChild().attr('height')) / 2;
 
-  const cordX = nodeRect.x + (headNodeRect.x - nodeRect.x < 0) ? 50 : -50;
-  const cordY = nodeRect.y + (headNodeRect.y - nodeRect.y < 0) ? 50 : -50;
+  const headNodeCenterX =
+    Number(headNode.attr('x')) +
+    Number(headNode.selectChild().attr('width')) / 2;
+  const headNodeCenterY =
+    Number(headNode.attr('y')) +
+    Number(headNode.selectChild().attr('height')) / 2;
+
+  const diffX = nodeCenterX - headNodeCenterX;
+  const diffY = nodeCenterY - headNodeCenterY;
+
+  const cordX =
+    nodeCenterX +
+    150 * (diffX / (diffX ** 2 + diffY ** 2) ** 0.5) -
+    NODE_SIZE.MEDIUM.width / 2;
+  const cordY =
+    nodeCenterY +
+    150 * (diffY / (diffX ** 2 + diffY ** 2) ** 0.5) -
+    NODE_SIZE.MEDIUM.height / 2;
 
   return { cordX, cordY };
 };
