@@ -1,23 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react';
 // import axios from 'axios';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
+
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import flexCenter from '../shared/FlexCenterContainer';
 import { Button } from '../shared/Button';
 import {
   getCommentsData,
   postCommentsData,
 } from '../../utils/api/nodeRequests';
+import { isOpenNodeCommentModal, clickedNodeId } from '../../store/states';
 
-export default function NodeComment({ closeComment }) {
+export default function NodeComment() {
   const commentList = useRef();
   const [allComments, setAllComments] = useState([]);
   // const [newComment, setNewComment] = useState('');
+  const isOpenCommentMenu = useRecoilValue(isOpenNodeCommentModal);
+  const setNodeCommentMode = useSetRecoilState(isOpenNodeCommentModal);
+
+  const nodeId = useRecoilValue(clickedNodeId);
 
   useEffect(() => {
     const getComments = async () => {
       try {
         // Todo
+        console.log(nodeId);
         const response = await getCommentsData();
         setAllComments([...response.data.data]);
       } catch (error) {
@@ -42,26 +49,30 @@ export default function NodeComment({ closeComment }) {
     }
   };
 
+  const createCommentElement = commentsArray => {
+    return commentsArray.map(comment => {
+      const { _id: id } = comment;
+      return (
+        <div key={id}>
+          <Author>{comment.author}</Author>
+          <Content>{comment.content}</Content>
+        </div>
+      );
+    });
+  };
+
   useEffect(() => {
     scrollToBottom();
   }, [allComments]);
 
   return (
-    <CommentContainer>
+    <CommentContainer isOpen={isOpenCommentMenu}>
       <ButtonWrapper>
-        <CloseButton onClick={closeComment}>X</CloseButton>
+        <CloseButton onClick={() => setNodeCommentMode(false)}>X</CloseButton>
       </ButtonWrapper>
       <CommentBody>
         <CommentList ref={commentList}>
-          {allComments.map(item => {
-            const { _id: id } = item;
-            return (
-              <div key={id}>
-                <Author>{item.author}</Author>
-                <Content>{item.content}</Content>
-              </div>
-            );
-          })}
+          {createCommentElement(allComments)}
         </CommentList>
         <CommentTextBar>
           <CommentTextArea placeholder="Add to the discussion" />
@@ -83,6 +94,8 @@ const CommentContainer = styled(flexCenter)`
   z-index: 1000;
   background-color: rgba(255, 255, 255, 0.7);
   font-size: 13px;
+  transform: ${props => (props.isOpen ? 'translateX(400)' : 'translateX(0)')};
+  transition: all 2s ease-in-out;
 `;
 
 const ButtonWrapper = styled.div`
@@ -157,7 +170,3 @@ const CommentBody = styled(flexCenter)`
   height: 400px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 `;
-
-NodeComment.propTypes = {
-  closeComment: PropTypes.func.isRequired,
-};
