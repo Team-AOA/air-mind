@@ -5,13 +5,16 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { getCookie, deleteCookie } from 'cookies-next';
 
+import { useSetRecoilState } from 'recoil';
 import { logOut } from '../../service/auth';
 import { HeaderButton } from '../shared/Button';
 import MindMapInfo from '../MindMapInfo';
+import { userInfo } from '../../store/states';
 
 export default function Header() {
   const router = useRouter();
   const [token, setToken] = useState('');
+  const deleteUserInfo = useSetRecoilState(userInfo);
 
   useEffect(() => {
     setToken(getCookie('loginData'));
@@ -20,7 +23,7 @@ export default function Header() {
   const clickLogOutHandler = () => {
     logOut();
     deleteCookie('loginData');
-    setToken('');
+    deleteUserInfo({});
     return router.push('/');
   };
 
