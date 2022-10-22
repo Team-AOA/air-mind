@@ -68,7 +68,13 @@ export default function Header() {
       </HeaderLeftSide>
       <MindMapInfo />
       <HeaderRightSide>
-        <HeaderMyWorkButton>My Work</HeaderMyWorkButton>
+        <HeaderMyWorkButton
+          onClick={() => {
+            router.push('/my-works');
+          }}
+        >
+          My Work
+        </HeaderMyWorkButton>
         <HeaderLoginButton
           onClick={() => {
             router.push('/login');

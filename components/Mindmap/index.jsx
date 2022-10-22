@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
@@ -13,9 +13,10 @@ import {
 } from '../../service/mindMapRequests';
 import preventBodyScrolling from '../../utils/preventBodyScrolling';
 import {
+  userInfo,
   errorInfo,
-  mindMapInfo,
   nodesInfo,
+  mindMapInfo,
   isOpenNodeCommentModal,
   isOpenNodeOptionModal,
 } from '../../store/states';
@@ -30,18 +31,15 @@ const NodeCanvas = dynamic(() => import('../NodeCanvas'), {
 
 export default function MindMap({ mindMapId }) {
   const setNodeData = useSetRecoilState(nodesInfo);
-  const setMindMapData = useSetRecoilState(mindMapInfo);
+  const userData = useRecoilValue(userInfo);
   const setError = useSetRecoilState(errorInfo);
-
-  const mindMapData = useRecoilValue(mindMapInfo);
+  const [mindMapData, setMindMapData] = useRecoilState(mindMapInfo);
   const isOpenNodeCommentMenu = useRecoilValue(isOpenNodeCommentModal);
   const isOpenNodeOptionMenu = useRecoilValue(isOpenNodeOptionModal);
   const router = useRouter();
 
   const [isSearchMode, setIsSearchMode] = useState(false);
 
-  // Todo: search
-  // Todo: 모달 클릭
   useEffect(() => {
     return preventBodyScrolling();
   }, []);
@@ -50,11 +48,11 @@ export default function MindMap({ mindMapId }) {
     const pageLoader = async () => {
       try {
         let userId;
-        // if (userData && Object.keys(userData).length > 0) {
-        //   ({ _id: userId } = userData);
-        // } else {
-        //   userId = 'anonymous';
-        // }
+        if (userData && Object.keys(userData).length > 0) {
+          ({ _id: userId } = userData);
+        } else {
+          userId = 'anonymous';
+        }
 
         let headNodeId;
         if (mindMapData && Object.keys(mindMapData).length > 0) {
@@ -100,6 +98,7 @@ export default function MindMap({ mindMapId }) {
     const createMindMap = async () => {
       try {
         const mindMap = await createMindMapData();
+
         setMindMapData(mindMap);
       } catch (error) {
         setError(error);
