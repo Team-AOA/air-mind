@@ -23,6 +23,7 @@ export default function Header() {
   const clickLogOutHandler = () => {
     logOut();
     deleteCookie('loginData');
+    setToken('');
     deleteUserInfo({});
     return router.push('/');
   };
@@ -43,7 +44,6 @@ export default function Header() {
           />
           <HeaderHomeButton>air-mind</HeaderHomeButton>
         </HeaderLeftSide>
-        <MindMapInfo />
         <HeaderRightSide>
           <HeaderMyWorkButton onClick={() => router.push('mind-map')}>
             My Work
