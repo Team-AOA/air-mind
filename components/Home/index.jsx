@@ -19,7 +19,6 @@ export default function Home() {
     const fetchPublicMindMapData = async () => {
       try {
         const data = await getPublicMindMapData();
-
         setMindMapData(data.mindMap);
       } catch (error) {
         setError(error);

@@ -1,12 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
 export default function MindMapInfo() {
+  const [mindMapTitle, setMindMapTitle] = useState('');
+  const [publicOption, setPublicOption] = useState('');
+
+  const handleMindMapTitle = event => {
+    setMindMapTitle(event.target.value);
+  };
+
+  const handlePublicOption = event => {
+    setPublicOption(event.target.value);
+  };
+
   return (
     <MindMapInfoWrapper>
-      <MindMapTitle>마인드맵 제목</MindMapTitle>
-      <MindMapPublicSelect>
+      <MindMapTitle value={mindMapTitle} onChange={handleMindMapTitle} />
+      <MindMapPublicSelect onChange={handlePublicOption} value={publicOption}>
         <MindMapPublicOption>Public</MindMapPublicOption>
         <MindMapPrivateOption>Private</MindMapPrivateOption>
       </MindMapPublicSelect>
@@ -19,14 +30,13 @@ const MindMapInfoWrapper = styled.div`
   flex-direction: row;
 `;
 
-const MindMapTitle = styled.div`
+const MindMapTitle = styled.input`
   width: 100%;
-  color: white;
   font-size: 20px;
 `;
 
 const MindMapPublicSelect = styled.select`
-  width: 100%;
+  width: 40%;
   height: 35px;
   border: none;
   background: white;

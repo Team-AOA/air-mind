@@ -30,15 +30,15 @@ const NodeCanvas = dynamic(() => import('../NodeCanvas'), {
 });
 
 export default function MindMap({ mindMapId }) {
+  const [isSearchMode, setIsSearchMode] = useState(false);
   const setNodeData = useSetRecoilState(nodesInfo);
   const userData = useRecoilValue(userInfo);
   const setError = useSetRecoilState(errorInfo);
   const [mindMapData, setMindMapData] = useRecoilState(mindMapInfo);
   const isOpenNodeCommentMenu = useRecoilValue(isOpenNodeCommentModal);
   const isOpenNodeOptionMenu = useRecoilValue(isOpenNodeOptionModal);
-  const router = useRouter();
 
-  const [isSearchMode, setIsSearchMode] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     return preventBodyScrolling();
