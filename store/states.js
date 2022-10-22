@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
 
-const currentUserInfo = atom({
-  key: 'currentUserInfo',
+const userInfo = atom({
+  key: 'userInfo',
   default: {},
 });
 
@@ -41,7 +41,7 @@ const clickedNodeId = atom({
 });
 
 export {
-  currentUserInfo,
+  userInfo,
   errorInfo,
   mindMapInfo,
   mindMapListInfo,
