@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 import { getNodesData } from '../../service/nodeRequests';
 import {
-  createMindMapData,
+  // createMindMapData,
   getMindMapData,
 } from '../../service/mindMapRequests';
 import preventBodyScrolling from '../../utils/preventBodyScrolling';
@@ -94,18 +94,18 @@ export default function MindMap({ mindMapId }) {
     }
   }, [mindMapId]);
 
-  useEffect(() => {
-    const createMindMap = async () => {
-      try {
-        const mindMap = await createMindMapData();
+  // useEffect(() => {
+  //   const createMindMap = async () => {
+  //     try {
+  //       const mindMap = await createMindMapData();
 
-        setMindMapData(mindMap);
-      } catch (error) {
-        setError(error);
-      }
-    };
-    createMindMap();
-  }, []);
+  //       setMindMapData(mindMap);
+  //     } catch (error) {
+  //       setError(error);
+  //     }
+  //   };
+  //   createMindMap();
+  // }, []);
 
   return (
     <Container>

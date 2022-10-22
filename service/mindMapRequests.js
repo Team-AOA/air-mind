@@ -1,21 +1,21 @@
-import axiosNode, { axiosMindMap } from '../network/http';
+import API from '../network/http';
 
 export async function getMindMapData(userId, mindMapId) {
-  return axiosNode({
+  return API({
     method: 'get',
     url: `/users/${userId}/mind-maps/${mindMapId}`,
   });
 }
 
 export async function postMindMapData(userId) {
-  return axiosNode({
+  return API({
     method: 'post',
     url: `/users/${userId}/mind-maps/`,
   });
 }
 
 export default async function getPublicMindMapData() {
-  return axiosMindMap({
+  return API({
     method: 'get',
     url: '/mind-maps',
     params: { access: 'public', max: 15 },
@@ -23,7 +23,7 @@ export default async function getPublicMindMapData() {
 }
 
 export async function getMyMindMapData() {
-  return axiosMindMap({
+  return API({
     method: 'get',
     url: `/users/634ed0872b20f15c36b9a029/mind-maps`,
     params: { access: 'public', max: 15 },
@@ -31,14 +31,14 @@ export async function getMyMindMapData() {
 }
 
 export async function createMindMapData() {
-  return axiosMindMap({
+  return API({
     method: 'post',
     url: '/users/634ed0872b20f15c36b9a029/mind-maps',
   });
 }
 
 export async function deleteMindMapData() {
-  return axiosMindMap({
+  return API({
     method: 'delete',
     url: '/users/634ed0872b20f15c36b9a029/mind-maps/:mindMapId',
   });
