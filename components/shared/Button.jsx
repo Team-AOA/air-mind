@@ -14,7 +14,7 @@ export const HeaderButton = styled(Button)`
   width: 8rem;
   height: 3rem;
   font-family: 'Open Sans', sans-serif;
-  font-size: 20px;
+  font-size: 15px;
   margin: 0;
   background-color: #2c2c2c;
   color: #eff0f5;
