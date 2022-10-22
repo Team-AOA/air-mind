@@ -1,29 +1,42 @@
 import axios from 'axios';
+import { getCookie } from 'cookies-next';
 
-const server = 'http://localhost:8000';
+const API = axios.create({
+  baseURL: 'http://localhost:8000',
+  timeout: 1000,
+});
 
-export default async function axiosNode(options) {
-  try {
-    const response = await axios({
-      baseURL: server,
-      ...options,
-    });
+API.interceptors.request.use(
+  req => {
+    const loginData = getCookie('loginData');
+    if (loginData) {
+      req.headers.Authorization = `Bearer ${loginData}`;
+    }
 
-    if (!response.data) {
+    return req;
+  },
+  error => {
+    return Promise.reject(error);
+  },
+);
+
+API.interceptors.response.use(
+  res => {
+    if (!res.data) {
       throw new Error('No data transferred');
     }
 
-    return response.data;
-  } catch (error) {
-    error.message = `Error during connection to server in nodeRequests.js : ${error.message}`;
+    return res.data;
+  },
+  error => {
+    return process.env.NODE_ENV === 'development'
+      ? console.error({
+          result: error.response.data.result,
+          ...error.response.data.error,
+          error,
+        })
+      : console.log({ result: 'error', statusCode: error.response.status });
+  },
+);
 
-    if (process.env.NODE_ENV === 'development') {
-      console.error(error);
-    }
-
-    return {
-      result: 'error',
-      error,
-    };
-  }
-}
+export default API;
