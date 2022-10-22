@@ -16,6 +16,14 @@ export async function putNodesData(userId, mindMapId, nodeId, nodeData) {
   });
 }
 
+export async function postNodesData(userId, mindMapId, nodeId, nodeData) {
+  return axiosNode({
+    method: 'post',
+    url: `/users/${userId}/mind-maps/${mindMapId}/nodes/${nodeId}`,
+    data: nodeData,
+  });
+}
+
 export async function getCommentsData(userId, mindMapId, nodeId) {
   return axiosNode({
     method: 'get',

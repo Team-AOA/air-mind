@@ -1,8 +1,8 @@
 import * as d3 from 'd3';
 
 export default function setMovePosition(ref, x, y, selector, setNodeData) {
-  let translateX = x;
-  let translateY = y;
+  const translateX = x;
+  const translateY = y;
 
   const handleDrag = d3
     .drag()
@@ -11,10 +11,6 @@ export default function setMovePosition(ref, x, y, selector, setNodeData) {
       return { x: translateX, y: translateY };
     })
     .on('drag', d => {
-      const me = d3.select(this);
-
-      translateX = d.x;
-      translateY = d.y;
       setNodeData(prev => {
         const temp = { ...prev };
         const tempSel = { ...prev[selector] };
@@ -26,8 +22,6 @@ export default function setMovePosition(ref, x, y, selector, setNodeData) {
         temp[selector] = tempSel;
         return temp;
       });
-      me.attr('x', translateX);
-      me.attr('y', translateY);
     });
 
   handleDrag(ref);
