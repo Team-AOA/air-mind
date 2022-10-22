@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
+import PropTypes from 'prop-types';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 
 import { getNodesData } from '../../service/nodeRequests';
+import { getMindMapData } from '../../service/mindMapRequests';
 import preventBodyScrolling from '../../utils/preventBodyScrolling';
 import {
+  userInfo,
   errorInfo,
   mindMapInfo,
   nodesInfo,
@@ -23,9 +26,10 @@ const NodeCanvas = dynamic(() => import('../NodeCanvas'), {
   ssr: false,
 });
 
-export default function MindMap() {
+export default function MindMap({ mindMapId }) {
   const setNodeData = useSetRecoilState(nodesInfo);
-  const mindMapData = useRecoilValue(mindMapInfo);
+  const userData = useRecoilValue(userInfo);
+  const [mindMapData, setMindMapData] = useRecoilState(mindMapInfo);
   const setError = useSetRecoilState(errorInfo);
   const isOpenNodeCommentMenu = useRecoilValue(isOpenNodeCommentModal);
   const isOpenNodeOptionMenu = useRecoilValue(isOpenNodeOptionModal);
@@ -42,19 +46,37 @@ export default function MindMap() {
   useEffect(() => {
     const pageLoader = async () => {
       try {
-        const response = await getNodesData(
-          mindMapData.author || '123',
-          mindMapData.id || '456',
-          mindMapData.headNode || '634e4e47475c008330626937',
+        let userId;
+        if (userData && Object.keys(userData).length > 0) {
+          ({ _id: userId } = userData);
+        } else {
+          userId = 'anonymous';
+        }
+
+        let headNodeId;
+        if (mindMapData && Object.keys(mindMapData).length > 0) {
+          headNodeId = mindMapData.headNode;
+        } else {
+          const responseGetMindMap = await getMindMapData(userId, mindMapId);
+          if (responseGetMindMap.result === 'error') {
+            throw responseGetMindMap.error;
+          }
+
+          headNodeId = responseGetMindMap.mindMap.headNode;
+          setMindMapData(responseGetMindMap.mindMap);
+        }
+
+        const responseNodes = await getNodesData(
+          userId,
+          mindMapId,
+          headNodeId,
           50,
         );
-
-        if (response.result === 'ok') {
-          setNodeData(response.node);
-        } else if (response.result === 'error') {
-          setError(response.error);
-          router('/error');
+        if (responseNodes.result === 'error') {
+          throw responseNodes.error;
         }
+
+        setNodeData(responseNodes.node);
       } catch (error) {
         error.message = `Error in MindMap component : ${error.message}`;
 
@@ -66,8 +88,10 @@ export default function MindMap() {
         router.push('/error');
       }
     };
-    pageLoader();
-  }, []);
+    if (mindMapId) {
+      pageLoader();
+    }
+  }, [mindMapId]);
 
   return (
     <Container>
@@ -90,14 +114,14 @@ export default function MindMap() {
           </RightMenuWrapper>
         </RightMenuContainer>
       </RightMenu>
-      <NodeCanvas
-        headNode={
-          mindMapData.headNode?.toString() || '634e4e47475c008330626937'
-        }
-      />
+      <NodeCanvas headNode={mindMapData.headNode} />
     </Container>
   );
 }
+
+MindMap.propTypes = {
+  mindMapId: PropTypes.string.isRequired,
+};
 
 const Container = styled.div`
   height: 100vh;
