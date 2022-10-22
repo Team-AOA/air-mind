@@ -1,7 +1,7 @@
-import axiosNode from '../network/http';
+import API from '../network/http';
 
 export async function getNodesData(userId, mindMapId, nodeId, max = 30) {
-  return axiosNode({
+  return API({
     method: 'get',
     url: `/users/${userId}/mind-maps/${mindMapId}/nodes/${nodeId}`,
     params: { max },
@@ -9,7 +9,7 @@ export async function getNodesData(userId, mindMapId, nodeId, max = 30) {
 }
 
 export async function putNodesData(userId, mindMapId, nodeId, nodeData) {
-  return axiosNode({
+  return API({
     method: 'put',
     url: `/users/${userId}/mind-maps/${mindMapId}/nodes/${nodeId}`,
     data: nodeData,
@@ -17,7 +17,7 @@ export async function putNodesData(userId, mindMapId, nodeId, nodeData) {
 }
 
 export async function postNodesData(userId, mindMapId, nodeId, nodeData) {
-  return axiosNode({
+  return API({
     method: 'post',
     url: `/users/${userId}/mind-maps/${mindMapId}/nodes/${nodeId}`,
     data: nodeData,
@@ -25,14 +25,14 @@ export async function postNodesData(userId, mindMapId, nodeId, nodeData) {
 }
 
 export async function getCommentsData(userId, mindMapId, nodeId) {
-  return axiosNode({
+  return API({
     method: 'get',
     url: `/users/${userId}/mind-maps/${mindMapId}/nodes/${nodeId}/comments`,
   });
 }
 
 export async function postCommentsData(userId, mindMapId, nodeId, commentData) {
-  return axiosNode({
+  return API({
     method: 'get',
     url: `/users/${userId}/mind-maps/${mindMapId}/nodes/${nodeId}/comments`,
     data: commentData,

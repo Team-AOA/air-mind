@@ -10,44 +10,54 @@ export default function NavBar() {
   const router = useRouter();
 
   return (
-    <NavBarWrapper>
-      <NavBarCreateButton
-        onClick={() => {
-          router.push('/mind-map/:{nodeId}');
-        }}
-      >
-        Create
-      </NavBarCreateButton>
-      <NavBarPublicButton
-        onClick={() => {
-          router.push('/');
-        }}
-      >
-        Public
-      </NavBarPublicButton>
-      <NavBarMyWorkButton
-        onClick={() => {
-          router.push('/my-works');
-        }}
-      >
-        My Work
-      </NavBarMyWorkButton>
-    </NavBarWrapper>
+    <NavBarContainer>
+      <NavBarWrapper>
+        <NavBarCreateButton
+          onClick={() => {
+            router.push('/mind-map/:{nodeId}');
+          }}
+        >
+          Create
+        </NavBarCreateButton>
+        <NavBarPublicButton
+          onClick={() => {
+            router.push('/');
+          }}
+        >
+          Public
+        </NavBarPublicButton>
+        <NavBarMyWorkButton
+          onClick={() => {
+            router.push('/my-works');
+          }}
+        >
+          My Work
+        </NavBarMyWorkButton>
+      </NavBarWrapper>
+    </NavBarContainer>
   );
 }
+
+const NavBarContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  position: sticky;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 1;
+  top: 100px;
+  background-color: white;
+  height: 80px;
+  width: 100%;
+`;
 
 const NavBarWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  position: sticky;
-  justify-content: start;
   align-items: center;
-  z-index: 1;
-  top: 100px;
-  background-color: white;
+  justify-content: center;
   border-bottom: 3px solid #2c2c2c;
-  height: 80px;
-  width: 90%;
+  width: 90.5%;
 `;
 
 const NavBarCreateButton = styled(NavBarButton)`
