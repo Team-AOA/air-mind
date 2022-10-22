@@ -36,3 +36,10 @@ export async function createMindMapData() {
     url: '/users/634ed0872b20f15c36b9a029/mind-maps',
   });
 }
+
+export async function deleteMindMapData() {
+  return axiosMindMap({
+    method: 'delete',
+    url: '/users/634ed0872b20f15c36b9a029/mind-maps/:mindMapId',
+  });
+}

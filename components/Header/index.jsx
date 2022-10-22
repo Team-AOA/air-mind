@@ -66,7 +66,7 @@ export default function Header() {
           <HeaderHomeButton>air-mind</HeaderHomeButton>
         </Link>
       </HeaderLeftSide>
-      <MindMapInfo />
+      {router.query.mindMapId && <MindMapInfo />}
       <HeaderRightSide>
         <HeaderMyWorkButton
           onClick={() => {
