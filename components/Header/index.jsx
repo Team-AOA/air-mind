@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { getCookie, deleteCookie } from 'cookies-next';
-
+import Link from 'next/link';
 import { useSetRecoilState } from 'recoil';
 import { logOut } from '../../service/auth';
 import { HeaderButton } from '../shared/Button';
@@ -15,6 +15,7 @@ export default function Header() {
   const router = useRouter();
   const [token, setToken] = useState('');
   const deleteUserInfo = useSetRecoilState(userInfo);
+  const { mindMapId } = router.query;
 
   useEffect(() => {
     setToken(getCookie('loginData'));
@@ -58,23 +59,29 @@ export default function Header() {
 
   return (
     <HeaderWrapper>
-      <HeaderLeftSide
-        onClick={() => {
-          router.push('/');
-        }}
-      >
-        <Image
-          className="homeIcon"
-          src="/images/air_mind_logo.png"
-          width="80px"
-          height="80px"
-        />
-        <HeaderHomeButton>air-mind</HeaderHomeButton>
+      <HeaderLeftSide>
+        <Link href="/">
+          <Image src="/images/air_mind_logo.png" width="80px" height="80px" />
+        </Link>
+        <Link href="/">
+          <HeaderHomeButton>air-mind</HeaderHomeButton>
+        </Link>
       </HeaderLeftSide>
-      <MindMapInfo />
+      {mindMapId && <MindMapInfo mindMapId={mindMapId} />}
       <HeaderRightSide>
-        <HeaderLoginButton onClick={() => router.push('login')}>
-          Log In
+        <HeaderMyWorkButton
+          onClick={() => {
+            router.push('/my-works');
+          }}
+        >
+          My Work
+        </HeaderMyWorkButton>
+        <HeaderLoginButton
+          onClick={() => {
+            router.push('/login');
+          }}
+        >
+          Login
         </HeaderLoginButton>
       </HeaderRightSide>
     </HeaderWrapper>
