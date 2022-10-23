@@ -76,6 +76,7 @@ const MindMapsWrapper = styled.div`
 `;
 
 const ErrorMessage = styled.div``;
+
 Home.propTypes = {
   loginData: PropTypes.node.isRequired,
 };

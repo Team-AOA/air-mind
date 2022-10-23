@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 
@@ -10,7 +11,7 @@ import MindMapCard from '../MindMapCard';
 import { getMyMindMapData } from '../../service/mindMapRequests';
 import { currentUserInfo } from '../../store/states';
 
-export default function MyWorks() {
+export default function MyWorks({ loginData }) {
   const [myMindMapData, setMyMindMapData] = useState([]);
   const [currentError, setCurrentError] = useState({});
   const currentUserData = useRecoilValue(currentUserInfo);
@@ -33,7 +34,7 @@ export default function MyWorks() {
 
   return (
     <Wrapper>
-      <Header />
+      <Header loginData={loginData} />
       <NavBar />
       {currentError.message && (
         <ErrorMessage>{currentError.message}</ErrorMessage>
@@ -56,6 +57,10 @@ export default function MyWorks() {
     </Wrapper>
   );
 }
+
+MyWorks.propTypes = {
+  loginData: PropTypes.node.isRequired,
+};
 
 const Wrapper = styled.div`
   display: flex;
