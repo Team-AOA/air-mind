@@ -12,8 +12,8 @@ import { errorInfo } from '../../store/states';
 
 export default function Home() {
   const [mindMapData, setMindMapData] = useState([]);
-  const setError = useSetRecoilState(errorInfo);
-  const errorMessage = useRecoilValue(errorInfo);
+  const setCurrentError = useSetRecoilState(errorInfo);
+  const currentError = useRecoilValue(errorInfo);
 
   useEffect(() => {
     const fetchPublicMindMapData = async () => {
@@ -22,32 +22,33 @@ export default function Home() {
 
         setMindMapData(data.mindMap);
       } catch (error) {
-        setError(error);
+        setCurrentError(error);
       }
     };
     fetchPublicMindMapData();
   }, []);
 
+  const mindMapList = mindMapData.map(mindMap => {
+    const { _id: id } = mindMap;
+    return (
+      <MindMapCard
+        key={id}
+        mindMap={mindMap}
+        title={mindMap.title}
+        access={mindMap.access}
+        author={mindMap.author}
+      />
+    );
+  });
+
   return (
     <Wrapper>
       <Header />
       <NavBar />
-      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-      <MindMapsWrapper>
-        {mindMapData[0] &&
-          mindMapData.map(mindMap => {
-            const { _id: id } = mindMap;
-            return (
-              <MindMapCard
-                key={id}
-                title={mindMap.title}
-                access={mindMap.access}
-                author={mindMap.author}
-                headNode={mindMap.headNode}
-              />
-            );
-          })}
-      </MindMapsWrapper>
+      {currentError.message && (
+        <ErrorMessage>{currentError.message}</ErrorMessage>
+      )}
+      <MindMapsWrapper>{mindMapList}</MindMapsWrapper>
     </Wrapper>
   );
 }
