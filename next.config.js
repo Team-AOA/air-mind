@@ -8,6 +8,9 @@ const nextConfig = {
     config.plugins.push(new Dotenv({ silent: true }));
     return config;
   },
+  images: {
+    domains: ['localhost'],
+  },
 };
 
 module.exports = nextConfig;
