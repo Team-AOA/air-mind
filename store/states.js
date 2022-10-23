@@ -1,4 +1,7 @@
 import { atom } from 'recoil';
+import { v4 as uuidv4 } from 'uuid';
+
+const newId = uuidv4();
 
 const currentUserInfo = atom({
   key: 'currentUserInfo',
@@ -6,7 +9,7 @@ const currentUserInfo = atom({
 });
 
 const userInfo = atom({
-  key: 'currentUserInfo',
+  key: `currentUserInfo/${newId}`,
   default: {},
 });
 
