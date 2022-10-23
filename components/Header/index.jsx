@@ -9,12 +9,12 @@ import { useSetRecoilState } from 'recoil';
 import { logOut } from '../../service/auth';
 import { HeaderButton } from '../shared/Button';
 import MindMapInfo from '../MindMapInfo';
-import { userInfo } from '../../store/states';
+import { currentUserInfo } from '../../store/states';
 
 export default function Header() {
   const router = useRouter();
   const [token, setToken] = useState('');
-  const deleteUserInfo = useSetRecoilState(userInfo);
+  const deleteUserInfo = useSetRecoilState(currentUserInfo);
   const { mindMapId } = router.query;
 
   useEffect(() => {

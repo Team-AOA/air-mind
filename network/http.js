@@ -29,6 +29,7 @@ API.interceptors.response.use(
     return res.data;
   },
   error => {
+    console.log('error : ', error);
     return process.env.NODE_ENV === 'development'
       ? console.error({
           result: error.response.data.result,

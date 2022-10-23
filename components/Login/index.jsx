@@ -4,7 +4,7 @@ import Image from 'next/image';
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
 import { useRouter } from 'next/router';
-import { userInfo } from '../../store/states';
+import { currentUserInfo } from '../../store/states';
 
 import { login } from '../../service/auth';
 import googleDocsIcon from '../../public/images/btn_google_signin_light_pressed_web@2x.png';
@@ -12,7 +12,7 @@ import Header from '../Header';
 import flexCenter from '../shared/FlexCenterContainer';
 
 export default function Login() {
-  const saveUserData = useSetRecoilState(userInfo);
+  const saveUserData = useSetRecoilState(currentUserInfo);
   const router = useRouter();
 
   const clickLoginHandler = async () => {

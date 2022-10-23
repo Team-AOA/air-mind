@@ -1,6 +1,6 @@
 {
   "name": "air-mind",
-  "version": "0.18.0",
+  "version": "0.20.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -12,8 +12,7 @@
   "lint-staged": {
     "**/*.{js,jsx,html,css}": [
       "prettier --write .",
-      "eslint --fix .",
-      "git add ."
+      "eslint --fix ."
     ]
   },
   "dependencies": {
