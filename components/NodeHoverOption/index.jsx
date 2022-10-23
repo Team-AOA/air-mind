@@ -48,7 +48,7 @@ export default function NodeHoverOption({
 
   const createNode = async (id, headId) => {
     const calculated = calculateNewNodePosition(id, headId);
-    const newNode = await postNodesData('123', '456', nodeId, {
+    const newNode = await postNodesData(userId, mindMapId, nodeId, {
       attribute: calculated,
     });
 

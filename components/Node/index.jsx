@@ -5,6 +5,7 @@ import * as d3 from 'd3';
 
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import NodeHoverOption from '../NodeHoverOption';
+import NodeFoldOption from '../NodeFoldOption';
 import NODE_COLOR from '../../constants/nodeColor';
 import NODE_SIZE from '../../constants/nodeSize';
 import setMovePosition from '../../utils/d3/setMovePosition';
@@ -34,10 +35,11 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
   let nodeColor;
   let textX;
   let textY;
+  let isFold;
 
   if (node && Object.keys(node)?.length > 0) {
     ({ attribute: nodeAttribute, title: nodeTitle } = node);
-    ({ cordX: nodeX, cordY: nodeY } = nodeAttribute);
+    ({ cordX: nodeX, cordY: nodeY, isFold } = nodeAttribute);
     ({ width: nodeWidth, height: nodeHeight } = NODE_SIZE[nodeAttribute.size]);
     nodeColor = NODE_COLOR[nodeAttribute.color];
 
@@ -100,6 +102,7 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
           setNodeData={setNodeData}
         />
       )}
+      <NodeFoldOption x={nodeX} y={nodeY} nodeId={nodeId} isFold={isFold} />
     </g>
   );
 }
