@@ -9,7 +9,8 @@ const makeNodeComponentList = (nodeData, setNodeData, headNode) => {
   nodeComponentList.push(
     <Node
       key={headNode}
-      nodeData={nodeData[headNode]}
+      nodeId={headNode}
+      nodeData={nodeData}
       setNodeData={setNodeData}
     />,
   );
@@ -25,8 +26,9 @@ const makeNodeComponentList = (nodeData, setNodeData, headNode) => {
     nodeComponentList.unshift(
       <NodeWithLine
         key={tempNode}
-        parentNodeData={nodeData[tempParentNode]}
-        childNodeData={nodeData[tempNode]}
+        parentNodeId={tempParentNode}
+        childNodeId={tempNode}
+        nodeData={nodeData}
         setNodeData={setNodeData}
       />,
     );

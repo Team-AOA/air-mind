@@ -8,17 +8,17 @@ import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { NavBarButton } from '../shared/Button';
 
 import { createMindMapData } from '../../service/mindMapRequests';
-import { errorInfo, mindMapInfo, userInfo } from '../../store/states';
+import { currentUserInfo, errorInfo, mindMapInfo } from '../../store/states';
 
 export default function NavBar() {
   const router = useRouter();
   const setError = useSetRecoilState(errorInfo);
   const setMindMapData = useSetRecoilState(mindMapInfo);
-  const userData = useRecoilValue(userInfo);
+  const currentUserData = useRecoilValue(currentUserInfo);
 
   const handleCreateButton = async () => {
     try {
-      const { _id: userId } = userData;
+      const { id: userId } = currentUserData;
       const data = await createMindMapData(userId);
       const { mindMap } = data;
       const { _id: mindMapId } = mindMap;

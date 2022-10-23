@@ -12,7 +12,7 @@ import { isOpenNodeCommentModal, mindMapInfo } from '../../store/states';
 import NODE_COLOR from '../../constants/nodeColor';
 import flexCenter from '../shared/FlexCenterContainer';
 import calculateNewNodePosition from '../../utils/d3/calculateNewNodePosition';
-import { postNodesData } from '../../service/nodeRequests';
+import { postNodesData, putNodesData } from '../../service/nodeRequests';
 
 export default function NodeHoverOption({
   x,
@@ -26,6 +26,8 @@ export default function NodeHoverOption({
   const setNodeCommentMode = useSetRecoilState(isOpenNodeCommentModal);
   const isOpenCommentMenu = useRecoilValue(isOpenNodeCommentModal);
   const mindMap = useRecoilValue(mindMapInfo);
+  const { _id: mindMapId } = mindMap;
+  const { _id: userId } = mindMap.author;
 
   const onClickColorPalette = item => {
     setNodeData(prev => {
@@ -36,6 +38,9 @@ export default function NodeHoverOption({
         color: item,
       };
       temp[nodeId] = tempSel;
+
+      putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
+
       return temp;
     });
     setIsSelectColorMode(prev => !prev);

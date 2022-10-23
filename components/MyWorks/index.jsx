@@ -2,34 +2,42 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
+import { useRecoilValue } from 'recoil';
 import Header from '../Header';
 import NavBar from '../Navbar';
 import MindMapCard from '../MindMapCard';
 
 import { getMyMindMapData } from '../../service/mindMapRequests';
+import { currentUserInfo } from '../../store/states';
 
 export default function MyWorks() {
   const [myMindMapData, setMyMindMapData] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [currentError, setCurrentError] = useState({});
+  const currentUserData = useRecoilValue(currentUserInfo);
+  const { id: currentUserId } = currentUserData;
 
   useEffect(() => {
-    const fetchMyMindMapData = async () => {
+    const fetchMyMindMapData = async id => {
       try {
-        const data = await getMyMindMapData();
+        const data = await getMyMindMapData(id);
 
         setMyMindMapData(data.mindMap);
       } catch (error) {
-        setErrorMessage(error);
+        setCurrentError(error);
       }
     };
-    fetchMyMindMapData();
-  }, []);
+    if (currentUserId) {
+      fetchMyMindMapData(currentUserId);
+    }
+  }, [currentUserId]);
 
   return (
     <Wrapper>
       <Header />
       <NavBar />
-      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+      {currentError.message && (
+        <ErrorMessage>{currentError.message}</ErrorMessage>
+      )}
       <MindMapsWrapper>
         {myMindMapData[0] &&
           myMindMapData.map(mindMap => {
@@ -37,9 +45,10 @@ export default function MyWorks() {
             return (
               <MindMapCard
                 key={id}
+                mindMap={mindMap}
                 title={mindMap.title}
+                access={mindMap.access}
                 author={mindMap.author}
-                headNode={mindMap.headNode}
               />
             );
           })}

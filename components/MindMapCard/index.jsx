@@ -1,10 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { useSetRecoilState } from 'recoil';
+import Router from 'next/router';
 import Modal from './Modal';
+import { mindMapInfo, userInfo } from '../../store/states';
 
-export default function MindMapCard({ title, author, access, headNode }) {
-  console.log(author, access, headNode);
+export default function MindMapCard({ mindMap, title, author, access }) {
+  const setUserData = useSetRecoilState(userInfo);
+  const setMindMapData = useSetRecoilState(mindMapInfo);
   const [modalRight, setModalRight] = useState(0);
   const [modalBottom, setModalBottom] = useState(0);
   const [modalShow, setModalShow] = useState(false);
@@ -28,8 +32,15 @@ export default function MindMapCard({ title, author, access, headNode }) {
     setModalShow(!modalShow);
   };
 
+  const mindMapLoader = () => {
+    setMindMapData(mindMap);
+    setUserData(mindMap.author);
+    const { _id: mindMapId } = mindMap;
+    Router.push(`/mind-map/${mindMapId}`);
+  };
+
   return (
-    <Card ref={card}>
+    <Card ref={card} onClick={mindMapLoader}>
       <Thumbnail
         src="https://nulab.com/static/6127951160c31e3ed297bb12d2e2201e/2d083/mindmap.png"
         alt="mindmapThumb"
@@ -43,7 +54,7 @@ export default function MindMapCard({ title, author, access, headNode }) {
         </DocIcon>
         <ShortInfo>
           <div className="infoTitle">{title}</div>
-          <div className="infoAuthor">{author}</div>
+          <div className="infoAuthor">{author?.userName}</div>
         </ShortInfo>
         <Option>
           <AccessIcon>{access}</AccessIcon>
@@ -68,10 +79,10 @@ const TestModule = styled.div`
 `;
 
 MindMapCard.propTypes = {
+  mindMap: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
+  author: PropTypes.object.isRequired,
   access: PropTypes.string.isRequired,
-  headNode: PropTypes.string.isRequired,
 };
 
 const Card = styled.div`
