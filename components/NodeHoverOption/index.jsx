@@ -7,12 +7,21 @@ import {
   BiPlusMedical as PlusIcon,
 } from 'react-icons/bi';
 import { RiDeleteBin6Line as RecycleBinIcon } from 'react-icons/ri';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { isOpenNodeCommentModal, mindMapInfo } from '../../store/states';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  isOpenNodeCommentModal,
+  mindMapInfo,
+  nodesInfo,
+} from '../../store/states';
 import NODE_COLOR from '../../constants/nodeColor';
 import flexCenter from '../shared/FlexCenterContainer';
 import calculateNewNodePosition from '../../utils/d3/calculateNewNodePosition';
-import { postNodesData, putNodesData } from '../../service/nodeRequests';
+import deleteNodeHelper from '../../utils/deleteNodeHelper';
+import {
+  deleteNodesData,
+  postNodesData,
+  putNodesData,
+} from '../../service/nodeRequests';
 
 export default function NodeHoverOption({
   x,
@@ -20,12 +29,13 @@ export default function NodeHoverOption({
   setIsOptionMode,
   selectedColor,
   nodeId,
-  setNodeData,
 }) {
   const [isSelectColorMode, setIsSelectColorMode] = useState(false);
   const setNodeCommentMode = useSetRecoilState(isOpenNodeCommentModal);
   const isOpenCommentMenu = useRecoilValue(isOpenNodeCommentModal);
+  const [nodeData, setNodeData] = useRecoilState(nodesInfo);
   const mindMap = useRecoilValue(mindMapInfo);
+  const isHead = nodeData[nodeId]?.parent === undefined;
   const { _id: mindMapId } = mindMap;
   const { _id: userId } = mindMap.author;
 
@@ -66,7 +76,10 @@ export default function NodeHoverOption({
     });
   };
 
-  const deleteNode = () => {};
+  const deleteNode = async () => {
+    deleteNodeHelper(nodeId, nodeData, setNodeData);
+    await deleteNodesData(userId, mindMapId, nodeId);
+  };
 
   return (
     <foreignObject x={x + 20} y={y - 180} width={125} height={180}>
@@ -95,12 +108,24 @@ export default function NodeHoverOption({
           <Icon onClick={() => createNode(nodeId, mindMap.headNode)}>
             <PlusIcon size="24" className="icon" />
           </Icon>
-          <Icon onClick={() => setNodeCommentMode(!isOpenCommentMenu)}>
-            <CommentIcon size="24" className="icon" />
-          </Icon>
-          <Icon className="rightIcon" onClick={deleteNode}>
-            <RecycleBinIcon size="24" className="icon" />
-          </Icon>
+          {isHead && (
+            <Icon
+              className="rightIcon"
+              onClick={() => setNodeCommentMode(!isOpenCommentMenu)}
+            >
+              <CommentIcon size="24" className="icon" />
+            </Icon>
+          )}
+          {!isHead && (
+            <>
+              <Icon onClick={() => setNodeCommentMode(!isOpenCommentMenu)}>
+                <CommentIcon size="24" className="icon" />
+              </Icon>
+              <Icon className="rightIcon" onClick={deleteNode}>
+                <RecycleBinIcon size="24" className="icon" />
+              </Icon>
+            </>
+          )}
         </Menu>
       </HoverContainer>
     </foreignObject>
@@ -116,7 +141,7 @@ const HoverContainer = styled(flexCenter)`
 
 const Menu = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   width: 120px;
   height: 30px;
@@ -166,7 +191,6 @@ const ColorButton = styled.div`
 const Icon = styled(flexCenter)`
   width: 30px;
   height: 30px;
-  border-right: 1px solid #e6e6e6;
   cursor: pointer;
   transition: background-color 0.3s ease;
 
@@ -181,5 +205,4 @@ NodeHoverOption.propTypes = {
   setIsOptionMode: PropTypes.func.isRequired,
   selectedColor: PropTypes.string.isRequired,
   nodeId: PropTypes.string.isRequired,
-  setNodeData: PropTypes.func.isRequired,
 };

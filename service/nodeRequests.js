@@ -24,6 +24,13 @@ export async function postNodesData(userId, mindMapId, nodeId, nodeData) {
   });
 }
 
+export async function deleteNodesData(userId, mindMapId, nodeId) {
+  return API({
+    method: 'delete',
+    url: `/users/${userId}/mind-maps/${mindMapId}/nodes/${nodeId}`,
+  });
+}
+
 export async function getCommentsData(userId, mindMapId, nodeId) {
   return API({
     method: 'get',
