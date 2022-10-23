@@ -88,13 +88,11 @@ MindMap.propTypes = {
 const Container = styled.div`
   height: 100vh;
   border: 1px solid black;
-  overflow: hidden;
 `;
 
 const RightMenu = styled.div`
   display: flex;
   justify-content: flex-end;
-  overflow: hidden;
 `;
 
 const RightMenuContainer = styled.div`
@@ -103,14 +101,13 @@ const RightMenuContainer = styled.div`
   align-items: flex-end;
   justify-content: flex-start;
   position: absolute;
-
-  overflow: hidden;
 `;
 
 const RightMenuWrapper = styled(flexCenter)`
   justify-content: flex-start;
   width: 300px;
   height: 100vh;
+
   z-index: 1000;
 `;
 

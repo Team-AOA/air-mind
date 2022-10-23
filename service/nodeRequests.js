@@ -38,3 +38,11 @@ export async function postCommentsData(userId, mindMapId, nodeId, commentData) {
     data: commentData,
   });
 }
+
+export async function putImagesData(userId, mindMapId, nodeId, imageData) {
+  return API({
+    method: 'put',
+    url: `/users/${userId}/mind-maps/${mindMapId}/nodes/${nodeId}`,
+    data: imageData,
+  });
+}
