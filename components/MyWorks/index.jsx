@@ -13,8 +13,8 @@ import { currentUserInfo } from '../../store/states';
 export default function MyWorks() {
   const [myMindMapData, setMyMindMapData] = useState([]);
   const [currentError, setCurrentError] = useState({});
-  const userData = useRecoilValue(currentUserInfo);
-  const { _id: userId } = userData;
+  const currentUserData = useRecoilValue(currentUserInfo);
+  const { id: currentUserId } = currentUserData;
 
   useEffect(() => {
     const fetchMyMindMapData = async id => {
@@ -26,10 +26,10 @@ export default function MyWorks() {
         setCurrentError(error);
       }
     };
-    if (userId) {
-      fetchMyMindMapData(userId);
+    if (currentUserId) {
+      fetchMyMindMapData(currentUserId);
     }
-  }, [userId]);
+  }, [currentUserId]);
 
   return (
     <Wrapper>
