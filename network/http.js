@@ -29,14 +29,21 @@ API.interceptors.response.use(
     return res.data;
   },
   error => {
+    const currentError = {
+      result: error.response.data.result,
+      ...error.response.data.error,
+      error,
+    };
+
     console.log('error : ', error);
-    return process.env.NODE_ENV === 'development'
-      ? console.error({
-          result: error.response.data.result,
-          ...error.response.data.error,
-          error,
-        })
-      : console.log({ result: 'error', statusCode: error.response.status });
+
+    if (process.env.NODE_ENV === 'development') {
+      console.error(currentError);
+    } else {
+      console.log({ result: 'error', statusCode: error.response.status });
+    }
+
+    throw currentError;
   },
 );
 
