@@ -15,6 +15,7 @@ export default function Header() {
   const router = useRouter();
   const [token, setToken] = useState('');
   const deleteUserInfo = useSetRecoilState(userInfo);
+  const { mindMapId } = router.query;
 
   useEffect(() => {
     setToken(getCookie('loginData'));
@@ -66,7 +67,7 @@ export default function Header() {
           <HeaderHomeButton>air-mind</HeaderHomeButton>
         </Link>
       </HeaderLeftSide>
-      {router.query.mindMapId && <MindMapInfo />}
+      {mindMapId && <MindMapInfo mindMapId={mindMapId} />}
       <HeaderRightSide>
         <HeaderMyWorkButton
           onClick={() => {

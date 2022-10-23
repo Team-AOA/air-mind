@@ -14,6 +14,14 @@ export async function postMindMapData(userId) {
   });
 }
 
+export async function updateMindMapData(userId, mindMapId, mindMapData) {
+  return API({
+    method: 'put',
+    url: `/users/${userId}/mind-maps/${mindMapId}`,
+    data: mindMapData,
+  });
+}
+
 export default async function getPublicMindMapData() {
   return API({
     method: 'get',
@@ -30,16 +38,16 @@ export async function getMyMindMapData() {
   });
 }
 
-export async function createMindMapData() {
+export async function createMindMapData(userId) {
   return API({
     method: 'post',
-    url: '/users/634ed0872b20f15c36b9a029/mind-maps',
+    url: `/users/${userId}/mind-maps`,
   });
 }
 
-export async function deleteMindMapData() {
+export async function deleteMindMapData(userId, mindMapId) {
   return API({
     method: 'delete',
-    url: '/users/634ed0872b20f15c36b9a029/mind-maps/:mindMapId',
+    url: `/users/${userId}/mind-maps/${mindMapId}`,
   });
 }

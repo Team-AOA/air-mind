@@ -4,19 +4,40 @@ import { useRouter } from 'next/router';
 
 import styled from 'styled-components';
 
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { NavBarButton } from '../shared/Button';
+
+import { createMindMapData } from '../../service/mindMapRequests';
+import { errorInfo, mindMapInfo, userInfo } from '../../store/states';
 
 export default function NavBar() {
   const router = useRouter();
+  const setError = useSetRecoilState(errorInfo);
+  const setMindMapData = useSetRecoilState(mindMapInfo);
+  const userData = useRecoilValue(userInfo);
+
+  const handleCreateButton = async () => {
+    try {
+      const { _id: userId } = userData;
+      const data = await createMindMapData(userId);
+      const { mindMap } = data;
+      const { _id: mindMapId } = mindMap;
+
+      setMindMapData(mindMap);
+
+      router.push({
+        pathname: `/mind-map/${mindMapId}`,
+        query: { mindMapId },
+      });
+    } catch (error) {
+      setError(error);
+    }
+  };
 
   return (
     <NavBarContainer>
       <NavBarWrapper>
-        <NavBarCreateButton
-          onClick={() => {
-            router.push('/mind-map/:{nodeId}');
-          }}
-        >
+        <NavBarCreateButton onClick={handleCreateButton}>
           Create
         </NavBarCreateButton>
         <NavBarPublicButton

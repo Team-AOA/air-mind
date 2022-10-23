@@ -7,10 +7,7 @@ import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 
 import { getNodesData } from '../../service/nodeRequests';
-import {
-  // createMindMapData,
-  getMindMapData,
-} from '../../service/mindMapRequests';
+import { getMindMapData } from '../../service/mindMapRequests';
 import preventBodyScrolling from '../../utils/preventBodyScrolling';
 import {
   userInfo,
@@ -93,19 +90,6 @@ export default function MindMap({ mindMapId }) {
       pageLoader();
     }
   }, [mindMapId]);
-
-  // useEffect(() => {
-  //   const createMindMap = async () => {
-  //     try {
-  //       const mindMap = await createMindMapData();
-
-  //       setMindMapData(mindMap);
-  //     } catch (error) {
-  //       setError(error);
-  //     }
-  //   };
-  //   createMindMap();
-  // }, []);
 
   return (
     <Container>

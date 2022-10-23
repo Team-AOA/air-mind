@@ -3,7 +3,7 @@ import { atom } from 'recoil';
 const userInfo = atom({
   key: 'currentUserInfo',
   default: {
-    id: '634ed0452b20f15c36b9a028',
+    _id: '634ed0452b20f15c36b9a028',
     userName: '최재혁',
     mindMapList: [],
   },
@@ -16,7 +16,9 @@ const errorInfo = atom({
 
 const mindMapInfo = atom({
   key: 'mindMapInfo',
-  default: {},
+  default: {
+    access: '',
+  },
 });
 
 const mindMapListInfo = atom({
