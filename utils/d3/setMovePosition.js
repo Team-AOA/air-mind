@@ -1,8 +1,18 @@
 import * as d3 from 'd3';
+import { putNodesData } from '../../service/nodeRequests';
 
-export default function setMovePosition(ref, x, y, selector, setNodeData) {
+export default function setMovePosition(
+  ref,
+  x,
+  y,
+  nodeId,
+  nodeData,
+  setNodeData,
+  mindMap,
+) {
   const translateX = x;
   const translateY = y;
+  let dragged = false;
 
   const handleDrag = d3
     .drag()
@@ -12,16 +22,31 @@ export default function setMovePosition(ref, x, y, selector, setNodeData) {
     })
     .on('drag', d => {
       setNodeData(prev => {
-        const temp = { ...prev };
-        const tempSel = { ...prev[selector] };
-        tempSel.attribute = {
-          ...tempSel.attribute,
+        const tempNodeData = { ...prev };
+        const node = { ...tempNodeData[nodeId] };
+        node.attribute = {
+          ...node.attribute,
           cordX: d.x,
           cordY: d.y,
         };
-        temp[selector] = tempSel;
-        return temp;
+        tempNodeData[nodeId] = node;
+        return tempNodeData;
       });
+      dragged = true;
+    })
+    .on('end', d => {
+      if (dragged) {
+        const node = { ...nodeData[nodeId] };
+        node.attribute = {
+          ...node.attribute,
+          cordX: d.x,
+          cordY: d.y,
+        };
+
+        const { _id: mindMapId } = mindMap;
+        const { _id: userId } = mindMap.author;
+        putNodesData(userId, mindMapId, nodeId, node);
+      }
     });
 
   handleDrag(ref);

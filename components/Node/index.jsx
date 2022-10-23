@@ -8,17 +8,23 @@ import NodeHoverOption from '../NodeHoverOption';
 import NODE_COLOR from '../../constants/nodeColor';
 import NODE_SIZE from '../../constants/nodeSize';
 import setMovePosition from '../../utils/d3/setMovePosition';
-import { isOpenNodeOptionModal, clickedNodeId } from '../../store/states';
+import {
+  isOpenNodeOptionModal,
+  clickedNodeId,
+  mindMapInfo,
+} from '../../store/states';
 
-export default function Node({ nodeData, setNodeData }) {
+export default function Node({ nodeId, nodeData, setNodeData }) {
   const [isOptionMode, setIsOptionMode] = useState(false);
   const isOpenNodeRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
   const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
   const setClickedNodeId = useSetRecoilState(clickedNodeId);
+  const mindMap = useRecoilValue(mindMapInfo);
 
   const groupRef = useRef();
   const textRef = useRef();
-  let nodeId;
+  const node = nodeData[nodeId];
+
   let nodeAttribute;
   let nodeTitle;
   let nodeX;
@@ -29,8 +35,8 @@ export default function Node({ nodeData, setNodeData }) {
   let textX;
   let textY;
 
-  if (nodeData && Object.keys(nodeData)?.length > 0) {
-    ({ _id: nodeId, attribute: nodeAttribute, title: nodeTitle } = nodeData);
+  if (node && Object.keys(node)?.length > 0) {
+    ({ attribute: nodeAttribute, title: nodeTitle } = node);
     ({ cordX: nodeX, cordY: nodeY } = nodeAttribute);
     ({ width: nodeWidth, height: nodeHeight } = NODE_SIZE[nodeAttribute.size]);
     nodeColor = NODE_COLOR[nodeAttribute.color];
@@ -43,12 +49,20 @@ export default function Node({ nodeData, setNodeData }) {
   }
 
   useEffect(() => {
-    if (nodeData && Object.keys(nodeData)?.length > 0) {
-      const node = d3.select(groupRef.current);
+    if (node && Object.keys(node)?.length > 0) {
+      const nodeSelected = d3.select(groupRef.current);
 
-      setMovePosition(node, nodeX, nodeY, nodeId, setNodeData);
+      setMovePosition(
+        nodeSelected,
+        nodeX,
+        nodeY,
+        nodeId,
+        nodeData,
+        setNodeData,
+        mindMap,
+      );
     }
-  }, [nodeData]);
+  }, [node]);
 
   const onClickHandler = () => {
     setNodeRightOptionMode(!isOpenNodeRightOptionMenu);
@@ -95,10 +109,7 @@ const RectSvg = styled.rect`
 `;
 
 Node.propTypes = {
-  nodeData: PropTypes.object,
+  nodeId: PropTypes.string.isRequired,
+  nodeData: PropTypes.object.isRequired,
   setNodeData: PropTypes.func.isRequired,
-};
-
-Node.defaultProps = {
-  nodeData: {},
 };

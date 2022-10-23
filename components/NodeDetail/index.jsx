@@ -1,23 +1,48 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
 
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { isOpenNodeOptionModal } from '../../store/states';
+import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
+import {
+  clickedNodeId,
+  isOpenNodeOptionModal,
+  mindMapInfo,
+  nodesInfo,
+  userInfo,
+} from '../../store/states';
 import flexCenter from '../shared/FlexCenterContainer';
+import debounce from '../../utils/debounce';
+import { putNodesData } from '../../service/nodeRequests';
 
 export default function NodeDetail() {
-  const [title, setTitle] = useState('');
-  const [memo, setMemo] = useState('');
+  const [nodeData, setNodeData] = useRecoilState(nodesInfo);
+  const userData = useRecoilValue(userInfo);
+  const mindMapData = useRecoilValue(mindMapInfo);
+  const nodeId = useRecoilValue(clickedNodeId);
   const isOpenNodeRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
   const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
 
+  const { _id: userId } = userData;
+  const { _id: mindMapId } = mindMapData;
+
   const writeTitleHandler = e => {
-    setTitle(e.target.value);
+    const tempData = { ...nodeData };
+    tempData[nodeId] = { ...tempData[nodeId], title: e.target.value };
+    setNodeData(tempData);
+
+    debounce(() => {
+      putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
+    }, 1500);
   };
 
   const writeDescriptionHandler = e => {
-    setMemo(e.target.value);
+    const tempData = { ...nodeData };
+    tempData[nodeId] = { ...tempData[nodeId], content: e.target.value };
+    setNodeData(tempData);
+
+    debounce(() => {
+      putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
+    }, 1500);
   };
 
   return (
@@ -33,11 +58,17 @@ export default function NodeDetail() {
       </MenuBody>
       <MenuBody className="title">
         <MenuTitle>Title</MenuTitle>
-        <TitleInput value={title} onChange={writeTitleHandler} />
+        <TitleInput
+          value={nodeData[nodeId]?.title}
+          onChange={writeTitleHandler}
+        />
       </MenuBody>
       <MenuBody className="memo">
         <MenuTitle>Description</MenuTitle>
-        <MemoTextArea value={memo} onChange={writeDescriptionHandler} />
+        <MemoTextArea
+          value={nodeData[nodeId]?.content}
+          onChange={writeDescriptionHandler}
+        />
       </MenuBody>
       <MenuBody className="image">
         <MenuTitle>Image</MenuTitle>

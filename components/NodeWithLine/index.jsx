@@ -6,11 +6,15 @@ import Node from '../Node';
 import NODE_SIZE from '../../constants/nodeSize';
 
 export default function NodeWithLine({
-  parentNodeData,
-  childNodeData,
+  parentNodeId,
+  childNodeId,
+  nodeData,
   setNodeData,
 }) {
   const lineRef = useRef();
+  const parentNodeData = nodeData[parentNodeId];
+  const childNodeData = nodeData[childNodeId];
+
   let parentX;
   let parentY;
   let parentWidth;
@@ -58,17 +62,18 @@ export default function NodeWithLine({
   return (
     <>
       <line ref={lineRef} style={{ stroke: 'red' }} />
-      <Node nodeData={childNodeData} setNodeData={setNodeData} />
+      <Node
+        nodeId={childNodeId}
+        nodeData={nodeData}
+        setNodeData={setNodeData}
+      />
     </>
   );
 }
 
 NodeWithLine.propTypes = {
-  parentNodeData: PropTypes.object,
-  childNodeData: PropTypes.object.isRequired,
+  parentNodeId: PropTypes.string.isRequired,
+  childNodeId: PropTypes.string.isRequired,
+  nodeData: PropTypes.object.isRequired,
   setNodeData: PropTypes.func.isRequired,
-};
-
-NodeWithLine.defaultProps = {
-  parentNodeData: {},
 };
