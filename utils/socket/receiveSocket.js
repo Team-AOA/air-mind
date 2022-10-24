@@ -1,7 +1,5 @@
 const receiveSocket = (socket, setNodeData) => {
   socket.on('receiveColor', (nodeId, color) => {
-    console.log(nodeId, color);
-
     setNodeData(prev => {
       const temp = { ...prev };
       const tempSel = { ...temp[nodeId] };
@@ -41,10 +39,6 @@ const receiveSocket = (socket, setNodeData) => {
   });
 
   socket.on('receivePosition', (nodeId, updatedPositionX, updatedPositionY) => {
-    console.log(
-      '🐶 ~ file: receiveSocket.js ~ line 45 ~ socket.on ~ updatedPositionX',
-      updatedPositionX,
-    );
     setNodeData(prev => {
       const temp = { ...prev };
       const tempSel = { ...temp[nodeId] };

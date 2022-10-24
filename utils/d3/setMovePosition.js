@@ -43,7 +43,6 @@ export default function setMovePosition(
           cordX: d.x,
           cordY: d.y,
         };
-        console.log('🐶 ~ file: setMovePosition.js ~ line 45 ~ d.y', d.y);
 
         const { _id: mindMapId } = mindMap;
         const { _id: userId } = mindMap.author;
