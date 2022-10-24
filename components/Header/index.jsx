@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+// eslint-disable-next-line camelcase
+import jwt_decode from 'jwt-decode';
 import styled from 'styled-components';
-import { deleteCookie } from 'cookies-next';
+
+import { getCookie, deleteCookie } from 'cookies-next';
 import Link from 'next/link';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { logOut } from '../../service/auth';
 import { HeaderButton } from '../shared/Button';
 import MindMapInfo from '../MindMapInfo';
@@ -14,13 +16,32 @@ import { currentUserInfo } from '../../store/states';
 
 export default function Header({ loginData }) {
   const router = useRouter();
-  const deleteUserInfo = useSetRecoilState(currentUserInfo);
+  const setUserInfo = useSetRecoilState(currentUserInfo);
+  const userInfo = useRecoilValue(currentUserInfo);
   const { mindMapId } = router.query;
+
+  useEffect(() => {
+    if (loginData !== 'notAuth' && !userInfo.name) {
+      const userData = jwt_decode(loginData);
+      const userId = getCookie('loginData-id');
+
+      const { name, email, picture } = userData;
+
+      setUserInfo({
+        id: userId,
+        username: name,
+        email,
+        profile: picture,
+      });
+    }
+  }, []);
+
+  console.log(userInfo);
 
   const clickLogOutHandler = () => {
     logOut();
     deleteCookie('loginData');
-    deleteUserInfo({});
+    setUserInfo({});
     return router.push('/');
   };
 
