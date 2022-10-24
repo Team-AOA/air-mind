@@ -9,6 +9,7 @@ const { persistAtom } = recoilPersist({});
 const userInfo = atom({
   key: `userInfo/${newId}`,
   default: {},
+  effects_UNSTABLE: [persistAtom],
 });
 
 const currentUserInfo = atom({

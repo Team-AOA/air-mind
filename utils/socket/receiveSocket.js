@@ -1,3 +1,7 @@
+import calculateNewNodePosition from '../d3/calculateNewNodePosition';
+import { postNodesData, deleteNodesData } from '../../service/nodeRequests';
+import deleteNodeHelper from '../deleteNodeHelper';
+
 const receiveSocket = (socket, setNodeData) => {
   socket.on('receiveColor', (nodeId, color) => {
     setNodeData(prev => {
@@ -36,6 +40,39 @@ const receiveSocket = (socket, setNodeData) => {
 
       return temp;
     });
+  });
+
+  socket.on(
+    'receiveDeleteNode',
+    async (nodeId, nodeData, userId, mindMapId) => {
+      deleteNodeHelper(nodeId, nodeData, setNodeData);
+      await deleteNodesData(userId, mindMapId, nodeId);
+    },
+  );
+
+  socket.on('receiveAddNode', (id, headId, userId, mindMapId, nodeId) => {
+    const createNode = async () => {
+      const calculated = calculateNewNodePosition(id, headId);
+      console.log(userId, mindMapId, nodeId);
+      const newNode = await postNodesData(userId, mindMapId, nodeId, {
+        attribute: calculated,
+      });
+
+      setNodeData(prev => {
+        const tempData = { ...prev };
+        const { _id: newId } = newNode.node;
+        const newParent = {
+          ...tempData[nodeId],
+          children: [...tempData[nodeId].children, newId],
+        };
+
+        tempData[nodeId] = newParent;
+        tempData[newId] = newNode.node;
+
+        return { ...prev, ...tempData };
+      });
+    };
+    createNode(id, headId);
   });
 
   socket.on('receivePosition', (nodeId, updatedPositionX, updatedPositionY) => {
