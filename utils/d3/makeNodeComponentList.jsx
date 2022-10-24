@@ -16,7 +16,7 @@ const makeNodeComponentList = (nodeData, setNodeData, headNode) => {
     />,
   );
 
-  if (nodeData[headNode].attribute.isFold === false) {
+  if (nodeData[headNode]?.attribute.isFold === false) {
     nodeQueue.push(...nodeData[headNode].children);
   }
 

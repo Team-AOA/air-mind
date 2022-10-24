@@ -9,6 +9,9 @@ const Icon = styled.img`
 `;
 
 const GuestIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 50px;
   height: 50px;
   border-radius: 50px;
@@ -19,12 +22,12 @@ export default function ProfileIcon({ src, alt }) {
   const [hasUrl, setHasUrl] = useState(false);
 
   useEffect(() => {
-    if (src) {
+    if (src !== 'guest') {
       setHasUrl(true);
     }
   }, []);
 
-  return hasUrl ? <Icon src={src} alt={alt} /> : <GuestIcon />;
+  return hasUrl ? <Icon src={src} alt={alt} /> : <GuestIcon>Guest</GuestIcon>;
 }
 
 ProfileIcon.propTypes = {

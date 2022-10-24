@@ -22,7 +22,7 @@ export default function Header({ loginData }) {
   const { mindMapId } = router.query;
 
   useEffect(() => {
-    if (loginData !== 'notAuth' && !userInfo.name) {
+    if (loginData !== 'notAuth' && !userInfo.username) {
       const userData = jwt_decode(loginData);
       const userId = getCookie('loginData-id');
 
@@ -35,11 +35,29 @@ export default function Header({ loginData }) {
         profile: picture,
       });
     }
+
+    if (userInfo.username && loginData === 'notAuth') {
+      setUserInfo({});
+    }
+
+    const loginDate = getCookie('loginTime');
+    const currentDate = new Date();
+
+    if (currentDate - loginDate >= 3600000) {
+      deleteCookie('loginData');
+      deleteCookie('loginData-id');
+      deleteCookie('loginTime');
+      setUserInfo({});
+
+      alert('Your certification has expired. Please log in again.');
+    }
   }, []);
 
   const clickLogOutHandler = () => {
     logOut();
     deleteCookie('loginData');
+    deleteCookie('loginData-id');
+    deleteCookie('loginTime');
     setUserInfo({});
     return router.push('/');
   };
@@ -49,7 +67,12 @@ export default function Header({ loginData }) {
       <HeaderLeftSide>
         <Link href="/">
           <div>
-            <Image src="/images/air_mind_logo.png" width="80px" height="80px" />
+            <Image
+              src="/images/air_mind_logo.png"
+              width="80px"
+              height="80px"
+              className="homeIcon"
+            />
           </div>
         </Link>
         <Link href="/">
@@ -64,6 +87,7 @@ export default function Header({ loginData }) {
           <HeaderLoginButton onClick={() => router.push('login')}>
             Log In
           </HeaderLoginButton>
+          <ProfileIcon src={userInfo.profile || 'guest'} alt="profile" />
         </HeaderRightSide>
       ) : (
         <HeaderRightSide>
@@ -73,7 +97,7 @@ export default function Header({ loginData }) {
           <HeaderLoginButton onClick={clickLogOutHandler}>
             LogOut
           </HeaderLoginButton>
-          <ProfileIcon src={userInfo.profile} alt="profile" />
+          <ProfileIcon src={userInfo.profile || 'guest'} alt="profile" />
         </HeaderRightSide>
       )}
     </HeaderWrapper>
@@ -105,7 +129,7 @@ const HeaderWrapper = styled.div`
   align-items: center;
   position: sticky;
   top: 0px;
-  z-index: 1;
+  z-index: 10;
   height: 100px;
   width: 100%;
   padding: 0 10px;

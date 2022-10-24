@@ -28,6 +28,7 @@ export async function login() {
 
     setCookie('loginData', idToken, { secure: true });
     setCookie('loginData-id', id, { secure: true });
+    setCookie('loginTime', new Date());
 
     response.token = idToken;
     return response;
