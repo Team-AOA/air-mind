@@ -12,24 +12,34 @@ const calculateNewNodePosition = (nodeId, headNodeId) => {
   const nodeCenterY =
     Number(node.attr('y')) + Number(node.selectChild().attr('height')) / 2;
 
-  const headNodeCenterX =
-    Number(headNode.attr('x')) +
-    Number(headNode.selectChild().attr('width')) / 2;
-  const headNodeCenterY =
-    Number(headNode.attr('y')) +
-    Number(headNode.selectChild().attr('height')) / 2;
+  let increaseX;
+  let increaseY;
 
-  const diffX = nodeCenterX - headNodeCenterX;
-  const diffY = nodeCenterY - headNodeCenterY;
+  if (nodeId === headNodeId) {
+    increaseX = 200;
+    increaseY = 200;
+  } else {
+    const headNodeCenterX =
+      Number(headNode.attr('x')) +
+      Number(headNode.selectChild().attr('width')) / 2;
+    const headNodeCenterY =
+      Number(headNode.attr('y')) +
+      Number(headNode.selectChild().attr('height')) / 2;
 
-  const cordX =
-    nodeCenterX +
-    150 * (diffX / (diffX ** 2 + diffY ** 2) ** 0.5) -
-    NODE_SIZE.MEDIUM.width / 2;
-  const cordY =
-    nodeCenterY +
-    150 * (diffY / (diffX ** 2 + diffY ** 2) ** 0.5) -
-    NODE_SIZE.MEDIUM.height / 2;
+    const diffX = nodeCenterX - headNodeCenterX;
+    const diffY = nodeCenterY - headNodeCenterY;
+
+    increaseX =
+      150 * (diffX / (diffX ** 2 + diffY ** 2) ** 0.5) -
+      NODE_SIZE.MEDIUM.width / 2;
+
+    increaseY =
+      150 * (diffY / (diffX ** 2 + diffY ** 2) ** 0.5) -
+      NODE_SIZE.MEDIUM.height / 2;
+  }
+
+  const cordX = nodeCenterX + increaseX;
+  const cordY = nodeCenterY + increaseY;
 
   return { cordX, cordY };
 };
