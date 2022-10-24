@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
 import router from 'next/router';
 import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 
-import { RiDeleteBin6Line as RecycleBinIcon } from 'react-icons/ri';
 import flexCenter from '../shared/FlexCenterContainer';
 import { userInfo, errorInfo, mindMapInfo } from '../../store/states';
 import {
@@ -86,7 +86,12 @@ export default function MindMapInfo({ mindMapId }) {
         <MindMapPrivateOption>Private</MindMapPrivateOption>
       </MindMapPublicSelect>
       <Icon onClick={handleMindMapDelete}>
-        <RecycleBinIcon size="60" className="icon" />
+        <Image
+          src="/images/recycle-bin.png"
+          width="50px"
+          height="50px"
+          className="icon"
+        />
       </Icon>
     </MindMapInfoWrapper>
   );
