@@ -7,11 +7,12 @@ import {
   BiPlusMedical as PlusIcon,
 } from 'react-icons/bi';
 import { RiDeleteBin6Line as RecycleBinIcon } from 'react-icons/ri';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
 import {
   isOpenNodeCommentModal,
   mindMapInfo,
   socketInfo,
+  nodesInfo,
 } from '../../store/states';
 import NODE_COLOR from '../../constants/nodeColor';
 import flexCenter from '../shared/FlexCenterContainer';

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
 import router from 'next/router';
@@ -18,35 +18,41 @@ import {
   FAIL_DELETE_MIND_MAP_BY_SERVER_PROBLEM,
   FAIL_CHANGE_MIND_MAP_PUBLIC_OPTION,
 } from '../../constants/constants';
+import debounce from '../../utils/debounce';
 
 export default function MindMapInfo({ mindMapId }) {
-  const [mindMapTitle, setMindMapTitle] = useState('');
-  const [publicOption, setPublicOption] = useState('');
   const [mindMapData, setMindMapData] = useRecoilState(mindMapInfo);
 
   const setError = useSetRecoilState(errorInfo);
   const userData = useRecoilValue(userInfo);
 
-  const { _id: userId } = userData;
-  const { author } = mindMapData;
+  let userId;
+  let authorId;
+
+  if (userData && Object.keys(userData).length > 0) {
+    ({ _id: userId } = userData);
+  }
+
+  if (mindMapData && Object.keys(mindMapData).length > 0) {
+    const { author } = mindMapData;
+    ({ _id: authorId } = author);
+  }
 
   const handleMindMapTitle = event => {
-    setMindMapTitle(event.target.value);
+    const newMindMapData = { ...mindMapData, title: event.target.value };
+    setMindMapData(newMindMapData);
+    debounce(() => {
+      updateMindMapData(userId, mindMapId, newMindMapData);
+    }, 1500);
   };
 
   const handlePublicOption = async event => {
     try {
-      if (author === userId) {
-        setPublicOption(event.target.value);
-        setMindMapData({
-          ...mindMapData,
-          access: event.target.value,
-        });
+      if (authorId === userId) {
+        const newMindMapData = { ...mindMapData, access: event.target.value };
+        setMindMapData(newMindMapData);
 
-        const data = await updateMindMapData(userId, mindMapId, mindMapData);
-        const { mindMap } = data;
-
-        setMindMapData(mindMap);
+        await updateMindMapData(userId, mindMapId, newMindMapData);
       } else {
         alert(FAIL_CHANGE_MIND_MAP_PUBLIC_OPTION);
       }
@@ -57,7 +63,7 @@ export default function MindMapInfo({ mindMapId }) {
 
   const handleMindMapDelete = async () => {
     try {
-      if (author === userId) {
+      if (authorId === userId) {
         const confirmCheck = window.confirm('정말 삭제하시겠습니까?');
 
         if (!confirmCheck) {
@@ -80,8 +86,11 @@ export default function MindMapInfo({ mindMapId }) {
 
   return (
     <MindMapInfoWrapper>
-      <MindMapTitle value={mindMapTitle} onChange={handleMindMapTitle} />
-      <MindMapPublicSelect onChange={handlePublicOption} value={publicOption}>
+      <MindMapTitle value={mindMapData.title} onChange={handleMindMapTitle} />
+      <MindMapPublicSelect
+        onChange={handlePublicOption}
+        value={mindMapData.access}
+      >
         <MindMapPublicOption>Public</MindMapPublicOption>
         <MindMapPrivateOption>Private</MindMapPrivateOption>
       </MindMapPublicSelect>
