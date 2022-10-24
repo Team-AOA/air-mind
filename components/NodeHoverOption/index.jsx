@@ -7,11 +7,11 @@ import {
   BiPlusMedical as PlusIcon,
 } from 'react-icons/bi';
 import { RiDeleteBin6Line as RecycleBinIcon } from 'react-icons/ri';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   isOpenNodeCommentModal,
   mindMapInfo,
-  nodesInfo,
+  socketInfo,
 } from '../../store/states';
 import NODE_COLOR from '../../constants/nodeColor';
 import flexCenter from '../shared/FlexCenterContainer';
@@ -36,6 +36,8 @@ export default function NodeHoverOption({
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
   const mindMap = useRecoilValue(mindMapInfo);
   const isHead = nodeData[nodeId]?.parent === undefined;
+  const socket = useRecoilValue(socketInfo);
+
   const { _id: mindMapId } = mindMap;
   const { _id: userId } = mindMap.author;
 
@@ -43,6 +45,7 @@ export default function NodeHoverOption({
     setNodeData(prev => {
       const temp = { ...prev };
       const tempSel = { ...temp[nodeId] };
+
       tempSel.attribute = {
         ...tempSel.attribute,
         color: item,
@@ -53,6 +56,9 @@ export default function NodeHoverOption({
 
       return temp;
     });
+
+    socket.emit('colorChange', mindMapId, nodeId, item);
+
     setIsSelectColorMode(prev => !prev);
   };
 

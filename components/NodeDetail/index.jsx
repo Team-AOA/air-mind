@@ -9,7 +9,8 @@ import {
   isOpenNodeOptionModal,
   mindMapInfo,
   nodesInfo,
-  userInfo,
+  currentUserInfo,
+  socketInfo,
 } from '../../store/states';
 import flexCenter from '../shared/FlexCenterContainer';
 import NodeImageDropZone from '../NodeImageDropZone';
@@ -18,9 +19,11 @@ import { putNodesData } from '../../service/nodeRequests';
 
 export default function NodeDetail() {
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
-  const userData = useRecoilValue(userInfo);
+  const userData = useRecoilValue(currentUserInfo);
   const mindMapData = useRecoilValue(mindMapInfo);
   const nodeId = useRecoilValue(clickedNodeId);
+  const socket = useRecoilValue(socketInfo);
+
   const isOpenNodeRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
   const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
 
@@ -29,22 +32,30 @@ export default function NodeDetail() {
 
   const writeTitleHandler = e => {
     const tempData = { ...nodeData };
+
     tempData[nodeId] = { ...tempData[nodeId], title: e.target.value };
+
     setNodeData(tempData);
 
     debounce(() => {
       putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
     }, 1500);
+
+    socket.emit('titleChange', mindMapId, nodeId, e.target.value);
   };
 
   const writeDescriptionHandler = e => {
     const tempData = { ...nodeData };
+
     tempData[nodeId] = { ...tempData[nodeId], content: e.target.value };
+
     setNodeData(tempData);
 
     debounce(() => {
       putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
     }, 1500);
+
+    socket.emit('contentChange', mindMapId, nodeId, e.target.value);
   };
 
   const addImageHandler = imageArray => {
@@ -65,7 +76,7 @@ export default function NodeDetail() {
           onClick={() => setNodeRightOptionMode(false)}
         />
       </MenuBody>
-      <ScrollWraper>
+      <ScrollWrapper>
         <Scroll>
           <MenuWrapper>
             <TitleMenu className="title">
@@ -110,7 +121,7 @@ export default function NodeDetail() {
             </ImageList>
           </MenuWrapper>
         </Scroll>
-      </ScrollWraper>
+      </ScrollWrapper>
     </Container>
   );
 }
@@ -140,7 +151,7 @@ const Container = styled(flexCenter)`
   }
 `;
 
-const ScrollWraper = styled.div`
+const ScrollWrapper = styled.div`
   width: 100%;
   height: 90vh;
   overflow: hidden;

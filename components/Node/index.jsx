@@ -13,6 +13,7 @@ import {
   isOpenNodeOptionModal,
   clickedNodeId,
   mindMapInfo,
+  socketInfo,
 } from '../../store/states';
 
 export default function Node({ nodeId, nodeData, setNodeData }) {
@@ -24,6 +25,7 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
   const mindMap = useRecoilValue(mindMapInfo);
   const [textX, setTextX] = useState();
   const [textY, setTextY] = useState();
+  const socket = useRecoilValue(socketInfo);
 
   const groupRef = useRef();
   const textRef = useRef();
@@ -57,6 +59,7 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
         nodeData,
         setNodeData,
         mindMap,
+        socket,
       );
     }
   }, [node]);

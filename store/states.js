@@ -1,16 +1,20 @@
 import { atom } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
+import { recoilPersist } from 'recoil-persist';
 
 const newId = uuidv4();
 
-const currentUserInfo = atom({
-  key: 'currentUserInfo',
-  default: {},
-});
+const { persistAtom } = recoilPersist({});
 
 const userInfo = atom({
   key: `userInfo/${newId}`,
   default: {},
+});
+
+const currentUserInfo = atom({
+  key: 'currentUserInfo',
+  default: {},
+  effects_UNSTABLE: [persistAtom],
 });
 
 const errorInfo = atom({
@@ -48,6 +52,12 @@ const clickedNodeId = atom({
   default: '',
 });
 
+const socketInfo = atom({
+  key: 'socketInfo',
+  default: {},
+  dangerouslyAllowMutability: true,
+});
+
 export {
   currentUserInfo,
   userInfo,
@@ -58,4 +68,5 @@ export {
   isOpenNodeCommentModal,
   isOpenNodeOptionModal,
   clickedNodeId,
+  socketInfo,
 };

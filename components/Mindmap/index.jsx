@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
-
+import { io } from 'socket.io-client';
+import receiveSocket from '../../utils/socket/receiveSocket';
 import preventBodyScrolling from '../../utils/preventBodyScrolling';
 import {
   userInfo,
@@ -14,12 +15,17 @@ import {
   mindMapInfo,
   isOpenNodeCommentModal,
   isOpenNodeOptionModal,
+  socketInfo,
 } from '../../store/states';
 import Header from '../Header';
 import NodeComment from '../NodeComment';
 import NodeDetail from '../NodeDetail';
 import flexCenter from '../shared/FlexCenterContainer';
 import pageLoader from '../../utils/pageLoader';
+
+const socket = io(process.env.NEXT_PUBLIC_SERVER_URL, {
+  transports: [`websocket`],
+});
 
 const NodeCanvas = dynamic(() => import('../NodeCanvas'), {
   ssr: false,
@@ -33,6 +39,24 @@ export default function MindMap({ loginData, mindMapId }) {
   const setError = useSetRecoilState(errorInfo);
   const isOpenNodeCommentMenu = useRecoilValue(isOpenNodeCommentModal);
   const isOpenNodeOptionMenu = useRecoilValue(isOpenNodeOptionModal);
+  const setSocket = useSetRecoilState(socketInfo);
+
+  useEffect(() => {
+    socket.on('connect', () => {
+      console.log(' client socket connected');
+    });
+
+    socket.emit('joinMindMap', mindMapId);
+
+    setSocket(socket);
+    receiveSocket(socket, setNodeData);
+
+    return () => {
+      socket.emit('leaveMindMap', mindMapId);
+      socket.off('broadcast');
+      setSocket({});
+    };
+  }, []);
 
   const router = useRouter();
 
