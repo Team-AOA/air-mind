@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import Image from 'next/image';
 import styled from 'styled-components';
@@ -14,7 +14,7 @@ import {
 import flexCenter from '../shared/FlexCenterContainer';
 import NodeImageDropZone from '../NodeImageDropZone';
 import debounce from '../../utils/debounce';
-import { putNodesData, getNodesData } from '../../service/nodeRequests';
+import { putNodesData } from '../../service/nodeRequests';
 
 export default function NodeDetail() {
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
@@ -23,20 +23,9 @@ export default function NodeDetail() {
   const nodeId = useRecoilValue(clickedNodeId);
   const isOpenNodeRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
   const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
-  const [imageList, setImageList] = useState([]);
 
   const { _id: userId } = userData;
   const { _id: mindMapId } = mindMapData;
-
-  useEffect(() => {
-    const fetchNodeImageData = async () => {
-      // TODO getNodesData 인자 안에 userId, mindMapId 추가되어야 함
-      const res = await getNodesData(nodeId);
-      setImageList(res.node[nodeId].images);
-    };
-
-    fetchNodeImageData();
-  }, []);
 
   const writeTitleHandler = e => {
     const tempData = { ...nodeData };
@@ -56,6 +45,13 @@ export default function NodeDetail() {
     debounce(() => {
       putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
     }, 1500);
+  };
+
+  const addImageHandler = imageArray => {
+    const tempData = { ...nodeData };
+    tempData[nodeId] = { ...tempData[nodeId], images: imageArray };
+
+    setNodeData(tempData);
   };
 
   return (
@@ -88,12 +84,18 @@ export default function NodeDetail() {
             </DescriptionMenu>
             <ImageMenu className="image">
               <MenuTitle>Image</MenuTitle>
-              <NodeImageDropZone addImage={setImageList} className="dragZone" />
+              <NodeImageDropZone
+                userId={userId}
+                mindMapId={mindMapId}
+                nodeId={nodeId}
+                addImage={addImageHandler}
+                className="dragZone"
+              />
             </ImageMenu>
             <ImageList>
               <MenuTitle>Image List</MenuTitle>
               <ImageWrapper>
-                {imageList.map(img => {
+                {nodeData[nodeId]?.images.map(img => {
                   const { _id: id } = img;
                   return (
                     <NodeImg

@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { logOut } from '../../service/auth';
 import { HeaderButton } from '../shared/Button';
+import ProfileIcon from '../shared/ProfileIcon';
 import MindMapInfo from '../MindMapInfo';
 import { currentUserInfo } from '../../store/states';
 
@@ -35,8 +36,6 @@ export default function Header({ loginData }) {
       });
     }
   }, []);
-
-  console.log(userInfo);
 
   const clickLogOutHandler = () => {
     logOut();
@@ -63,13 +62,14 @@ export default function Header({ loginData }) {
           </HeaderLoginButton>
         </HeaderRightSide>
       ) : (
-        <HeaderRightSide>
+        <HeaderRightSide onLogin={loginData !== 'notAuth'}>
           <HeaderMyWorkButton onClick={() => router.push('mind-map')}>
             My Work
           </HeaderMyWorkButton>
           <HeaderLoginButton onClick={clickLogOutHandler}>
             LogOut
           </HeaderLoginButton>
+          <ProfileIcon src={userInfo.profile} alt="profile" />
         </HeaderRightSide>
       )}
     </HeaderWrapper>
@@ -92,7 +92,7 @@ const HeaderRightSide = styled.div`
   display: flex;
   margin-left: auto;
   width: 20%;
-  margin-right: 10px;
+  margin-right: ${props => (props.onLogin ? '30px' : '5px')};
 `;
 
 const HeaderWrapper = styled.div`
@@ -126,7 +126,6 @@ const HeaderLoginButton = styled(HeaderButton)`
     color: #fab004;
   }
 `;
-
 Header.propTypes = {
   loginData: PropTypes.node.isRequired,
 };
