@@ -4,13 +4,13 @@ import Image from 'next/image';
 import styled from 'styled-components';
 
 import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
-import { io } from 'socket.io-client';
 import {
   clickedNodeId,
   isOpenNodeOptionModal,
   mindMapInfo,
   nodesInfo,
   currentUserInfo,
+  socketInfo,
 } from '../../store/states';
 import flexCenter from '../shared/FlexCenterContainer';
 import NodeImageDropZone from '../NodeImageDropZone';
@@ -31,25 +31,23 @@ const SocketEmit = (mindMapId, nodeInfo) => {
   socket.emit('userSend', JSON.stringify(data));
 };
 
-const socket = io(process.env.NEXT_PUBLIC_SERVER_URL, {
-  transports: [`websocket`],
-});
+// const SocketEmit = (mindMapId, nodeInfo) => {
+//   // 타이틀용, 디스크립션용 분리
+//   const data = {
+//     mindMapId,
+//     title: nodeInfo.title,
+//     description: nodeInfo.description,
+//   };
 
-const SocketEmit = (mindMapId, nodeInfo) => {
-  const data = {
-    mindMapId,
-    title: nodeInfo.title,
-    description: nodeInfo.description,
-  };
-
-  socket.emit('userSend', JSON.stringify(data));
-};
+//   socket.emit('userSend', JSON.stringify(data));
+// };
 
 export default function NodeDetail() {
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
   const userData = useRecoilValue(currentUserInfo);
   const mindMapData = useRecoilValue(mindMapInfo);
   const nodeId = useRecoilValue(clickedNodeId);
+  const socket = useRecoilValue(socketInfo);
 
   const isOpenNodeRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
   const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
@@ -67,69 +65,32 @@ export default function NodeDetail() {
     fetchNodeImageData();
   }, []);
 
-  useEffect(() => {
-    socket.emit('joinMindMap', mindMapId);
-
-    // socket.on(
-    //   'broadcast',
-    //   jsonData => {
-    //     const data = JSON.parse(jsonData);
-
-    //   setNodeData(prevData => ({
-    //     ...prevData,
-    //     data[nodeId].title:
-    //     description: data.description,
-    //   }));
-    // });
-
-    return () => {
-      socket.emit('leaveMindMap', mindMapId);
-      socket.off('broadcast');
-    };
-  }, [mindMapId]);
-
   const writeTitleHandler = e => {
-    // const tempData = { ...nodeData };
-    // tempData[nodeId] = { ...tempData[nodeId], title: e.target.value };
-    // setNodeData(tempData);
+    const tempData = { ...nodeData };
 
-    setNodeData(() => {
-      const tempData = { ...nodeData };
+    tempData[nodeId] = { ...tempData[nodeId], title: e.target.value };
 
-      tempData[nodeId] = { ...tempData[nodeId], title: e.target.value };
+    setNodeData(tempData);
 
-      debounce(() => {
-        putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
-      }, 1500);
+    debounce(() => {
+      putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
+    }, 1500);
 
-      SocketEmit(mindMapId, tempData);
-
-      return tempData;
-    });
+    socket.emit('titleChange', mindMapId, nodeId, e.target.value);
   };
 
   const writeDescriptionHandler = e => {
-    // const tempData = { ...nodeData };
-    // tempData[nodeId] = { ...tempData[nodeId], content: e.target.value };
-    // setNodeData(tempData);
+    const tempData = { ...nodeData };
 
-    // debounce(() => {
-    //   putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
-    // }, 1500);
+    tempData[nodeId] = { ...tempData[nodeId], content: e.target.value };
 
-    setNodeData(() => {
-      const tempData = { ...nodeData };
+    setNodeData(tempData);
 
-      tempData[nodeId] = { ...tempData[nodeId], description: e.target.value };
+    debounce(() => {
+      putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
+    }, 1500);
 
-      debounce(() => {
-        putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
-      }, 1500);
-
-      SocketEmit(mindMapId, tempData);
-
-      return tempData;
-    });
+    socket.emit('contentChange', mindMapId, nodeId, e.target.value);
   };
 
   const addImageHandler = imageArray => {

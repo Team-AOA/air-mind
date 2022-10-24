@@ -9,6 +9,7 @@ export default function setMovePosition(
   nodeData,
   setNodeData,
   mindMap,
+  socket,
 ) {
   const translateX = x;
   const translateY = y;
@@ -42,10 +43,13 @@ export default function setMovePosition(
           cordX: d.x,
           cordY: d.y,
         };
+        console.log('🐶 ~ file: setMovePosition.js ~ line 45 ~ d.y', d.y);
 
         const { _id: mindMapId } = mindMap;
         const { _id: userId } = mindMap.author;
         putNodesData(userId, mindMapId, nodeId, node);
+
+        socket.emit('nodePositionChange', mindMapId, nodeId, d.x, d.y);
       }
     });
 

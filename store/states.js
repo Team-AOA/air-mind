@@ -52,6 +52,12 @@ const clickedNodeId = atom({
   default: '',
 });
 
+const socketInfo = atom({
+  key: 'socketInfo',
+  default: {},
+  dangerouslyAllowMutability: true,
+});
+
 export {
   currentUserInfo,
   userInfo,
@@ -62,4 +68,5 @@ export {
   isOpenNodeCommentModal,
   isOpenNodeOptionModal,
   clickedNodeId,
+  socketInfo,
 };
