@@ -62,7 +62,7 @@ export default function Header({ loginData }) {
           </HeaderLoginButton>
         </HeaderRightSide>
       ) : (
-        <HeaderRightSide>
+        <HeaderRightSide onLogin={loginData !== 'notAuth'}>
           <HeaderMyWorkButton onClick={() => router.push('mind-map')}>
             My Work
           </HeaderMyWorkButton>
@@ -92,7 +92,7 @@ const HeaderRightSide = styled.div`
   display: flex;
   margin-left: auto;
   width: 20%;
-  margin-right: 10px;
+  margin-right: ${props => (props.onLogin ? '30px' : '5px')};
 `;
 
 const HeaderWrapper = styled.div`
@@ -102,7 +102,7 @@ const HeaderWrapper = styled.div`
   align-items: center;
   position: sticky;
   top: 0px;
-  /* z-index: 1; */
+  z-index: 1;
   height: 100px;
   width: 100%;
   padding: 0 10px;
