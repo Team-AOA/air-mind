@@ -17,31 +17,6 @@ import NodeImageDropZone from '../NodeImageDropZone';
 import debounce from '../../utils/debounce';
 import { putNodesData } from '../../service/nodeRequests';
 
-const socket = io(process.env.NEXT_PUBLIC_SERVER_URL, {
-  transports: [`websocket`],
-});
-
-const SocketEmit = (mindMapId, nodeInfo) => {
-  const data = {
-    mindMapId,
-    title: nodeInfo.title,
-    description: nodeInfo.description,
-  };
-
-  socket.emit('userSend', JSON.stringify(data));
-};
-
-// const SocketEmit = (mindMapId, nodeInfo) => {
-//   // 타이틀용, 디스크립션용 분리
-//   const data = {
-//     mindMapId,
-//     title: nodeInfo.title,
-//     description: nodeInfo.description,
-//   };
-
-//   socket.emit('userSend', JSON.stringify(data));
-// };
-
 export default function NodeDetail() {
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
   const userData = useRecoilValue(currentUserInfo);
@@ -54,16 +29,6 @@ export default function NodeDetail() {
 
   const { _id: userId } = userData;
   const { _id: mindMapId } = mindMapData;
-
-  useEffect(() => {
-    const fetchNodeImageData = async () => {
-      // TODO getNodesData 인자 안에 userId, mindMapId 추가되어야 함
-      const res = await getNodesData(nodeId);
-      setImageList(res.node[nodeId].images);
-    };
-
-    fetchNodeImageData();
-  }, []);
 
   const writeTitleHandler = e => {
     const tempData = { ...nodeData };
@@ -111,7 +76,7 @@ export default function NodeDetail() {
           onClick={() => setNodeRightOptionMode(false)}
         />
       </MenuBody>
-      <ScrollWraper>
+      <ScrollWrapper>
         <Scroll>
           <MenuWrapper>
             <TitleMenu className="title">
@@ -156,7 +121,7 @@ export default function NodeDetail() {
             </ImageList>
           </MenuWrapper>
         </Scroll>
-      </ScrollWraper>
+      </ScrollWrapper>
     </Container>
   );
 }
@@ -186,7 +151,7 @@ const Container = styled(flexCenter)`
   }
 `;
 
-const ScrollWraper = styled.div`
+const ScrollWrapper = styled.div`
   width: 100%;
   height: 90vh;
   overflow: hidden;
