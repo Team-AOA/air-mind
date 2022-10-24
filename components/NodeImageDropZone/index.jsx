@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 import styled from 'styled-components';
@@ -7,14 +8,11 @@ import { putImagesData } from '../../service/nodeRequests';
 import flexCenter from '../shared/FlexCenterContainer';
 import { Button } from '../shared/Button';
 
-export default function NodeImageDropZone({
-  userId,
-  mindMapId,
-  nodeId,
-  addImage,
-}) {
+export default function NodeImageDropZone({ addImage }) {
+  const router = useRouter();
   const uploadFile = useRef();
   const [onImgDropZone, setOnImgDropZone] = useState(false);
+  const { nodeId } = router.query;
 
   const handleOnImgDropZone = e => {
     e.preventDefault();
@@ -42,13 +40,15 @@ export default function NodeImageDropZone({
     if (images.length > 3) {
       return alert('A maximum of 3 can be uploaded at one time. ');
     }
+
     const formData = new FormData();
 
     images?.forEach(image => formData.append('images', image));
-
     try {
-      const response = await putImagesData(userId, mindMapId, nodeId, formData);
+      // TODO: putImagesData 인자에 userId, mindMapId 들어가야함
+      const response = await putImagesData(nodeId, formData);
       setOnImgDropZone(false);
+
       addImage(response.node.images);
     } catch (error) {
       if (error.code === 400) {
@@ -91,13 +91,6 @@ export default function NodeImageDropZone({
     </ImageDropArea>
   );
 }
-
-NodeImageDropZone.propTypes = {
-  addImage: PropTypes.func.isRequired,
-  userId: PropTypes.string.isRequired,
-  mindMapId: PropTypes.string.isRequired,
-  nodeId: PropTypes.string.isRequired,
-};
 
 const ImageDropArea = styled(flexCenter)`
   justify-content: center;
@@ -159,3 +152,7 @@ const UploadButton = styled(Button)`
     color: white;
   }
 `;
+
+NodeImageDropZone.propTypes = {
+  addImage: PropTypes.func.isRequired,
+};

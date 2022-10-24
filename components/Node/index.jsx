@@ -20,7 +20,6 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
   const isOpenNodeRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
   const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
   const setClickedNodeId = useSetRecoilState(clickedNodeId);
-  const currentNodeId = useRecoilValue(clickedNodeId);
   const mindMap = useRecoilValue(mindMapInfo);
   const [textX, setTextX] = useState();
   const [textY, setTextY] = useState();
@@ -74,10 +73,7 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
   }, [node]);
 
   const onClickHandler = () => {
-    if (nodeId === currentNodeId || !isOpenNodeRightOptionMenu) {
-      setNodeRightOptionMode(!isOpenNodeRightOptionMenu);
-    }
-
+    setNodeRightOptionMode(!isOpenNodeRightOptionMenu);
     setClickedNodeId(nodeId);
   };
 
