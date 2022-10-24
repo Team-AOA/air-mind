@@ -5,7 +5,10 @@ import styled from 'styled-components';
 import {
   BiCommentDetail as CommentIcon,
   BiPlusMedical as PlusIcon,
+  BiUpArrowCircle as BiggerIcon,
+  BiDownArrowCircle as SmallerIcon,
 } from 'react-icons/bi';
+import { TbResize as SizeIcon } from 'react-icons/tb';
 import { RiDeleteBin6Line as RecycleBinIcon } from 'react-icons/ri';
 import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
 import {
@@ -32,6 +35,7 @@ export default function NodeHoverOption({
   nodeId,
 }) {
   const [isSelectColorMode, setIsSelectColorMode] = useState(false);
+  const [isSelectSizeMode, setIsSelectSizeMode] = useState(false);
   const setNodeCommentMode = useSetRecoilState(isOpenNodeCommentModal);
   const isOpenCommentMenu = useRecoilValue(isOpenNodeCommentModal);
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
@@ -61,6 +65,52 @@ export default function NodeHoverOption({
     socket.emit('colorChange', mindMapId, nodeId, item);
 
     setIsSelectColorMode(prev => !prev);
+  };
+
+  const onClickResize = change => {
+    setNodeData(prev => {
+      const temp = { ...prev };
+      const tempSel = { ...temp[nodeId] };
+
+      const currentSize = tempSel.attribute.size;
+      let newSize;
+
+      if (change === 'bigger') {
+        switch (currentSize) {
+          case 'SMALL':
+            newSize = 'MEDIUM';
+            break;
+          case 'MEDIUM':
+            newSize = 'LARGE';
+            break;
+          default:
+            newSize = 'LARGE';
+        }
+      } else {
+        switch (currentSize) {
+          case 'LARGE':
+            newSize = 'MEDIUM';
+            break;
+          case 'MEDIUM':
+            newSize = 'SMALL';
+            break;
+          default:
+            newSize = 'SMALL';
+        }
+      }
+
+      tempSel.attribute = {
+        ...tempSel.attribute,
+        size: newSize,
+      };
+      temp[nodeId] = tempSel;
+
+      putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
+
+      return temp;
+    });
+
+    setIsSelectSizeMode(prev => !prev);
   };
 
   const createNode = async (id, headId) => {
@@ -102,6 +152,18 @@ export default function NodeHoverOption({
             ))}
           </ColorPalette>
         )}
+        {isSelectSizeMode && (
+          <SizePalette>
+            <BiggerIcon
+              className="sizeButton"
+              onClick={() => onClickResize('bigger')}
+            />
+            <SmallerIcon
+              className="sizeButton"
+              onClick={() => onClickResize('smaller')}
+            />
+          </SizePalette>
+        )}
         <Menu
           onMouseOver={() => setIsOptionMode(true)}
           onMouseOut={() => setIsOptionMode(false)}
@@ -111,6 +173,9 @@ export default function NodeHoverOption({
             onClick={() => setIsSelectColorMode(prev => !prev)}
           >
             <ColorButton selectedColor={selectedColor} />
+          </Icon>
+          <Icon onClick={() => setIsSelectSizeMode(prev => !prev)}>
+            <SizeIcon size="24" className="icon" />
           </Icon>
           <Icon onClick={() => createNode(nodeId, mindMap.headNode)}>
             <PlusIcon size="24" className="icon" />
@@ -192,6 +257,34 @@ const ColorButton = styled.div`
   &:hover {
     box-shadow: 0 0 0 1px #696969 inset;
     transform: scale(1.1);
+  }
+`;
+
+const SizePalette = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  justify-items: center;
+  position: absolute;
+  width: 50px;
+  height: 30px;
+  border-radius: 5px;
+  background-color: white;
+  transform: translateX(-10px) translateY(45px);
+  transition: background-color 0.3s ease;
+
+  .sizeButton {
+    width: 20px;
+    height: 20px;
+    border-radius: 50px;
+    background-color: ${props => props.selectedColor};
+    transition: 100ms linear;
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0 0 0 1px #696969 inset;
+      transform: scale(1.1);
+    }
   }
 `;
 
