@@ -4,47 +4,132 @@ import Image from 'next/image';
 import styled from 'styled-components';
 
 import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
+import { io } from 'socket.io-client';
 import {
   clickedNodeId,
   isOpenNodeOptionModal,
   mindMapInfo,
   nodesInfo,
-  userInfo,
+  currentUserInfo,
 } from '../../store/states';
 import flexCenter from '../shared/FlexCenterContainer';
 import NodeImageDropZone from '../NodeImageDropZone';
 import debounce from '../../utils/debounce';
 import { putNodesData } from '../../service/nodeRequests';
 
+const socket = io(process.env.NEXT_PUBLIC_SERVER_URL, {
+  transports: [`websocket`],
+});
+
+const SocketEmit = (mindMapId, nodeInfo) => {
+  const data = {
+    mindMapId,
+    title: nodeInfo.title,
+    description: nodeInfo.description,
+  };
+
+  socket.emit('userSend', JSON.stringify(data));
+};
+
+const socket = io(process.env.NEXT_PUBLIC_SERVER_URL, {
+  transports: [`websocket`],
+});
+
+const SocketEmit = (mindMapId, nodeInfo) => {
+  const data = {
+    mindMapId,
+    title: nodeInfo.title,
+    description: nodeInfo.description,
+  };
+
+  socket.emit('userSend', JSON.stringify(data));
+};
+
 export default function NodeDetail() {
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
-  const userData = useRecoilValue(userInfo);
+  const userData = useRecoilValue(currentUserInfo);
   const mindMapData = useRecoilValue(mindMapInfo);
   const nodeId = useRecoilValue(clickedNodeId);
+
   const isOpenNodeRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
   const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
 
   const { _id: userId } = userData;
   const { _id: mindMapId } = mindMapData;
 
-  const writeTitleHandler = e => {
-    const tempData = { ...nodeData };
-    tempData[nodeId] = { ...tempData[nodeId], title: e.target.value };
-    setNodeData(tempData);
+  useEffect(() => {
+    const fetchNodeImageData = async () => {
+      // TODO getNodesData 인자 안에 userId, mindMapId 추가되어야 함
+      const res = await getNodesData(nodeId);
+      setImageList(res.node[nodeId].images);
+    };
 
-    debounce(() => {
-      putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
-    }, 1500);
+    fetchNodeImageData();
+  }, []);
+
+  useEffect(() => {
+    socket.emit('joinMindMap', mindMapId);
+
+    // socket.on(
+    //   'broadcast',
+    //   jsonData => {
+    //     const data = JSON.parse(jsonData);
+
+    //   setNodeData(prevData => ({
+    //     ...prevData,
+    //     data[nodeId].title:
+    //     description: data.description,
+    //   }));
+    // });
+
+    return () => {
+      socket.emit('leaveMindMap', mindMapId);
+      socket.off('broadcast');
+    };
+  }, [mindMapId]);
+
+  const writeTitleHandler = e => {
+    // const tempData = { ...nodeData };
+    // tempData[nodeId] = { ...tempData[nodeId], title: e.target.value };
+    // setNodeData(tempData);
+
+    setNodeData(() => {
+      const tempData = { ...nodeData };
+
+      tempData[nodeId] = { ...tempData[nodeId], title: e.target.value };
+
+      debounce(() => {
+        putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
+      }, 1500);
+
+      SocketEmit(mindMapId, tempData);
+
+      return tempData;
+    });
   };
 
   const writeDescriptionHandler = e => {
-    const tempData = { ...nodeData };
-    tempData[nodeId] = { ...tempData[nodeId], content: e.target.value };
-    setNodeData(tempData);
+    // const tempData = { ...nodeData };
+    // tempData[nodeId] = { ...tempData[nodeId], content: e.target.value };
+    // setNodeData(tempData);
 
-    debounce(() => {
-      putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
-    }, 1500);
+    // debounce(() => {
+    //   putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
+    // }, 1500);
+
+    setNodeData(() => {
+      const tempData = { ...nodeData };
+
+      tempData[nodeId] = { ...tempData[nodeId], description: e.target.value };
+
+      debounce(() => {
+        putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
+      }, 1500);
+
+      SocketEmit(mindMapId, tempData);
+
+      return tempData;
+    });
   };
 
   const addImageHandler = imageArray => {
