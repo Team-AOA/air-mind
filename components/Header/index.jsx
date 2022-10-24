@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { logOut } from '../../service/auth';
 import { HeaderButton } from '../shared/Button';
+import ProfileIcon from '../shared/ProfileIcon';
 import MindMapInfo from '../MindMapInfo';
 import { currentUserInfo } from '../../store/states';
 
@@ -35,8 +36,6 @@ export default function Header({ loginData }) {
       });
     }
   }, []);
-
-  console.log(userInfo);
 
   const clickLogOutHandler = () => {
     logOut();
@@ -70,6 +69,7 @@ export default function Header({ loginData }) {
           <HeaderLoginButton onClick={clickLogOutHandler}>
             LogOut
           </HeaderLoginButton>
+          <ProfileIcon src={userInfo.profile} alt="profile" />
         </HeaderRightSide>
       )}
     </HeaderWrapper>
@@ -102,7 +102,7 @@ const HeaderWrapper = styled.div`
   align-items: center;
   position: sticky;
   top: 0px;
-  z-index: 1;
+  /* z-index: 1; */
   height: 100px;
   width: 100%;
   padding: 0 10px;
@@ -126,7 +126,6 @@ const HeaderLoginButton = styled(HeaderButton)`
     color: #fab004;
   }
 `;
-
 Header.propTypes = {
   loginData: PropTypes.node.isRequired,
 };

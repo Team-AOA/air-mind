@@ -9,7 +9,7 @@ const currentUserInfo = atom({
 });
 
 const userInfo = atom({
-  key: `currentUserInfo/${newId}`,
+  key: `userInfo/${newId}`,
   default: {},
 });
 

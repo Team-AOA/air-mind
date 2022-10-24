@@ -107,7 +107,7 @@ const RightMenuContainer = styled.div`
 const RightMenuWrapper = styled(flexCenter)`
   justify-content: flex-start;
   width: 300px;
-  height: 100vh;
+  /* height: 100vh; */
 
   z-index: 1000;
 `;
