@@ -20,11 +20,15 @@ export async function login() {
       },
     });
 
+    const { _id: id } = response.user;
+
     if (response && response.result === 'error') {
       throw Error('Authentication Error');
     }
 
     setCookie('loginData', idToken, { secure: true });
+    setCookie('loginData-id', id, { secure: true });
+
     response.token = idToken;
     return response;
   } catch (error) {

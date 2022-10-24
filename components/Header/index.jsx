@@ -1,61 +1,49 @@
-import React, { useEffect, useState } from 'react';
-
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+// eslint-disable-next-line camelcase
+import jwt_decode from 'jwt-decode';
 import styled from 'styled-components';
+
 import { getCookie, deleteCookie } from 'cookies-next';
 import Link from 'next/link';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { logOut } from '../../service/auth';
 import { HeaderButton } from '../shared/Button';
 import MindMapInfo from '../MindMapInfo';
 import { currentUserInfo } from '../../store/states';
 
-export default function Header() {
+export default function Header({ loginData }) {
   const router = useRouter();
-  const [token, setToken] = useState('');
-  const deleteUserInfo = useSetRecoilState(currentUserInfo);
+  const setUserInfo = useSetRecoilState(currentUserInfo);
+  const userInfo = useRecoilValue(currentUserInfo);
   const { mindMapId } = router.query;
 
   useEffect(() => {
-    setToken(getCookie('loginData'));
-  }, [token]);
+    if (loginData !== 'notAuth' && !userInfo.name) {
+      const userData = jwt_decode(loginData);
+      const userId = getCookie('loginData-id');
+
+      const { name, email, picture } = userData;
+
+      setUserInfo({
+        id: userId,
+        username: name,
+        email,
+        profile: picture,
+      });
+    }
+  }, []);
+
+  console.log(userInfo);
 
   const clickLogOutHandler = () => {
     logOut();
     deleteCookie('loginData');
-    setToken('');
-    deleteUserInfo({});
+    setUserInfo({});
     return router.push('/');
   };
-
-  if (token) {
-    return (
-      <HeaderWrapper>
-        <HeaderLeftSide
-          onClick={() => {
-            router.push('/');
-          }}
-        >
-          <Image
-            className="homeIcon"
-            src="/images/air_mind_logo.png"
-            width="80px"
-            height="80px"
-          />
-          <HeaderHomeButton>air-mind</HeaderHomeButton>
-        </HeaderLeftSide>
-        <HeaderRightSide>
-          <HeaderMyWorkButton onClick={() => router.push('mind-map')}>
-            My Work
-          </HeaderMyWorkButton>
-          <HeaderLoginButton onClick={clickLogOutHandler}>
-            LogOut
-          </HeaderLoginButton>
-        </HeaderRightSide>
-      </HeaderWrapper>
-    );
-  }
 
   return (
     <HeaderWrapper>
@@ -68,22 +56,22 @@ export default function Header() {
         </Link>
       </HeaderLeftSide>
       {mindMapId && <MindMapInfo mindMapId={mindMapId} />}
-      <HeaderRightSide>
-        <HeaderMyWorkButton
-          onClick={() => {
-            router.push('/my-works');
-          }}
-        >
-          My Work
-        </HeaderMyWorkButton>
-        <HeaderLoginButton
-          onClick={() => {
-            router.push('/login');
-          }}
-        >
-          Login
-        </HeaderLoginButton>
-      </HeaderRightSide>
+      {loginData === 'notAuth' ? (
+        <HeaderRightSide>
+          <HeaderLoginButton onClick={() => router.push('login')}>
+            Log In
+          </HeaderLoginButton>
+        </HeaderRightSide>
+      ) : (
+        <HeaderRightSide>
+          <HeaderMyWorkButton onClick={() => router.push('mind-map')}>
+            My Work
+          </HeaderMyWorkButton>
+          <HeaderLoginButton onClick={clickLogOutHandler}>
+            LogOut
+          </HeaderLoginButton>
+        </HeaderRightSide>
+      )}
     </HeaderWrapper>
   );
 }
@@ -138,3 +126,7 @@ const HeaderLoginButton = styled(HeaderButton)`
     color: #fab004;
   }
 `;
+
+Header.propTypes = {
+  loginData: PropTypes.node.isRequired,
+};

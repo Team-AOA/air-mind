@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import PropTypes from 'prop-types';
 import Header from '../Header';
 import NavBar from '../Navbar';
 import MindMapCard from '../MindMapCard';
@@ -10,7 +11,7 @@ import MindMapCard from '../MindMapCard';
 import getPublicMindMapData from '../../service/mindMapRequests';
 import { errorInfo } from '../../store/states';
 
-export default function Home() {
+export default function Home({ loginData }) {
   const [mindMapData, setMindMapData] = useState([]);
   const setCurrentError = useSetRecoilState(errorInfo);
   const currentError = useRecoilValue(errorInfo);
@@ -43,7 +44,7 @@ export default function Home() {
 
   return (
     <Wrapper>
-      <Header />
+      <Header loginData={loginData} />
       <NavBar />
       {currentError.message && (
         <ErrorMessage>{currentError.message}</ErrorMessage>
@@ -75,3 +76,7 @@ const MindMapsWrapper = styled.div`
 `;
 
 const ErrorMessage = styled.div``;
+
+Home.propTypes = {
+  loginData: PropTypes.node.isRequired,
+};

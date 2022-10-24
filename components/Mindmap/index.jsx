@@ -25,7 +25,7 @@ const NodeCanvas = dynamic(() => import('../NodeCanvas'), {
   ssr: false,
 });
 
-export default function MindMap({ mindMapId }) {
+export default function MindMap({ loginData, mindMapId }) {
   const [isSearchMode, setIsSearchMode] = useState(false);
   const setNodeData = useSetRecoilState(nodesInfo);
   const [userData, setUserData] = useRecoilState(userInfo);
@@ -57,7 +57,7 @@ export default function MindMap({ mindMapId }) {
 
   return (
     <Container>
-      <Header />
+      <Header loginData={loginData} />
       {isOpenNodeCommentMenu && <NodeComment />}
       <RightMenu>
         <RightMenuContainer>
@@ -82,19 +82,18 @@ export default function MindMap({ mindMapId }) {
 }
 
 MindMap.propTypes = {
+  loginData: PropTypes.node.isRequired,
   mindMapId: PropTypes.string.isRequired,
 };
 
 const Container = styled.div`
   height: 100vh;
   border: 1px solid black;
-  overflow: hidden;
 `;
 
 const RightMenu = styled.div`
   display: flex;
   justify-content: flex-end;
-  overflow: hidden;
 `;
 
 const RightMenuContainer = styled.div`
@@ -103,14 +102,13 @@ const RightMenuContainer = styled.div`
   align-items: flex-end;
   justify-content: flex-start;
   position: absolute;
-
-  overflow: hidden;
 `;
 
 const RightMenuWrapper = styled(flexCenter)`
   justify-content: flex-start;
   width: 300px;
   height: 100vh;
+
   z-index: 1000;
 `;
 
