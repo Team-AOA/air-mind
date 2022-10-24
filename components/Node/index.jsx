@@ -5,6 +5,7 @@ import * as d3 from 'd3';
 
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import NodeHoverOption from '../NodeHoverOption';
+import NodeFoldOption from '../NodeFoldOption';
 import NODE_COLOR from '../../constants/nodeColor';
 import NODE_SIZE from '../../constants/nodeSize';
 import setMovePosition from '../../utils/d3/setMovePosition';
@@ -20,6 +21,8 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
   const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
   const setClickedNodeId = useSetRecoilState(clickedNodeId);
   const mindMap = useRecoilValue(mindMapInfo);
+  const [textX, setTextX] = useState();
+  const [textY, setTextY] = useState();
 
   const groupRef = useRef();
   const textRef = useRef();
@@ -32,20 +35,13 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
   let nodeWidth;
   let nodeHeight;
   let nodeColor;
-  let textX;
-  let textY;
+  let isFold;
 
   if (node && Object.keys(node)?.length > 0) {
     ({ attribute: nodeAttribute, title: nodeTitle } = node);
-    ({ cordX: nodeX, cordY: nodeY } = nodeAttribute);
+    ({ cordX: nodeX, cordY: nodeY, isFold } = nodeAttribute);
     ({ width: nodeWidth, height: nodeHeight } = NODE_SIZE[nodeAttribute.size]);
     nodeColor = NODE_COLOR[nodeAttribute.color];
-
-    const textRect = textRef.current?.getBoundingClientRect();
-    textX = textRef.current ? nodeX + (nodeWidth - textRect.width) / 2 : nodeX;
-    textY = textRef.current
-      ? nodeY + nodeHeight - (nodeHeight - (textRect.height - 5)) / 2
-      : nodeY;
   }
 
   useEffect(() => {
@@ -62,6 +58,18 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
         mindMap,
       );
     }
+  }, [node]);
+
+  useEffect(() => {
+    const textRect = textRef.current?.getBoundingClientRect();
+    setTextX(
+      textRef.current ? nodeX + (nodeWidth - textRect.width) / 2 : nodeX,
+    );
+    setTextY(
+      textRef.current
+        ? nodeY + nodeHeight - (nodeHeight - (textRect.height - 5)) / 2
+        : nodeY,
+    );
   }, [node]);
 
   const onClickHandler = () => {
@@ -97,8 +105,10 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
           setIsOptionMode={setIsOptionMode}
           selectedColor={nodeColor}
           nodeId={nodeId}
-          setNodeData={setNodeData}
         />
+      )}
+      {node.children.length > 0 && (
+        <NodeFoldOption x={nodeX} y={nodeY} nodeId={nodeId} isFold={isFold} />
       )}
     </g>
   );
