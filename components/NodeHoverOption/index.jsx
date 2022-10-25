@@ -137,11 +137,9 @@ export default function NodeHoverOption({
         tempData[nodeId] = newParent;
         tempData[newId] = newNode.node;
 
-        socket.emit('addNode', id, headId, userId, mindMapId, nodeId);
-
-        return { ...prev, ...tempData };
-      });
-    }
+      return { ...prev, ...tempData };
+    });
+    socket.emit('addNode', mindMapId, newNode, nodeId);
   };
 
   const deleteNode = async () => {
