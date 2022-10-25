@@ -4,31 +4,38 @@ import styled from 'styled-components';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { putNodesData } from '../../service/nodeRequests';
-import { currentUserInfo, mindMapInfo, nodesInfo } from '../../store/states';
+import {
+  currentUserInfo,
+  mindMapInfo,
+  nodesInfo,
+  socketInfo,
+} from '../../store/states';
 import countChildren from '../../utils/countChildren';
 
 export default function NodeFoldOption({ x, y, nodeId, isFold }) {
-  const [fold, setFold] = useState(isFold);
   const [numberOfChildren, setNumberOfChildren] = useState();
   const mindMap = useRecoilValue(mindMapInfo);
   const currentUser = useRecoilValue(currentUserInfo);
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
   const { _id: mindMapId } = mindMap;
   const { _id: userId } = mindMap.author;
+  const socket = useRecoilValue(socketInfo);
 
   const foldHandler = () => {
     if (currentUser && Object.keys(currentUser).length > 0) {
-      setFold(!fold);
       setNodeData(prev => {
         const temp = { ...prev };
         const tempSel = { ...temp[nodeId] };
+
         tempSel.attribute = {
           ...tempSel.attribute,
-          isFold: !fold,
+          isFold: !tempSel.attribute.isFold,
         };
         temp[nodeId] = tempSel;
 
         putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
+
+        socket.emit('fold', !tempSel.attribute.isFold, mindMapId, nodeId);
 
         return temp;
       });
@@ -36,15 +43,15 @@ export default function NodeFoldOption({ x, y, nodeId, isFold }) {
   };
 
   useEffect(() => {
-    if (fold && nodeId && Object.keys(nodeData).length > 0) {
+    if (isFold && nodeId && Object.keys(nodeData).length > 0) {
       setNumberOfChildren(countChildren(nodeId, nodeData));
     }
-  }, [nodeId, nodeData]);
+  }, [isFold, nodeId, nodeData]);
 
   return (
     <foreignObject x={x - 20} y={y} width={50} height={50}>
       <FoldButton onClick={foldHandler}>
-        {fold ? numberOfChildren : '-'}
+        {isFold ? numberOfChildren : '-'}
       </FoldButton>
     </foreignObject>
   );

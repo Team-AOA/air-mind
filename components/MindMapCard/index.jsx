@@ -8,7 +8,7 @@ import Thumbnail from 'react-webpage-thumbnail';
 import { CgFileDocument as DocumentIcon } from 'react-icons/cg';
 import { mindMapInfo, userInfo, currentUserInfo } from '../../store/states';
 import { deleteMindMapData } from '../../service/mindMapRequests';
-import { DELETE_CONFIRM } from '../../constants/constants';
+import { DELETE_CONFIRM_MESSAGE } from '../../constants/constants';
 
 export default function MindMapCard({ mindMap, renameTitleHandler }) {
   const [title, setTitle] = useState(mindMap.title);
@@ -26,7 +26,7 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
     if (!mindMap) return;
 
     setMindMapData(mindMap);
-    setUrl(`${process.env.NEXT_PUBLIC_CLIENT_URL}mind-map/${mindMapId}`);
+    setUrl(`${process.env.NEXT_PUBLIC_CLIENT_URL}/mind-map/${mindMapId}`);
   }, [mindMap]);
 
   const modalShowOn = () => {
@@ -47,7 +47,7 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
 
     if (!mindMap) return;
 
-    const confirmCheck = window.confirm(DELETE_CONFIRM);
+    const confirmCheck = window.confirm(DELETE_CONFIRM_MESSAGE);
 
     if (!confirmCheck) {
       return;

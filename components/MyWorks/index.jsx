@@ -14,7 +14,7 @@ export default function MyWorks() {
   const [myMindMapData, setMyMindMapData] = useState([]);
   const [currentError, setCurrentError] = useState({});
   const currentUserData = useRecoilValue(currentUserInfo);
-  const { id: currentUserId } = currentUserData;
+  const { _id: currentUserId } = currentUserData;
 
   useEffect(() => {
     const fetchMyMindMapData = async id => {
