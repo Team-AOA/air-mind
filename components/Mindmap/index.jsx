@@ -16,6 +16,7 @@ import {
   isOpenNodeCommentModal,
   isOpenNodeOptionModal,
   socketInfo,
+  socketUserInfo,
 } from '../../store/states';
 import Header from '../Header';
 import NodeComment from '../NodeComment';
@@ -41,6 +42,7 @@ export default function MindMap({ mindMapId }) {
   const isOpenNodeOptionMenu = useRecoilValue(isOpenNodeOptionModal);
   const setSocket = useSetRecoilState(socketInfo);
   const router = useRouter();
+  const setSocketUserData = useSetRecoilState(socketUserInfo);
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -50,7 +52,13 @@ export default function MindMap({ mindMapId }) {
     socket.emit('joinMindMap', mindMapId);
 
     setSocket(socket);
-    receiveSocket(socket, setNodeData, setMindMapData, router);
+    receiveSocket(
+      socket,
+      setNodeData,
+      setMindMapData,
+      router,
+      setSocketUserData,
+    );
 
     return () => {
       socket.emit('leaveMindMap', mindMapId);

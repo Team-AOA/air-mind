@@ -10,6 +10,7 @@ export default function NodeWithLine({
   childNodeId,
   nodeData,
   setNodeData,
+  socketUsers,
 }) {
   const lineRef = useRef();
   const parentNodeData = nodeData[parentNodeId];
@@ -66,6 +67,7 @@ export default function NodeWithLine({
         nodeId={childNodeId}
         nodeData={nodeData}
         setNodeData={setNodeData}
+        socketUsers={socketUsers}
       />
     </>
   );
@@ -76,4 +78,5 @@ NodeWithLine.propTypes = {
   childNodeId: PropTypes.string.isRequired,
   nodeData: PropTypes.object.isRequired,
   setNodeData: PropTypes.func.isRequired,
+  socketUsers: PropTypes.object.isRequired,
 };

@@ -1,29 +1,48 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import zoomPanning from '../../utils/d3/zoomPanning';
 import makeNodeComponentList from '../../utils/d3/makeNodeComponentList';
-import { nodesInfo } from '../../store/states';
+import decideSocketUserNode from '../../utils/decideSocketUserNode';
+import { nodesInfo, socketUserInfo } from '../../store/states';
 
 export default function NodeCanvas({ headNode }) {
   const groupRef = useRef();
   const wrapperRef = useRef();
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
   const [nodeComponentList, setNodeComponentList] = useState([]);
+  const socketUserData = useRecoilValue(socketUserInfo);
+  const [decidedSocketUser, setDecidedSocketUser] = useState({});
+
+  console.log(
+    'TCL: NodeCanvas -> nodeData, socketUserData',
+    nodeData,
+    socketUserData,
+  );
 
   useEffect(() => {
     zoomPanning(groupRef);
   }, []);
 
   useEffect(() => {
+    console.log('aaa: ', decideSocketUserNode(nodeData, socketUserData));
+    setDecidedSocketUser(decideSocketUserNode(nodeData, socketUserData));
+  }, [nodeData, socketUserData]);
+
+  useEffect(() => {
     if (nodeData && Object.keys(nodeData).length > 0) {
       setNodeComponentList(
-        makeNodeComponentList(nodeData, setNodeData, headNode),
+        makeNodeComponentList(
+          nodeData,
+          setNodeData,
+          headNode,
+          decidedSocketUser,
+        ),
       );
     }
-  }, [nodeData]);
+  }, [nodeData, decidedSocketUser]);
 
   return (
     <Container ref={wrapperRef}>

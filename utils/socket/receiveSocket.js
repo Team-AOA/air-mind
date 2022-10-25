@@ -1,6 +1,12 @@
 import deleteNodeHelper from '../deleteNodeHelper';
 
-const receiveSocket = (socket, setNodeData, setMindMapData, router) => {
+const receiveSocket = (
+  socket,
+  setNodeData,
+  setMindMapData,
+  router,
+  setSocketUserData,
+) => {
   socket.on('receiveColor', (nodeId, color) => {
     setNodeData(prev => {
       const temp = { ...prev };
@@ -147,6 +153,29 @@ const receiveSocket = (socket, setNodeData, setMindMapData, router) => {
 
   socket.on('receiveDeleteMindMap', () => {
     router.push('/');
+  });
+
+  socket.on('insertUser', (currentUserId, profile, nodeAncestorList) => {
+    setSocketUserData(prev => {
+      const tempData = { ...prev };
+      tempData[currentUserId] = {
+        nodeAncestorList,
+        profile,
+      };
+
+      return tempData;
+    });
+  });
+
+  socket.on('deleteUser', currentUserId => {
+    setSocketUserData(prev => {
+      const tempData = { ...prev };
+      console.log('a: ', tempData, currentUserId);
+      delete tempData[currentUserId];
+      console.log('b: ', tempData, currentUserId);
+
+      return tempData;
+    });
   });
 };
 

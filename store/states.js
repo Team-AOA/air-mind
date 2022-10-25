@@ -59,6 +59,11 @@ const deleteInfo = atom({
   default: false,
 });
 
+const socketUserInfo = atom({
+  key: 'socketUserInfo',
+  default: {},
+});
+
 export {
   currentUserInfo,
   userInfo,
@@ -71,4 +76,5 @@ export {
   clickedNodeId,
   socketInfo,
   deleteInfo,
+  socketUserInfo,
 };

@@ -90,14 +90,14 @@ export default function NodeDetail() {
             <TitleMenu className="title">
               <MenuTitle>Title</MenuTitle>
               <TitleInput
-                value={nodeData[nodeId]?.title}
+                value={nodeData[nodeId]?.title || ''}
                 onChange={writeTitleHandler}
               />
             </TitleMenu>
             <DescriptionMenu className="description">
               <MenuTitle>Description</MenuTitle>
               <DescriptionTextArea
-                value={nodeData[nodeId]?.content}
+                value={nodeData[nodeId]?.content || ''}
                 onChange={writeDescriptionHandler}
               />
             </DescriptionMenu>

@@ -3,7 +3,12 @@ import React from 'react';
 import Node from '../../components/Node';
 import NodeWithLine from '../../components/NodeWithLine';
 
-const makeNodeComponentList = (nodeData, setNodeData, headNode) => {
+const makeNodeComponentList = (
+  nodeData,
+  setNodeData,
+  headNode,
+  decidedSocketUser,
+) => {
   const nodeComponentList = [];
   const nodeQueue = [];
 
@@ -13,6 +18,7 @@ const makeNodeComponentList = (nodeData, setNodeData, headNode) => {
       nodeId={headNode}
       nodeData={nodeData}
       setNodeData={setNodeData}
+      socketUsers={decidedSocketUser[headNode] || []}
     />,
   );
 
@@ -37,6 +43,7 @@ const makeNodeComponentList = (nodeData, setNodeData, headNode) => {
           childNodeId={tempNode}
           nodeData={nodeData}
           setNodeData={setNodeData}
+          socketUsers={decidedSocketUser[tempNode] || []}
         />,
       );
     }
