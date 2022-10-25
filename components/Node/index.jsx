@@ -114,7 +114,7 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
           nodeId={nodeId}
         />
       )}
-      {node.children.length > 0 && (
+      {node?.children.length > 0 && nodeData[node.children[0]] && (
         <NodeFoldOption x={nodeX} y={nodeY} nodeId={nodeId} isFold={isFold} />
       )}
     </g>

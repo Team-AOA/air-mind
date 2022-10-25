@@ -22,21 +22,24 @@ const makeNodeComponentList = (nodeData, setNodeData, headNode) => {
 
   while (nodeQueue.length > 0) {
     const tempNode = nodeQueue.shift();
-    const tempParentNode = nodeData[tempNode].parent;
 
-    if (nodeData[tempNode].attribute.isFold === false) {
-      nodeQueue.push(...nodeData[tempNode].children);
+    if (nodeData[tempNode]) {
+      const tempParentNode = nodeData[tempNode].parent;
+
+      if (nodeData[tempNode].attribute.isFold === false) {
+        nodeQueue.push(...nodeData[tempNode].children);
+      }
+
+      nodeComponentList.unshift(
+        <NodeWithLine
+          key={tempNode}
+          parentNodeId={tempParentNode}
+          childNodeId={tempNode}
+          nodeData={nodeData}
+          setNodeData={setNodeData}
+        />,
+      );
     }
-
-    nodeComponentList.unshift(
-      <NodeWithLine
-        key={tempNode}
-        parentNodeId={tempParentNode}
-        childNodeId={tempNode}
-        nodeData={nodeData}
-        setNodeData={setNodeData}
-      />,
-    );
   }
 
   return nodeComponentList;
