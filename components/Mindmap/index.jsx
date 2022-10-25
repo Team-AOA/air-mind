@@ -23,7 +23,7 @@ import NodeDetail from '../NodeDetail';
 import flexCenter from '../shared/FlexCenterContainer';
 import pageLoader from '../../utils/pageLoader';
 
-const socket = io(process.env.NEXT_PUBLIC_SERVER_URL, {
+const socket = io(process.env.NEXT_PUBLIC_BASE_URL, {
   transports: [`websocket`],
 });
 
