@@ -27,20 +27,7 @@ export default function Home({ loginData }) {
       }
     };
     fetchPublicMindMapData();
-  }, []);
-
-  const mindMapList = mindMapData.map(mindMap => {
-    const { _id: id } = mindMap;
-    return (
-      <MindMapCard
-        key={id}
-        mindMap={mindMap}
-        title={mindMap.title}
-        access={mindMap.access}
-        author={mindMap.author}
-      />
-    );
-  });
+  }, [setMindMapData]);
 
   return (
     <Wrapper>
@@ -49,7 +36,12 @@ export default function Home({ loginData }) {
       {currentError.message && (
         <ErrorMessage>{currentError.message}</ErrorMessage>
       )}
-      <MindMapsWrapper>{mindMapList}</MindMapsWrapper>
+      <MindMapsWrapper>
+        {mindMapData.map(mindMap => {
+          const { _id: id } = mindMap;
+          return <MindMapCard key={id} mindMap={mindMap} />;
+        })}
+      </MindMapsWrapper>
     </Wrapper>
   );
 }

@@ -2,18 +2,18 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 // eslint-disable-next-line camelcase
 import jwt_decode from 'jwt-decode';
+import { getCookie, deleteCookie } from 'cookies-next';
 import styled from 'styled-components';
 
-import { getCookie, deleteCookie } from 'cookies-next';
-import Link from 'next/link';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { currentUserInfo } from '../../store/states';
 import { logOut } from '../../service/auth';
 import { HeaderButton } from '../shared/Button';
 import ProfileIcon from '../shared/ProfileIcon';
 import MindMapInfo from '../MindMapInfo';
-import { currentUserInfo } from '../../store/states';
 
 export default function Header({ loginData }) {
   const router = useRouter();
@@ -22,7 +22,7 @@ export default function Header({ loginData }) {
   const { mindMapId } = router.query;
 
   useEffect(() => {
-    if (loginData !== 'notAuth' && !userInfo.name) {
+    if (loginData !== 'notAuth' && !userInfo.username) {
       const userData = jwt_decode(loginData);
       const userId = getCookie('loginData-id');
 
@@ -35,11 +35,29 @@ export default function Header({ loginData }) {
         profile: picture,
       });
     }
+
+    if (userInfo.username && loginData === 'notAuth') {
+      setUserInfo({});
+    }
+
+    const loginDate = getCookie('loginTime');
+    const currentDate = new Date();
+
+    if (currentDate - loginDate >= 3600000) {
+      deleteCookie('loginData');
+      deleteCookie('loginData-id');
+      deleteCookie('loginTime');
+      setUserInfo({});
+
+      alert('Your certification has expired. Please log in again.');
+    }
   }, []);
 
   const clickLogOutHandler = () => {
     logOut();
     deleteCookie('loginData');
+    deleteCookie('loginData-id');
+    deleteCookie('loginTime');
     setUserInfo({});
     return router.push('/');
   };
@@ -48,10 +66,19 @@ export default function Header({ loginData }) {
     <HeaderWrapper>
       <HeaderLeftSide>
         <Link href="/">
-          <Image src="/images/air_mind_logo.png" width="80px" height="80px" />
+          <div>
+            <Image
+              src="/images/air_mind_logo.png"
+              width="80px"
+              height="80px"
+              className="homeIcon"
+            />
+          </div>
         </Link>
         <Link href="/">
-          <HeaderHomeButton>air-mind</HeaderHomeButton>
+          <div>
+            <HeaderHomeButton>air-mind</HeaderHomeButton>
+          </div>
         </Link>
       </HeaderLeftSide>
       {mindMapId && <MindMapInfo mindMapId={mindMapId} />}
@@ -60,16 +87,17 @@ export default function Header({ loginData }) {
           <HeaderLoginButton onClick={() => router.push('login')}>
             Log In
           </HeaderLoginButton>
+          <ProfileIcon src={userInfo.profile || 'guest'} alt="profile" />
         </HeaderRightSide>
       ) : (
-        <HeaderRightSide onLogin={loginData !== 'notAuth'}>
+        <HeaderRightSide>
           <HeaderMyWorkButton onClick={() => router.push('mind-map')}>
             My Work
           </HeaderMyWorkButton>
           <HeaderLoginButton onClick={clickLogOutHandler}>
             LogOut
           </HeaderLoginButton>
-          <ProfileIcon src={userInfo.profile} alt="profile" />
+          <ProfileIcon src={userInfo.profile || 'guest'} alt="profile" />
         </HeaderRightSide>
       )}
     </HeaderWrapper>
@@ -91,8 +119,7 @@ const HeaderLeftSide = styled.div`
 const HeaderRightSide = styled.div`
   display: flex;
   margin-left: auto;
-  width: 20%;
-  margin-right: ${props => (props.onLogin ? '30px' : '5px')};
+  margin-right: 30px;
 `;
 
 const HeaderWrapper = styled.div`
@@ -102,7 +129,7 @@ const HeaderWrapper = styled.div`
   align-items: center;
   position: sticky;
   top: 0px;
-  z-index: 1;
+  z-index: 10;
   height: 100px;
   width: 100%;
   padding: 0 10px;
@@ -122,6 +149,7 @@ const HeaderMyWorkButton = styled(HeaderButton)`
 `;
 
 const HeaderLoginButton = styled(HeaderButton)`
+  margin-right: 15px;
   &:hover {
     color: #fab004;
   }

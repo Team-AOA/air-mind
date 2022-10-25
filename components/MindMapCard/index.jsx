@@ -1,129 +1,136 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
-import Router from 'next/router';
-import Modal from './Modal';
+import Router, { useRouter } from 'next/router';
+import Thumbnail from 'react-webpage-thumbnail';
+import { CgFileDocument as DocumentIcon } from 'react-icons/cg';
 import { mindMapInfo, userInfo } from '../../store/states';
+import { deleteMindMapData } from '../../service/mindMapRequests';
 
-export default function MindMapCard({ mindMap, title, author, access }) {
+export default function MindMapCard({ mindMap }) {
+  const router = useRouter();
   const setUserData = useSetRecoilState(userInfo);
   const setMindMapData = useSetRecoilState(mindMapInfo);
-  const [modalRight, setModalRight] = useState(0);
-  const [modalBottom, setModalBottom] = useState(0);
   const [modalShow, setModalShow] = useState(false);
-  const card = useRef();
-  const dotButton = useRef();
+  const [url, setUrl] = useState('');
+  const { _id: mindMapId } = mindMap;
 
   useEffect(() => {
-    setModalRight(
-      card.current.getBoundingClientRect().right -
-        dotButton.current.getBoundingClientRect().right +
-        dotButton.current.getBoundingClientRect().width / 2,
-    );
-    setModalBottom(
-      card.current.getBoundingClientRect().bottom -
-        dotButton.current.getBoundingClientRect().bottom +
-        dotButton.current.getBoundingClientRect().height / 2,
-    );
-  }, [dotButton]);
+    if (!mindMap) return;
+
+    setMindMapData(mindMap);
+    setUrl(`${process.env.NEXT_PUBLIC_CLIENT_URL}mind-map/${mindMapId}`);
+  }, [mindMap]);
 
   const modalShowOn = () => {
     setModalShow(!modalShow);
   };
 
   const mindMapLoader = () => {
+    if (!mindMap) return;
     setMindMapData(mindMap);
+
     setUserData(mindMap.author);
-    const { _id: mindMapId } = mindMap;
     Router.push(`/mind-map/${mindMapId}`);
   };
 
+  const deleteHandler = async () => {
+    setModalShow(!modalShow);
+    if (!mindMap) return;
+
+    try {
+      await deleteMindMapData(mindMap.author, mindMapId);
+    } catch (error) {
+      console.log(error);
+    }
+
+    router.reload('/');
+  };
+
   return (
-    <Card ref={card} onClick={mindMapLoader}>
-      <Thumbnail
-        src="https://nulab.com/static/6127951160c31e3ed297bb12d2e2201e/2d083/mindmap.png"
-        alt="mindmapThumb"
-      />
+    <Card>
+      <Wrapper onClick={mindMapLoader}>
+        <Thumbnail url={url} className="thumbnail" />
+      </Wrapper>
       <Footer>
-        <DocIcon>
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/177/177256.png"
-            alt="docIcon"
-          />
-        </DocIcon>
-        <ShortInfo>
-          <div className="infoTitle">{title}</div>
-          <div className="infoAuthor">{author?.userName}</div>
-        </ShortInfo>
+        <Left>
+          <DocumentIcon size={30} className="documentIcon" />
+          <ShortInfo onClick={mindMapLoader}>
+            <div className="infoTitle">{mindMap.title}</div>
+            <div className="infoAuthor">{mindMap.author?.userName}</div>
+          </ShortInfo>
+        </Left>
         <Option>
-          <AccessIcon>{access}</AccessIcon>
-          <DotButton ref={dotButton} onClick={modalShowOn}>
-            •••
-          </DotButton>
+          {modalShow && (
+            <OptionMenu>
+              <Menu className="open" onClick={mindMapLoader}>
+                Open
+              </Menu>
+              <Menu>Rename</Menu>
+              <Menu className="delete" onClick={deleteHandler}>
+                Delete
+              </Menu>
+            </OptionMenu>
+          )}
+          <BottomButton>
+            <AccessIcon>{mindMap.access}</AccessIcon>
+            <DotButton onClick={modalShowOn}>•••</DotButton>
+          </BottomButton>
         </Option>
       </Footer>
-      <TestModule />
-      {modalShow &&
-        Modal({ right: modalRight, bottom: modalBottom, setModalShow })}
     </Card>
   );
 }
 
-const TestModule = styled.div`
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  left: 0;
-  top: 0;
-`;
-
 MindMapCard.propTypes = {
   mindMap: PropTypes.object.isRequired,
-  title: PropTypes.string.isRequired,
-  author: PropTypes.object.isRequired,
-  access: PropTypes.string.isRequired,
 };
 
 const Card = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 100%;
   height: 300px;
-  border: 1px solid black;
+  border: 1px solid #e8e8e8;
+  cursor: pointer;
+  z-index: 0;
+
+  &:hover {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  }
 `;
 
-const Thumbnail = styled.img`
-  width: 100%;
-  height: 90%;
+const Wrapper = styled.div`
+  width: 300px;
+  height: 100%;
 `;
 
 const Footer = styled.div`
+  width: 90%;
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   height: 10%;
-  padding: 3%;
+  margin: 10px;
 `;
 
-const DocIcon = styled.div`
-  width: 15%;
+const Left = styled.div`
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 
-  img {
-    width: 50%;
+  .documentIcon {
+    margin-right: 3px;
   }
 `;
 
 const ShortInfo = styled.div`
   display: flex;
   flex-direction: column;
-  width: 65%;
-  justify-content: flex-start;
+  justify-content: center;
 
   .infoTitle {
     overflow: hidden;
@@ -141,12 +148,64 @@ const Option = styled.div`
   align-items: center;
 `;
 
+const OptionMenu = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  margin: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  transform: translate(-30px, -70px);
+  z-index: 100;
+
+  .open {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  .delete {
+    border-bottom: none;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+    &:hover {
+      background-color: red;
+      color: white;
+    }
+  }
+`;
+
+const Menu = styled.div`
+  width: inherit;
+  height: inherit;
+  padding: 5px 0;
+  border-bottom: 1px solid black;
+  transition: all 0.5s;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: black;
+
+  &:hover {
+    background-color: gray;
+    color: white;
+  }
+`;
+
+const BottomButton = styled.div`
+  display: flex;
+  transform: translateX(-10px);
+`;
+
 const AccessIcon = styled.div`
   border-radius: 10%;
-  background-color: #02bb02;
+  background-color: royalBlue;
   border: 2px solid brown;
+  padding: 0 5px;
   font-size: 80%;
-  color: black;
+  color: white;
 `;
 
 const DotButton = styled.div`
@@ -154,4 +213,8 @@ const DotButton = styled.div`
   align-self: center;
   border-radius: 10%;
   background-color: #eeeeee;
+
+  &:hover {
+    background-color: rgb(255, 245, 209);
+  }
 `;

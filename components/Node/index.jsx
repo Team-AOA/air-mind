@@ -102,7 +102,7 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
         selectedColor={nodeColor}
         onClick={onClickHandler}
       />
-      <text ref={textRef} x={textX} y={textY}>
+      <text ref={textRef} x={textX} y={textY} onClick={onClickHandler}>
         {nodeTitle}
       </text>
       {isOptionMode && (

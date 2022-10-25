@@ -86,7 +86,10 @@ export default function MindMapInfo({ mindMapId }) {
 
   return (
     <MindMapInfoWrapper>
-      <MindMapTitle value={mindMapData.title} onChange={handleMindMapTitle} />
+      <MindMapTitle
+        value={mindMapData.title || 'Untitled'}
+        onChange={handleMindMapTitle}
+      />
       <MindMapPublicSelect
         onChange={handlePublicOption}
         value={mindMapData.access}
