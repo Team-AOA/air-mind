@@ -18,7 +18,6 @@ import {
   deleteMindMapData,
   updateMindMapData,
 } from '../../service/mindMapRequests';
-
 import {
   FAIL_DELETE_MIND_MAP,
   FAIL_DELETE_MIND_MAP_BY_SERVER_PROBLEM,
