@@ -7,12 +7,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import flexCenter from '../shared/FlexCenterContainer';
-import {
-  userInfo,
-  errorInfo,
-  mindMapInfo,
-  socketInfo,
-} from '../../store/states';
+import { userInfo, errorInfo, mindMapInfo } from '../../store/states';
 import {
   deleteMindMapData,
   updateMindMapData,
@@ -26,11 +21,9 @@ import {
 import debounce from '../../utils/debounce';
 
 export default function MindMapInfo({ mindMapId }) {
-  const [publicOption, setPublicOption] = useState('');
   const [mindMapData, setMindMapData] = useRecoilState(mindMapInfo);
   const setError = useSetRecoilState(errorInfo);
   const userData = useRecoilValue(userInfo);
-  const socket = useRecoilValue(socketInfo);
 
   let userId;
   let authorId;
