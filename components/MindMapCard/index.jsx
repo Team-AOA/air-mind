@@ -6,6 +6,7 @@ import Router, { useRouter } from 'next/router';
 import Thumbnail from 'react-webpage-thumbnail';
 
 import { CgFileDocument as DocumentIcon } from 'react-icons/cg';
+import { TbShieldLock as LockIcon } from 'react-icons/tb';
 import { mindMapInfo, userInfo, currentUserInfo } from '../../store/states';
 import { deleteMindMapData } from '../../service/mindMapRequests';
 import { DELETE_CONFIRM } from '../../constants/constants';
@@ -26,7 +27,7 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
     if (!mindMap) return;
 
     setMindMapData(mindMap);
-    setUrl(`${process.env.NEXT_PUBLIC_CLIENT_URL}mind-map/${mindMapId}`);
+    setUrl(`${process.env.NEXT_PUBLIC_CLIENT_URL}/mind-map/${mindMapId}`);
   }, [mindMap]);
 
   const modalShowOn = () => {
@@ -82,7 +83,14 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
   return (
     <Card>
       <Wrapper onClick={mindMapLoader}>
-        <Thumbnail url={url} className="thumbnail" />
+        {mindMap.access === 'private' ? (
+          <LockPageWrapper>
+            <LockIcon className="lockIcon" size={50} />
+            <PrivatePageThumbnail />
+          </LockPageWrapper>
+        ) : (
+          <Thumbnail url={url} className="thumbnail" />
+        )}
       </Wrapper>
       <Footer>
         <FoooterLeft>
@@ -117,7 +125,7 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
             </OptionMenu>
           )}
           <BottomButton>
-            <AccessIcon>{mindMap.access}</AccessIcon>
+            <AccessIcon access={mindMap.access}>{mindMap.access}</AccessIcon>
             <DotButton onClick={modalShowOn}>•••</DotButton>
           </BottomButton>
         </OptionModal>
@@ -152,6 +160,28 @@ const Wrapper = styled.div`
   width: 300px;
   height: 100%;
   cursor: pointer;
+`;
+
+const LockPageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: inherit;
+  height: 100%;
+  color: white;
+
+  .lockIcon {
+    position: absolute;
+    z-index: 1;
+  }
+`;
+
+const PrivatePageThumbnail = styled.div`
+  width: inherit;
+  height: inherit;
+  background-image: linear-gradient(to right, #8e2de2, #4a00e0);
+  position: relative;
 `;
 
 const Footer = styled.div`
@@ -281,6 +311,8 @@ const BottomButton = styled.div`
 const AccessIcon = styled.div`
   border-radius: 10%;
   background-color: royalBlue;
+  background-color: ${props =>
+    props.access === 'private' ? 'red' : 'royalBlue'};
   border: 2px solid brown;
   padding: 0 5px;
   font-size: 80%;

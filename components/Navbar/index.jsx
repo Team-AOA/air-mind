@@ -19,7 +19,7 @@ export default function NavBar() {
   const handleCreateButton = async () => {
     if (currentUser && Object.keys(currentUser).length > 0) {
       try {
-        const { id: userId } = currentUser;
+        const { _id: userId } = currentUser;
         const data = await createMindMapData(userId);
         const { mindMap } = data;
         const { _id: mindMapId } = mindMap;
