@@ -19,15 +19,21 @@ const GuestIcon = styled.div`
 `;
 
 export default function ProfileIcon({ src, alt }) {
-  const [hasUrl, setHasUrl] = useState(false);
+  const [url, setUrl] = useState(src);
 
   useEffect(() => {
-    if (src !== 'guest') {
-      setHasUrl(true);
+    if (src === 'guest') {
+      setUrl('/images/guest.png');
+    } else {
+      setUrl(src);
     }
-  }, []);
+  }, [url, src]);
 
-  return hasUrl ? <Icon src={src} alt={alt} /> : <GuestIcon>Guest</GuestIcon>;
+  return src === 'guest' ? (
+    <GuestIcon>guest</GuestIcon>
+  ) : (
+    <Icon src={url} alt={alt} />
+  );
 }
 
 ProfileIcon.propTypes = {

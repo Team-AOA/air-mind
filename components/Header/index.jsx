@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -20,6 +20,7 @@ export default function Header({ loginData }) {
   const setUserInfo = useSetRecoilState(currentUserInfo);
   const userInfo = useRecoilValue(currentUserInfo);
   const { mindMapId } = router.query;
+  const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
     if (loginData !== 'notAuth' && !userInfo.username) {
@@ -34,20 +35,27 @@ export default function Header({ loginData }) {
         email,
         profile: picture,
       });
+      setIsLogin(true);
+    }
+
+    if (loginData !== 'notAuth' && userInfo.username) {
+      setIsLogin(true);
     }
 
     if (userInfo.username && loginData === 'notAuth') {
       setUserInfo({});
+      setIsLogin(false);
     }
 
-    const loginDate = getCookie('loginTime');
+    const loginDate = new Date(getCookie('loginTime'));
     const currentDate = new Date();
 
-    if (currentDate - loginDate >= 3600000) {
+    if (currentDate.getTime() - loginDate.getTime() >= 3600000) {
       deleteCookie('loginData');
       deleteCookie('loginData-id');
       deleteCookie('loginTime');
       setUserInfo({});
+      setIsLogin(false);
 
       alert('Your certification has expired. Please log in again.');
     }
@@ -59,6 +67,7 @@ export default function Header({ loginData }) {
     deleteCookie('loginData-id');
     deleteCookie('loginTime');
     setUserInfo({});
+    setIsLogin(false);
     return router.push('/');
   };
 
@@ -82,11 +91,13 @@ export default function Header({ loginData }) {
         </Link>
       </HeaderLeftSide>
       {mindMapId && <MindMapInfo mindMapId={mindMapId} />}
-      {loginData === 'notAuth' ? (
+      {!isLogin ? (
         <HeaderRightSide>
-          <HeaderLoginButton onClick={() => router.push('login')}>
-            Log In
-          </HeaderLoginButton>
+          <Link href="/login">
+            <div>
+              <HeaderLoginButton>Log In</HeaderLoginButton>
+            </div>
+          </Link>
           <ProfileIcon src={userInfo.profile || 'guest'} alt="profile" />
         </HeaderRightSide>
       ) : (
