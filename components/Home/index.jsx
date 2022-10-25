@@ -3,15 +3,16 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import PropTypes from 'prop-types';
 import Header from '../Header';
 import NavBar from '../Navbar';
 import MindMapCard from '../MindMapCard';
 
-import getPublicMindMapData from '../../service/mindMapRequests';
+import getPublicMindMapData, {
+  updateMindMapData,
+} from '../../service/mindMapRequests';
 import { errorInfo } from '../../store/states';
 
-export default function Home({ loginData }) {
+export default function Home() {
   const [mindMapData, setMindMapData] = useState([]);
   const setCurrentError = useSetRecoilState(errorInfo);
   const currentError = useRecoilValue(errorInfo);
@@ -30,27 +31,27 @@ export default function Home({ loginData }) {
   }, [setMindMapData]);
 
   const renameHandler = useCallback(
-    (updateMindmap, i) => {
-      // updateMindMapData()
-      console.log(updateMindmap);
+    (authorId, mindMapId, updatedTitle) => {
+      let updatedMindMap;
 
-      const updatedTitle = mindMapData.map(item => {
-        const { _id: id } = item;
-        if (id === i) {
-          console.log(item);
-          return { ...item, title: updateMindmap.title };
+      const updatedMindmaps = mindMapData.map(mindMap => {
+        const { _id: id } = mindMap;
+        if (id === mindMapId) {
+          updatedMindMap = { ...mindMap, title: updatedTitle };
+          return updatedMindMap;
         }
-        return item;
+        return mindMap;
       });
-      setMindMapData(updatedTitle);
-      // console.log(mindMapData);
+      setMindMapData(updatedMindmaps);
+
+      return updateMindMapData(authorId, mindMapId, updatedMindMap);
     },
     [mindMapData],
   );
 
   return (
     <Wrapper>
-      <Header loginData={loginData} />
+      <Header />
       <NavBar />
       {currentError.message && (
         <ErrorMessage>{currentError.message}</ErrorMessage>
@@ -62,7 +63,7 @@ export default function Home({ loginData }) {
             <MindMapCard
               key={id}
               mindMap={mindMap}
-              updateMindMapData={renameHandler}
+              renameTitleHandler={renameHandler}
             />
           );
         })}
@@ -86,14 +87,11 @@ const MindMapsWrapper = styled.div`
   display: grid;
   padding: 2em 0 0;
   width: 90%;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-template-rows: 300px 300px 300px;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 350px));
+  grid-template-rows: 320px 350px 320px;
+  justify-content: center;
   column-gap: 20px;
   row-gap: 20px;
 `;
 
 const ErrorMessage = styled.div``;
-
-Home.propTypes = {
-  loginData: PropTypes.node.isRequired,
-};

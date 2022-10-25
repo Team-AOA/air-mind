@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -11,7 +10,7 @@ import MindMapCard from '../MindMapCard';
 import { getMyMindMapData } from '../../service/mindMapRequests';
 import { currentUserInfo } from '../../store/states';
 
-export default function MyWorks({ loginData }) {
+export default function MyWorks() {
   const [myMindMapData, setMyMindMapData] = useState([]);
   const [currentError, setCurrentError] = useState({});
   const currentUserData = useRecoilValue(currentUserInfo);
@@ -32,9 +31,28 @@ export default function MyWorks({ loginData }) {
     }
   }, [currentUserId]);
 
+  const renameHandler = useCallback(
+    (authorId, mindMapId, updatedTitle) => {
+      let updatedMindMap;
+
+      const updatedMindmaps = myMindMapData.map(mindMap => {
+        const { _id: id } = mindMap;
+        if (id === mindMapId) {
+          updatedMindMap = { ...mindMap, title: updatedTitle };
+          return updatedMindMap;
+        }
+        return mindMap;
+      });
+      setMyMindMapData(updatedMindmaps);
+
+      return setMyMindMapData(authorId, mindMapId, updatedMindMap);
+    },
+    [myMindMapData],
+  );
+
   return (
     <Wrapper>
-      <Header loginData={loginData} />
+      <Header />
       <NavBar />
       {currentError.message && (
         <ErrorMessage>{currentError.message}</ErrorMessage>
@@ -47,9 +65,7 @@ export default function MyWorks({ loginData }) {
               <MindMapCard
                 key={id}
                 mindMap={mindMap}
-                title={mindMap.title}
-                access={mindMap.access}
-                author={mindMap.author}
+                renameTitleHandler={renameHandler}
               />
             );
           })}
@@ -58,15 +74,12 @@ export default function MyWorks({ loginData }) {
   );
 }
 
-MyWorks.propTypes = {
-  loginData: PropTypes.node.isRequired,
-};
-
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: relative;
   height: 100%;
   width: 100%;
   margin: 0;
@@ -77,8 +90,9 @@ const MindMapsWrapper = styled.div`
   display: grid;
   padding: 2em 0 0;
   width: 90%;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-template-rows: 300px 300px 300px;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 350px));
+  grid-template-rows: 320px 350px 320px;
+  justify-content: center;
   column-gap: 20px;
   row-gap: 20px;
 `;

@@ -1,16 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import Router, { useRouter } from 'next/router';
 import Thumbnail from 'react-webpage-thumbnail';
-import { CgFileDocument as DocumentIcon } from 'react-icons/cg';
-import { mindMapInfo, userInfo } from '../../store/states';
-import { deleteMindMapData } from '../../service/mindMapRequests';
 
-export default function MindMapCard({ mindMap }) {
+import { CgFileDocument as DocumentIcon } from 'react-icons/cg';
+import { mindMapInfo, userInfo, currentUserInfo } from '../../store/states';
+import { deleteMindMapData } from '../../service/mindMapRequests';
+import { DELETE_CONFIRM_MESSAGE } from '../../constants/constants';
+
+export default function MindMapCard({ mindMap, renameTitleHandler }) {
+  const [title, setTitle] = useState(mindMap.title);
+  const [istitleEditMode, setIsTitleEditMode] = useState(false);
+  const inputRef = useRef();
   const router = useRouter();
   const setUserData = useSetRecoilState(userInfo);
+  const currentUser = useRecoilValue(currentUserInfo);
   const setMindMapData = useSetRecoilState(mindMapInfo);
   const [modalShow, setModalShow] = useState(false);
   const [url, setUrl] = useState('');
@@ -28,8 +34,9 @@ export default function MindMapCard({ mindMap }) {
   };
 
   const mindMapLoader = () => {
-    if (!mindMap) return;
     setMindMapData(mindMap);
+
+    if (!mindMap) return;
 
     setUserData(mindMap.author);
     Router.push(`/mind-map/${mindMapId}`);
@@ -37,7 +44,14 @@ export default function MindMapCard({ mindMap }) {
 
   const deleteHandler = async () => {
     setModalShow(!modalShow);
+
     if (!mindMap) return;
+
+    const confirmCheck = window.confirm(DELETE_CONFIRM_MESSAGE);
+
+    if (!confirmCheck) {
+      return;
+    }
 
     try {
       await deleteMindMapData(mindMap.author, mindMapId);
@@ -48,26 +62,55 @@ export default function MindMapCard({ mindMap }) {
     router.reload('/');
   };
 
+  const renameHandler = () => {
+    inputRef.current.focus();
+
+    setIsTitleEditMode(true);
+    setModalShow(!modalShow);
+  };
+
+  const renameSubmitHandler = e => {
+    e.preventDefault();
+    setIsTitleEditMode(false);
+
+    const { _id: authorId } = mindMap.author;
+    if (currentUser.id !== authorId) return;
+
+    renameTitleHandler(authorId, mindMapId, title);
+  };
+
   return (
     <Card>
       <Wrapper onClick={mindMapLoader}>
         <Thumbnail url={url} className="thumbnail" />
       </Wrapper>
       <Footer>
-        <Left>
-          <DocumentIcon size={30} className="documentIcon" />
-          <ShortInfo onClick={mindMapLoader}>
-            <div className="infoTitle">{mindMap.title}</div>
-            <div className="infoAuthor">{mindMap.author?.userName}</div>
+        <FoooterLeft>
+          <ShortInfo>
+            <DocumentIcon size={25} className="documentIcon" />
+            <form type="submit">
+              <TitleInput
+                ref={inputRef}
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+                readOnly={!istitleEditMode}
+              />
+              {istitleEditMode && (
+                <TitleButton type="submit" onClick={renameSubmitHandler}>
+                  ✔
+                </TitleButton>
+              )}
+            </form>
           </ShortInfo>
-        </Left>
-        <Option>
+          <div className="infoAuthor">{mindMap.author?.userName}</div>
+        </FoooterLeft>
+        <OptionModal>
           {modalShow && (
             <OptionMenu>
               <Menu className="open" onClick={mindMapLoader}>
                 Open
               </Menu>
-              <Menu>Rename</Menu>
+              <Menu onClick={renameHandler}>Rename</Menu>
               <Menu className="delete" onClick={deleteHandler}>
                 Delete
               </Menu>
@@ -77,7 +120,7 @@ export default function MindMapCard({ mindMap }) {
             <AccessIcon>{mindMap.access}</AccessIcon>
             <DotButton onClick={modalShowOn}>•••</DotButton>
           </BottomButton>
-        </Option>
+        </OptionModal>
       </Footer>
     </Card>
   );
@@ -85,6 +128,7 @@ export default function MindMapCard({ mindMap }) {
 
 MindMapCard.propTypes = {
   mindMap: PropTypes.object.isRequired,
+  renameTitleHandler: PropTypes.func.isRequired,
 };
 
 const Card = styled.div`
@@ -92,10 +136,11 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  width: 95%;
   height: 300px;
   border: 1px solid #e8e8e8;
-  cursor: pointer;
+  border-radius: 5px;
+  padding: 10px;
   z-index: 0;
 
   &:hover {
@@ -106,31 +151,41 @@ const Card = styled.div`
 const Wrapper = styled.div`
   width: 300px;
   height: 100%;
+  cursor: pointer;
 `;
 
 const Footer = styled.div`
-  width: 90%;
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  width: 90%;
   height: 10%;
   margin: 10px;
 `;
 
-const Left = styled.div`
-  height: 100%;
+const FoooterLeft = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
+
+  height: 100%;
 
   .documentIcon {
-    margin-right: 3px;
+    margin-right: 5px;
+  }
+
+  .infoAuthor {
+    margin-left: 30px;
+    color: gray;
+    font-size: 13px;
   }
 `;
 
 const ShortInfo = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
+  align-items: center;
 
   .infoTitle {
     overflow: hidden;
@@ -141,11 +196,35 @@ const ShortInfo = styled.div`
   }
 `;
 
-const Option = styled.div`
+const TitleInput = styled.input`
+  height: 20px;
+  border: 1px solid #eff0f5;
+  border-radius: 10px;
+  margin: 3px 0;
+  background-color: rgba(255, 255, 255, 0.8);
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #529cca inset;
+  }
+`;
+
+const TitleButton = styled.button`
+  margin-left: 3px;
+  width: 25px;
+  height: 23px;
+  border: none;
+  background-color: none;
+  z-index: 10;
+  cursor: pointer;
+`;
+
+const OptionModal = styled.div`
   width: 25%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 100;
 `;
 
 const OptionMenu = styled.div`
