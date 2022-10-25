@@ -22,7 +22,7 @@ export default function Login() {
     }
     const { _id, username, email, profile } = response.user;
     saveUserData({
-      id: _id,
+      _id,
       username,
       email,
       profile,
