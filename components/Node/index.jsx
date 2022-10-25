@@ -6,6 +6,7 @@ import * as d3 from 'd3';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import NodeHoverOption from '../NodeHoverOption';
 import NodeFoldOption from '../NodeFoldOption';
+import NodeFetchButton from '../NodeFetchButton';
 import NODE_COLOR from '../../constants/nodeColor';
 import NODE_SIZE from '../../constants/nodeSize';
 import setMovePosition from '../../utils/d3/setMovePosition';
@@ -116,6 +117,9 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
       )}
       {node?.children.length > 0 && nodeData[node.children[0]] && (
         <NodeFoldOption x={nodeX} y={nodeY} nodeId={nodeId} isFold={isFold} />
+      )}
+      {node?.children.length > 0 && !nodeData[node?.children[0]] && (
+        <NodeFetchButton x={nodeX} y={nodeY} nodeId={nodeId} />
       )}
     </g>
   );
