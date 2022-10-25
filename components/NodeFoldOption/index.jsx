@@ -54,8 +54,9 @@ const FoldButton = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 10px;
-  border: 1px solid black;
+  border: 2px solid black;
   background-color: white;
+  font-weight: 500;
 `;
 
 NodeFoldOption.propTypes = {
