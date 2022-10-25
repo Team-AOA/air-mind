@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -29,6 +29,25 @@ export default function Home({ loginData }) {
     fetchPublicMindMapData();
   }, [setMindMapData]);
 
+  const renameHandler = useCallback(
+    (updateMindmap, i) => {
+      // updateMindMapData()
+      console.log(updateMindmap);
+
+      const updatedTitle = mindMapData.map(item => {
+        const { _id: id } = item;
+        if (id === i) {
+          console.log(item);
+          return { ...item, title: updateMindmap.title };
+        }
+        return item;
+      });
+      setMindMapData(updatedTitle);
+      // console.log(mindMapData);
+    },
+    [mindMapData],
+  );
+
   return (
     <Wrapper>
       <Header loginData={loginData} />
@@ -39,7 +58,13 @@ export default function Home({ loginData }) {
       <MindMapsWrapper>
         {mindMapData.map(mindMap => {
           const { _id: id } = mindMap;
-          return <MindMapCard key={id} mindMap={mindMap} />;
+          return (
+            <MindMapCard
+              key={id}
+              mindMap={mindMap}
+              updateMindMapData={renameHandler}
+            />
+          );
         })}
       </MindMapsWrapper>
     </Wrapper>
