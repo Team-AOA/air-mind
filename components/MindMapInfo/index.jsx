@@ -12,6 +12,7 @@ import {
   errorInfo,
   mindMapInfo,
   currentUserInfo,
+  socketInfo,
 } from '../../store/states';
 import {
   deleteMindMapData,
@@ -22,7 +23,7 @@ import {
   FAIL_DELETE_MIND_MAP,
   FAIL_DELETE_MIND_MAP_BY_SERVER_PROBLEM,
   FAIL_CHANGE_MIND_MAP_PUBLIC_OPTION,
-  DELETE_CONFIRM,
+  DELETE_CONFIRM_MESSAGE,
 } from '../../constants/constants';
 import debounce from '../../utils/debounce';
 
@@ -31,6 +32,7 @@ export default function MindMapInfo({ mindMapId }) {
   const setError = useSetRecoilState(errorInfo);
   const userData = useRecoilValue(userInfo);
   const currentUser = useRecoilValue(currentUserInfo);
+  const socket = useRecoilValue(socketInfo);
 
   let userId;
   let authorId;
@@ -53,6 +55,13 @@ export default function MindMapInfo({ mindMapId }) {
       debounce(() => {
         updateMindMapData(userId, mindMapId, newMindMapData);
       }, 1500);
+
+      socket.emit(
+        'mindMapTitleChange',
+        mindMapId,
+        mindMapData,
+        event.target.value,
+      );
     }
   };
 
@@ -65,6 +74,13 @@ export default function MindMapInfo({ mindMapId }) {
           setMindMapData(newMindMapData);
 
           await updateMindMapData(userId, mindMapId, newMindMapData);
+
+          socket.emit(
+            'publicOptionChange',
+            mindMapId,
+            mindMapData,
+            event.target.value,
+          );
         } else {
           alert(FAIL_CHANGE_MIND_MAP_PUBLIC_OPTION);
         }
@@ -78,7 +94,7 @@ export default function MindMapInfo({ mindMapId }) {
     if (currentUser && Object.keys(currentUser).length > 0) {
       try {
         if (authorId === userId) {
-          const confirmCheck = window.confirm(DELETE_CONFIRM);
+          const confirmCheck = window.confirm(DELETE_CONFIRM_MESSAGE);
 
           if (!confirmCheck) {
             return;
@@ -86,6 +102,8 @@ export default function MindMapInfo({ mindMapId }) {
 
           const response = await deleteMindMapData(userId, mindMapId);
           const { result } = response;
+
+          socket.emit('deleteMindMap', mindMapId, result);
 
           if (result === 'ok') {
             router.push('/');
@@ -109,8 +127,8 @@ export default function MindMapInfo({ mindMapId }) {
         onChange={handlePublicOption}
         value={mindMapData.access}
       >
-        <MindMapPublicOption>Public</MindMapPublicOption>
-        <MindMapPrivateOption>Private</MindMapPrivateOption>
+        <MindMapPublicOption>public</MindMapPublicOption>
+        <MindMapPrivateOption>private</MindMapPrivateOption>
       </MindMapPublicSelect>
       <Icon onClick={handleMindMapDelete}>
         <Image

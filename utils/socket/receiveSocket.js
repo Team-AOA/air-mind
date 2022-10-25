@@ -1,6 +1,6 @@
 import deleteNodeHelper from '../deleteNodeHelper';
 
-const receiveSocket = (socket, setNodeData, setMindMapData) => {
+const receiveSocket = (socket, setNodeData, setMindMapData, router) => {
   socket.on('receiveColor', (nodeId, color) => {
     setNodeData(prev => {
       const temp = { ...prev };
@@ -134,10 +134,19 @@ const receiveSocket = (socket, setNodeData, setMindMapData) => {
   });
 
   socket.on('receiveMindMapTitleChange', (mindMapData, value) => {
-    setMindMapData({
-      ...mindMapData,
-      title: value,
-    });
+    const newMindMapData = { ...mindMapData, title: value };
+
+    setMindMapData(newMindMapData);
+  });
+
+  socket.on('receivePublicOptionChange', (mindMapData, value) => {
+    const newMindMapData = { ...mindMapData, access: value };
+
+    setMindMapData(newMindMapData);
+  });
+
+  socket.on('receiveDeleteMindMap', () => {
+    router.push('/');
   });
 };
 

@@ -54,6 +54,11 @@ const socketInfo = atom({
   dangerouslyAllowMutability: true,
 });
 
+const deleteInfo = atom({
+  key: 'deleteInfo',
+  default: false,
+});
+
 export {
   currentUserInfo,
   userInfo,
@@ -65,4 +70,5 @@ export {
   isOpenNodeOptionModal,
   clickedNodeId,
   socketInfo,
+  deleteInfo,
 };

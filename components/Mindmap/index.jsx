@@ -40,6 +40,7 @@ export default function MindMap({ mindMapId }) {
   const isOpenNodeCommentMenu = useRecoilValue(isOpenNodeCommentModal);
   const isOpenNodeOptionMenu = useRecoilValue(isOpenNodeOptionModal);
   const setSocket = useSetRecoilState(socketInfo);
+  const router = useRouter();
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -49,7 +50,7 @@ export default function MindMap({ mindMapId }) {
     socket.emit('joinMindMap', mindMapId);
 
     setSocket(socket);
-    receiveSocket(socket, setNodeData, setMindMapData);
+    receiveSocket(socket, setNodeData, setMindMapData, router);
 
     return () => {
       socket.emit('leaveMindMap', mindMapId);
@@ -57,8 +58,6 @@ export default function MindMap({ mindMapId }) {
       setSocket({});
     };
   }, []);
-
-  const router = useRouter();
 
   useEffect(() => {
     return preventBodyScrolling();
