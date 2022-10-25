@@ -13,6 +13,7 @@ import setMovePosition from '../../utils/d3/setMovePosition';
 import {
   isOpenNodeOptionModal,
   clickedNodeId,
+  currentUserInfo,
   mindMapInfo,
   socketInfo,
 } from '../../store/states';
@@ -23,6 +24,7 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
   const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
   const setClickedNodeId = useSetRecoilState(clickedNodeId);
   const currentNodeId = useRecoilValue(clickedNodeId);
+  const currentUser = useRecoilValue(currentUserInfo);
   const mindMap = useRecoilValue(mindMapInfo);
   const [textX, setTextX] = useState();
   const [textY, setTextY] = useState();
@@ -52,16 +54,18 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
     if (node && Object.keys(node)?.length > 0) {
       const nodeSelected = d3.select(groupRef.current);
 
-      setMovePosition(
-        nodeSelected,
-        nodeX,
-        nodeY,
-        nodeId,
-        nodeData,
-        setNodeData,
-        mindMap,
-        socket,
-      );
+      if (currentUser && Object.keys(currentUser).length > 0) {
+        setMovePosition(
+          nodeSelected,
+          nodeX,
+          nodeY,
+          nodeId,
+          nodeData,
+          setNodeData,
+          mindMap,
+          socket,
+        );
+      }
     }
   }, [node]);
 

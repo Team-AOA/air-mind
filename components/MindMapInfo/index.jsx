@@ -7,7 +7,12 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import flexCenter from '../shared/FlexCenterContainer';
-import { userInfo, errorInfo, mindMapInfo } from '../../store/states';
+import {
+  userInfo,
+  errorInfo,
+  mindMapInfo,
+  currentUserInfo,
+} from '../../store/states';
 import {
   deleteMindMapData,
   updateMindMapData,
@@ -24,6 +29,7 @@ export default function MindMapInfo({ mindMapId }) {
   const [mindMapData, setMindMapData] = useRecoilState(mindMapInfo);
   const setError = useSetRecoilState(errorInfo);
   const userData = useRecoilValue(userInfo);
+  const currentUser = useRecoilValue(currentUserInfo);
 
   let userId;
   let authorId;
@@ -38,48 +44,54 @@ export default function MindMapInfo({ mindMapId }) {
   }
 
   const handleMindMapTitle = event => {
-    const newMindMapData = { ...mindMapData, title: event.target.value };
-    setMindMapData(newMindMapData);
-    debounce(() => {
-      updateMindMapData(userId, mindMapId, newMindMapData);
-    }, 1500);
+    if (currentUser && Object.keys(currentUser).length > 0) {
+      const newMindMapData = { ...mindMapData, title: event.target.value };
+      setMindMapData(newMindMapData);
+      debounce(() => {
+        updateMindMapData(userId, mindMapId, newMindMapData);
+      }, 1500);
+    }
   };
 
   const handlePublicOption = async event => {
-    try {
-      if (authorId === userId) {
-        const newMindMapData = { ...mindMapData, access: event.target.value };
-        setMindMapData(newMindMapData);
+    if (currentUser && Object.keys(currentUser).length > 0) {
+      try {
+        if (authorId === userId) {
+          const newMindMapData = { ...mindMapData, access: event.target.value };
+          setMindMapData(newMindMapData);
 
-        await updateMindMapData(userId, mindMapId, newMindMapData);
-      } else {
-        alert(FAIL_CHANGE_MIND_MAP_PUBLIC_OPTION);
+          await updateMindMapData(userId, mindMapId, newMindMapData);
+        } else {
+          alert(FAIL_CHANGE_MIND_MAP_PUBLIC_OPTION);
+        }
+      } catch (error) {
+        setError(error);
       }
-    } catch (error) {
-      setError(error);
     }
   };
 
   const handleMindMapDelete = async () => {
-    try {
-      if (authorId === userId) {
-        const confirmCheck = window.confirm('정말 삭제하시겠습니까?');
+    if (currentUser && Object.keys(currentUser).length > 0) {
+      try {
+        if (authorId === userId) {
+          const confirmCheck = window.confirm('정말 삭제하시겠습니까?');
 
-        if (!confirmCheck) {
-          return;
+          if (!confirmCheck) {
+            return;
+          }
+
+          const response = await deleteMindMapData(userId, mindMapId);
+          const { result } = response;
+
+          if (result === 'ok') {
+            router.push('/');
+          }
+        } else {
+          alert(FAIL_DELETE_MIND_MAP);
         }
-
-        const response = await deleteMindMapData(userId, mindMapId);
-        const { result } = response;
-
-        if (result === 'ok') {
-          router.push('/');
-        }
-      } else {
-        alert(FAIL_DELETE_MIND_MAP);
+      } catch (error) {
+        setError(FAIL_DELETE_MIND_MAP_BY_SERVER_PROBLEM);
       }
-    } catch (error) {
-      setError(FAIL_DELETE_MIND_MAP_BY_SERVER_PROBLEM);
     }
   };
 

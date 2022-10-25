@@ -14,23 +14,24 @@ export default function NavBar() {
   const router = useRouter();
   const setError = useSetRecoilState(errorInfo);
   const setMindMapData = useSetRecoilState(mindMapInfo);
-  const currentUserData = useRecoilValue(currentUserInfo);
+  const currentUser = useRecoilValue(currentUserInfo);
 
   const handleCreateButton = async () => {
-    try {
-      const { id: userId } = currentUserData;
-      const data = await createMindMapData(userId);
-      const { mindMap } = data;
-      const { _id: mindMapId } = mindMap;
+    if (currentUser && Object.keys(currentUser).length > 0) {
+      try {
+        const { id: userId } = currentUser;
+        const data = await createMindMapData(userId);
+        const { mindMap } = data;
+        const { _id: mindMapId } = mindMap;
 
-      setMindMapData(mindMap);
+        setMindMapData(mindMap);
 
-      router.push({
-        pathname: `/mind-map/${mindMapId}`,
-        query: { mindMapId },
-      });
-    } catch (error) {
-      setError(error);
+        router.push({
+          pathname: `/mind-map/${mindMapId}`,
+        });
+      } catch (error) {
+        setError(error);
+      }
     }
   };
 

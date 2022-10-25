@@ -4,32 +4,35 @@ import styled from 'styled-components';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { putNodesData } from '../../service/nodeRequests';
-import { mindMapInfo, nodesInfo } from '../../store/states';
+import { currentUserInfo, mindMapInfo, nodesInfo } from '../../store/states';
 import countChildren from '../../utils/countChildren';
 
 export default function NodeFoldOption({ x, y, nodeId, isFold }) {
   const [fold, setFold] = useState(isFold);
   const [numberOfChildren, setNumberOfChildren] = useState();
   const mindMap = useRecoilValue(mindMapInfo);
+  const currentUser = useRecoilValue(currentUserInfo);
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
   const { _id: mindMapId } = mindMap;
   const { _id: userId } = mindMap.author;
 
   const foldHandler = () => {
-    setFold(!fold);
-    setNodeData(prev => {
-      const temp = { ...prev };
-      const tempSel = { ...temp[nodeId] };
-      tempSel.attribute = {
-        ...tempSel.attribute,
-        isFold: !fold,
-      };
-      temp[nodeId] = tempSel;
+    if (currentUser && Object.keys(currentUser).length > 0) {
+      setFold(!fold);
+      setNodeData(prev => {
+        const temp = { ...prev };
+        const tempSel = { ...temp[nodeId] };
+        tempSel.attribute = {
+          ...tempSel.attribute,
+          isFold: !fold,
+        };
+        temp[nodeId] = tempSel;
 
-      putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
+        putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
 
-      return temp;
-    });
+        return temp;
+      });
+    }
   };
 
   useEffect(() => {

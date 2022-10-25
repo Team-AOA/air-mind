@@ -16,6 +16,7 @@ import {
   mindMapInfo,
   socketInfo,
   nodesInfo,
+  currentUserInfo,
 } from '../../store/states';
 import NODE_COLOR from '../../constants/nodeColor';
 import flexCenter from '../shared/FlexCenterContainer';
@@ -40,6 +41,7 @@ export default function NodeHoverOption({
   const isOpenCommentMenu = useRecoilValue(isOpenNodeCommentModal);
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
   const mindMap = useRecoilValue(mindMapInfo);
+  const currentUser = useRecoilValue(currentUserInfo);
   const isHead = nodeData[nodeId]?.parent === undefined;
   const socket = useRecoilValue(socketInfo);
 
@@ -47,100 +49,108 @@ export default function NodeHoverOption({
   const { _id: userId } = mindMap.author;
 
   const onClickColorPalette = item => {
-    setNodeData(prev => {
-      const temp = { ...prev };
-      const tempSel = { ...temp[nodeId] };
+    if (currentUser && Object.keys(currentUser).length > 0) {
+      setNodeData(prev => {
+        const temp = { ...prev };
+        const tempSel = { ...temp[nodeId] };
 
-      tempSel.attribute = {
-        ...tempSel.attribute,
-        color: item,
-      };
-      temp[nodeId] = tempSel;
+        tempSel.attribute = {
+          ...tempSel.attribute,
+          color: item,
+        };
+        temp[nodeId] = tempSel;
 
-      putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
+        putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
 
-      return temp;
-    });
+        return temp;
+      });
 
-    socket.emit('colorChange', mindMapId, nodeId, item);
+      socket.emit('colorChange', mindMapId, nodeId, item);
 
-    setIsSelectColorMode(prev => !prev);
+      setIsSelectColorMode(prev => !prev);
+    }
   };
 
   const onClickResize = change => {
-    setNodeData(prev => {
-      const temp = { ...prev };
-      const tempSel = { ...temp[nodeId] };
+    if (currentUser && Object.keys(currentUser).length > 0) {
+      setNodeData(prev => {
+        const temp = { ...prev };
+        const tempSel = { ...temp[nodeId] };
 
-      const currentSize = tempSel.attribute.size;
-      let newSize;
+        const currentSize = tempSel.attribute.size;
+        let newSize;
 
-      if (change === 'bigger') {
-        switch (currentSize) {
-          case 'SMALL':
-            newSize = 'MEDIUM';
-            break;
-          case 'MEDIUM':
-            newSize = 'LARGE';
-            break;
-          default:
-            newSize = 'LARGE';
+        if (change === 'bigger') {
+          switch (currentSize) {
+            case 'SMALL':
+              newSize = 'MEDIUM';
+              break;
+            case 'MEDIUM':
+              newSize = 'LARGE';
+              break;
+            default:
+              newSize = 'LARGE';
+          }
+        } else {
+          switch (currentSize) {
+            case 'LARGE':
+              newSize = 'MEDIUM';
+              break;
+            case 'MEDIUM':
+              newSize = 'SMALL';
+              break;
+            default:
+              newSize = 'SMALL';
+          }
         }
-      } else {
-        switch (currentSize) {
-          case 'LARGE':
-            newSize = 'MEDIUM';
-            break;
-          case 'MEDIUM':
-            newSize = 'SMALL';
-            break;
-          default:
-            newSize = 'SMALL';
-        }
-      }
 
-      tempSel.attribute = {
-        ...tempSel.attribute,
-        size: newSize,
-      };
-      temp[nodeId] = tempSel;
+        tempSel.attribute = {
+          ...tempSel.attribute,
+          size: newSize,
+        };
+        temp[nodeId] = tempSel;
 
-      putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
+        putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
 
-      return temp;
-    });
+        return temp;
+      });
 
-    setIsSelectSizeMode(prev => !prev);
+      setIsSelectSizeMode(prev => !prev);
+    }
   };
 
   const createNode = async (id, headId) => {
-    const calculated = calculateNewNodePosition(id, headId);
-    const newNode = await postNodesData(userId, mindMapId, nodeId, {
-      attribute: calculated,
-    });
+    if (currentUser && Object.keys(currentUser).length > 0) {
+      const calculated = calculateNewNodePosition(id, headId);
+      const newNode = await postNodesData(userId, mindMapId, nodeId, {
+        attribute: calculated,
+      });
 
-    setNodeData(prev => {
-      const tempData = { ...prev };
-      const { _id: newId } = newNode.node;
-      const newParent = {
-        ...tempData[nodeId],
-        children: [...tempData[nodeId].children, newId],
-      };
+      setNodeData(prev => {
+        const tempData = { ...prev };
+        const { _id: newId } = newNode.node;
+        const newParent = {
+          ...tempData[nodeId],
+          children: [...tempData[nodeId].children, newId],
+        };
 
-      tempData[nodeId] = newParent;
-      tempData[newId] = newNode.node;
+        tempData[nodeId] = newParent;
+        tempData[newId] = newNode.node;
 
-      socket.emit('addNode', id, headId, userId, mindMapId, nodeId);
+        socket.emit('addNode', id, headId, userId, mindMapId, nodeId);
 
-      return { ...prev, ...tempData };
-    });
+        return { ...prev, ...tempData };
+      });
+    }
   };
 
   const deleteNode = async () => {
-    deleteNodeHelper(nodeId, nodeData, setNodeData);
-    await deleteNodesData(userId, mindMapId, nodeId);
+    if (currentUser && Object.keys(currentUser).length > 0) {
+      deleteNodeHelper(nodeId, nodeData, setNodeData);
+      await deleteNodesData(userId, mindMapId, nodeId);
 
-    socket.emit('deleteNode', nodeId, nodeData, userId, mindMapId);
+      socket.emit('deleteNode', nodeId, nodeData, userId, mindMapId);
+    }
   };
 
   return (

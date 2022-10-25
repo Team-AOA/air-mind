@@ -11,6 +11,7 @@ import {
   nodesInfo,
   userInfo,
   socketInfo,
+  currentUserInfo,
 } from '../../store/states';
 import flexCenter from '../shared/FlexCenterContainer';
 import NodeImageDropZone from '../NodeImageDropZone';
@@ -23,6 +24,7 @@ export default function NodeDetail() {
   const mindMapData = useRecoilValue(mindMapInfo);
   const nodeId = useRecoilValue(clickedNodeId);
   const socket = useRecoilValue(socketInfo);
+  const currentUser = useRecoilValue(currentUserInfo);
 
   const isOpenNodeRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
   const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
@@ -31,38 +33,44 @@ export default function NodeDetail() {
   const { _id: mindMapId } = mindMapData;
 
   const writeTitleHandler = e => {
-    const tempData = { ...nodeData };
+    if (currentUser && Object.keys(currentUser).length > 0) {
+      const tempData = { ...nodeData };
 
-    tempData[nodeId] = { ...tempData[nodeId], title: e.target.value };
+      tempData[nodeId] = { ...tempData[nodeId], title: e.target.value };
 
-    setNodeData(tempData);
+      setNodeData(tempData);
 
-    debounce(() => {
-      putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
-    }, 1500);
+      debounce(() => {
+        putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
+      }, 1500);
 
-    socket.emit('titleChange', mindMapId, nodeId, e.target.value);
+      socket.emit('titleChange', mindMapId, nodeId, e.target.value);
+    }
   };
 
   const writeDescriptionHandler = e => {
-    const tempData = { ...nodeData };
+    if (currentUser && Object.keys(currentUser).length > 0) {
+      const tempData = { ...nodeData };
 
-    tempData[nodeId] = { ...tempData[nodeId], content: e.target.value };
+      tempData[nodeId] = { ...tempData[nodeId], content: e.target.value };
 
-    setNodeData(tempData);
+      setNodeData(tempData);
 
-    debounce(() => {
-      putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
-    }, 1500);
+      debounce(() => {
+        putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
+      }, 1500);
 
-    socket.emit('contentChange', mindMapId, nodeId, e.target.value);
+      socket.emit('contentChange', mindMapId, nodeId, e.target.value);
+    }
   };
 
   const addImageHandler = imageArray => {
-    const tempData = { ...nodeData };
-    tempData[nodeId] = { ...tempData[nodeId], images: imageArray };
+    if (currentUser && Object.keys(currentUser).length > 0) {
+      const tempData = { ...nodeData };
+      tempData[nodeId] = { ...tempData[nodeId], images: imageArray };
 
-    setNodeData(tempData);
+      setNodeData(tempData);
+    }
   };
 
   return (
