@@ -1,8 +1,12 @@
 import calculateNewNodePosition from '../d3/calculateNewNodePosition';
-import { postNodesData, deleteNodesData } from '../../service/nodeRequests';
+import {
+  postNodesData,
+  deleteNodesData,
+  putNodesData,
+} from '../../service/nodeRequests';
 import deleteNodeHelper from '../deleteNodeHelper';
 
-const receiveSocket = (socket, setNodeData) => {
+const receiveSocket = (socket, setNodeData, setMindMapData) => {
   socket.on('receiveColor', (nodeId, color) => {
     setNodeData(prev => {
       const temp = { ...prev };
@@ -53,7 +57,6 @@ const receiveSocket = (socket, setNodeData) => {
   socket.on('receiveAddNode', (id, headId, userId, mindMapId, nodeId) => {
     const createNode = async () => {
       const calculated = calculateNewNodePosition(id, headId);
-      console.log(userId, mindMapId, nodeId);
       const newNode = await postNodesData(userId, mindMapId, nodeId, {
         attribute: calculated,
       });
@@ -89,6 +92,30 @@ const receiveSocket = (socket, setNodeData) => {
       temp[nodeId] = tempSel;
 
       return temp;
+    });
+  });
+
+  // 폴드기능 작업중
+  socket.on('receiveFold', (userId, isFold, mindMapId, nodeId, setFold) => {
+    setFold(!isFold);
+    setNodeData(prev => {
+      const temp = { ...prev };
+      const tempSel = { ...temp[nodeId] };
+      tempSel.attribute = {
+        ...tempSel.attribute,
+        isFold: !isFold,
+      };
+      temp[nodeId] = tempSel;
+      putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
+
+      return temp;
+    });
+  });
+
+  socket.on('receiveMindMapTitleChange', (mindMapData, value) => {
+    setMindMapData({
+      ...mindMapData,
+      title: value,
     });
   });
 };
