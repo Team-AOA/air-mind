@@ -81,7 +81,10 @@ export default function NodeDetail() {
           width="20px"
           height="20px"
           className="closeIcon"
-          onClick={() => setNodeRightOptionMode(false)}
+          onClick={() => {
+            setNodeRightOptionMode(false);
+            socket.emit('leaveNode', currentUser, mindMapId);
+          }}
         />
       </MenuBody>
       <ScrollWrapper>

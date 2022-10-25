@@ -1,12 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import zoomPanning from '../../utils/d3/zoomPanning';
 import makeNodeComponentList from '../../utils/d3/makeNodeComponentList';
 import decideSocketUserNode from '../../utils/decideSocketUserNode';
-import { nodesInfo, socketUserInfo } from '../../store/states';
+import {
+  nodesInfo,
+  socketUserInfo,
+  isOpenNodeOptionModal,
+  currentUserInfo,
+  mindMapInfo,
+  socketInfo,
+} from '../../store/states';
 
 export default function NodeCanvas({ headNode }) {
   const groupRef = useRef();
@@ -15,19 +22,17 @@ export default function NodeCanvas({ headNode }) {
   const [nodeComponentList, setNodeComponentList] = useState([]);
   const socketUserData = useRecoilValue(socketUserInfo);
   const [decidedSocketUser, setDecidedSocketUser] = useState({});
-
-  console.log(
-    'TCL: NodeCanvas -> nodeData, socketUserData',
-    nodeData,
-    socketUserData,
-  );
+  const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
+  const currentUser = useRecoilValue(currentUserInfo);
+  const mindMapData = useRecoilValue(mindMapInfo);
+  const { _id: mindMapId } = mindMapData;
+  const socket = useRecoilValue(socketInfo);
 
   useEffect(() => {
     zoomPanning(groupRef);
   }, []);
 
   useEffect(() => {
-    console.log('aaa: ', decideSocketUserNode(nodeData, socketUserData));
     setDecidedSocketUser(decideSocketUserNode(nodeData, socketUserData));
   }, [nodeData, socketUserData]);
 
@@ -44,9 +49,14 @@ export default function NodeCanvas({ headNode }) {
     }
   }, [nodeData, decidedSocketUser]);
 
+  const optionHandler = () => {
+    setNodeRightOptionMode(false);
+    socket.emit('leaveNode', currentUser, mindMapId);
+  };
+
   return (
     <Container ref={wrapperRef}>
-      <SVG>
+      <SVG onClick={optionHandler}>
         <g ref={groupRef}>{nodeComponentList}</g>
       </SVG>
     </Container>

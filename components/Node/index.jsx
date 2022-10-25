@@ -85,18 +85,29 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
   }, [node]);
 
   const onClickHandler = e => {
+    console.log(nodeId, currentNodeId);
     e.stopPropagation();
-    if (nodeId === currentNodeId || !isOpenNodeRightOptionMenu) {
-      setNodeRightOptionMode(!isOpenNodeRightOptionMenu);
-      socket.emit('leaveNode', currentUser, mindMapId);
-    } else {
+    if (!isOpenNodeRightOptionMenu) {
+      setNodeRightOptionMode(true);
+      setClickedNodeId(nodeId);
       socket.emit(
         'enterNode',
         currentUser,
         makeAncestors(nodeId, nodeData),
         mindMapId,
       );
+    } else if (nodeId === currentNodeId) {
+      setNodeRightOptionMode(false);
+      setClickedNodeId('');
+      socket.emit('leaveNode', currentUser, mindMapId);
+    } else {
       setClickedNodeId(nodeId);
+      socket.emit(
+        'enterNode',
+        currentUser,
+        makeAncestors(nodeId, nodeData),
+        mindMapId,
+      );
     }
   };
 
@@ -108,6 +119,7 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
       y={nodeY}
       onMouseOver={() => setIsOptionMode(true)}
       onMouseOut={() => setIsOptionMode(false)}
+      onClick={onClickHandler}
     >
       <RectSvg
         x={nodeX}
@@ -116,9 +128,8 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
         height={nodeHeight}
         rx={20}
         selectedColor={nodeColor}
-        onClick={onClickHandler}
       />
-      <text ref={textRef} x={textX} y={textY} onClick={onClickHandler}>
+      <text ref={textRef} x={textX} y={textY}>
         {nodeTitle}
       </text>
       {isOptionMode && (

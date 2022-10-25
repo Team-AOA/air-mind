@@ -4,18 +4,8 @@ import styled from 'styled-components';
 
 export default function NodeCoworkers({ x, y, socketUsers }) {
   return (
-    <foreignObject x={x - 10} y={y + 30} width={150} height={150}>
+    <foreignObject x={x} y={y + 30} width={120} height={50}>
       <Icons>
-        {socketUsers.map(profile => {
-          return (
-            <Icon
-              key={profile}
-              className="profileIcon"
-              src={profile}
-              art="currentUserLocation"
-            />
-          );
-        })}
         {socketUsers.map(profile => {
           return (
             <Icon
@@ -44,7 +34,7 @@ const Icons = styled.div`
 const Icon = styled.img`
   width: 30px;
   height: 30px;
-  border-radius: 15px;
+  border-radius: 50px;
 `;
 
 NodeCoworkers.propTypes = {
