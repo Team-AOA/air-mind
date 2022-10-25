@@ -91,6 +91,48 @@ const receiveSocket = (socket, setNodeData, setMindMapData) => {
     });
   });
 
+  socket.on('receiveSizeChange', (nodeId, change) => {
+    setNodeData(prev => {
+      const temp = { ...prev };
+      const tempSel = { ...temp[nodeId] };
+
+      const currentSize = tempSel.attribute.size;
+      let newSize;
+
+      if (change === 'bigger') {
+        switch (currentSize) {
+          case 'SMALL':
+            newSize = 'MEDIUM';
+            break;
+          case 'MEDIUM':
+            newSize = 'LARGE';
+            break;
+          default:
+            newSize = 'LARGE';
+        }
+      } else {
+        switch (currentSize) {
+          case 'LARGE':
+            newSize = 'MEDIUM';
+            break;
+          case 'MEDIUM':
+            newSize = 'SMALL';
+            break;
+          default:
+            newSize = 'SMALL';
+        }
+      }
+
+      tempSel.attribute = {
+        ...tempSel.attribute,
+        size: newSize,
+      };
+      temp[nodeId] = tempSel;
+
+      return temp;
+    });
+  });
+
   socket.on('receiveMindMapTitleChange', (mindMapData, value) => {
     setMindMapData({
       ...mindMapData,

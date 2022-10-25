@@ -47,7 +47,9 @@ export default function MindMapInfo({ mindMapId }) {
   const handleMindMapTitle = event => {
     if (currentUser && Object.keys(currentUser).length > 0) {
       const newMindMapData = { ...mindMapData, title: event.target.value };
+
       setMindMapData(newMindMapData);
+
       debounce(() => {
         updateMindMapData(userId, mindMapId, newMindMapData);
       }, 1500);
@@ -59,6 +61,7 @@ export default function MindMapInfo({ mindMapId }) {
       try {
         if (authorId === userId) {
           const newMindMapData = { ...mindMapData, access: event.target.value };
+
           setMindMapData(newMindMapData);
 
           await updateMindMapData(userId, mindMapId, newMindMapData);

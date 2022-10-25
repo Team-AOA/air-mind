@@ -22,20 +22,24 @@ export default function NodeFoldOption({ x, y, nodeId, isFold }) {
   const socket = useRecoilValue(socketInfo);
 
   const foldHandler = () => {
-    setNodeData(prev => {
-      const temp = { ...prev };
-      const tempSel = { ...temp[nodeId] };
+    if (currentUser && Object.keys(currentUser).length > 0) {
+      setNodeData(prev => {
+        const temp = { ...prev };
+        const tempSel = { ...temp[nodeId] };
 
-      tempSel.attribute = {
-        ...tempSel.attribute,
-        isFold: !tempSel.attribute.isFold,
-      };
-      temp[nodeId] = tempSel;
+        tempSel.attribute = {
+          ...tempSel.attribute,
+          isFold: !tempSel.attribute.isFold,
+        };
+        temp[nodeId] = tempSel;
 
-      putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
+        putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
 
-      return temp;
-    });
+        socket.emit('fold', !tempSel.attribute.isFold, mindMapId, nodeId);
+
+        return temp;
+      });
+    }
   };
 
   useEffect(() => {

@@ -117,6 +117,7 @@ export default function NodeHoverOption({
 
       setIsSelectSizeMode(prev => !prev);
     }
+    socket.emit('sizeChange', mindMapId, nodeId, change);
   };
 
   const createNode = async (id, headId) => {
@@ -137,9 +138,10 @@ export default function NodeHoverOption({
         tempData[nodeId] = newParent;
         tempData[newId] = newNode.node;
 
-      return { ...prev, ...tempData };
-    });
-    socket.emit('addNode', mindMapId, newNode, nodeId);
+        return { ...prev, ...tempData };
+      });
+      socket.emit('addNode', mindMapId, newNode, nodeId);
+    }
   };
 
   const deleteNode = async () => {
