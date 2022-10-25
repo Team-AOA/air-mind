@@ -1,6 +1,5 @@
 import React from 'react';
 import Image from 'next/image';
-import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
@@ -12,7 +11,7 @@ import googleDocsIcon from '../../public/images/btn_google_signin_light_pressed_
 import Header from '../Header';
 import flexCenter from '../shared/FlexCenterContainer';
 
-export default function Login({ loginData }) {
+export default function Login() {
   const saveUserData = useSetRecoilState(currentUserInfo);
   const router = useRouter();
 
@@ -35,7 +34,7 @@ export default function Login({ loginData }) {
 
   return (
     <Wrapper>
-      <Header loginData={loginData} />
+      <Header />
       <IconWrapper>
         <Title>Sign in with</Title>
         <Title>Google</Title>
@@ -52,9 +51,9 @@ export default function Login({ loginData }) {
   );
 }
 
-Login.propTypes = {
-  loginData: PropTypes.node.isRequired,
-};
+// Login.propTypes = {
+//   loginData: PropTypes.node.isRequired,
+// };
 
 const Wrapper = styled.div`
   display: flex;

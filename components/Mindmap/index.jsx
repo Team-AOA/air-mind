@@ -31,7 +31,7 @@ const NodeCanvas = dynamic(() => import('../NodeCanvas'), {
   ssr: false,
 });
 
-export default function MindMap({ loginData, mindMapId }) {
+export default function MindMap({ mindMapId }) {
   const [isSearchMode, setIsSearchMode] = useState(false);
   const setNodeData = useSetRecoilState(nodesInfo);
   const [userData, setUserData] = useRecoilState(userInfo);
@@ -81,7 +81,7 @@ export default function MindMap({ loginData, mindMapId }) {
 
   return (
     <Container>
-      <Header loginData={loginData} />
+      <Header />
       {isOpenNodeCommentMenu && <NodeComment />}
       <RightMenu>
         <RightMenuContainer>
@@ -106,7 +106,6 @@ export default function MindMap({ loginData, mindMapId }) {
 }
 
 MindMap.propTypes = {
-  loginData: PropTypes.node.isRequired,
   mindMapId: PropTypes.string.isRequired,
 };
 
