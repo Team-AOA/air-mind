@@ -122,13 +122,16 @@ export default function NodeHoverOption({
     setNodeData(prev => {
       const tempData = { ...prev };
       const { _id: newId } = newNode.node;
-
       const newParent = {
         ...tempData[nodeId],
         children: [...tempData[nodeId].children, newId],
       };
+
       tempData[nodeId] = newParent;
       tempData[newId] = newNode.node;
+
+      socket.emit('addNode', id, headId, userId, mindMapId, nodeId);
+
       return { ...prev, ...tempData };
     });
   };
@@ -136,6 +139,8 @@ export default function NodeHoverOption({
   const deleteNode = async () => {
     deleteNodeHelper(nodeId, nodeData, setNodeData);
     await deleteNodesData(userId, mindMapId, nodeId);
+
+    socket.emit('deleteNode', nodeId, nodeData, userId, mindMapId);
   };
 
   return (

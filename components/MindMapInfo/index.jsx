@@ -22,7 +22,6 @@ import debounce from '../../utils/debounce';
 
 export default function MindMapInfo({ mindMapId }) {
   const [mindMapData, setMindMapData] = useRecoilState(mindMapInfo);
-
   const setError = useSetRecoilState(errorInfo);
   const userData = useRecoilValue(userInfo);
 

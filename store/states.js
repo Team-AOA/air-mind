@@ -9,6 +9,7 @@ const { persistAtom } = recoilPersist({});
 const userInfo = atom({
   key: `userInfo/${newId}`,
   default: {},
+  effects_UNSTABLE: [persistAtom],
 });
 
 const currentUserInfo = atom({
@@ -47,6 +48,11 @@ const isOpenNodeOptionModal = atom({
   default: false,
 });
 
+const isFoldInfo = atom({
+  key: 'isFoldInfo',
+  default: false,
+});
+
 const clickedNodeId = atom({
   key: 'clickedNodeId',
   default: '',
@@ -67,6 +73,7 @@ export {
   nodesInfo,
   isOpenNodeCommentModal,
   isOpenNodeOptionModal,
+  isFoldInfo,
   clickedNodeId,
   socketInfo,
 };

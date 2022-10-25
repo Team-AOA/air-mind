@@ -9,7 +9,7 @@ import {
   isOpenNodeOptionModal,
   mindMapInfo,
   nodesInfo,
-  currentUserInfo,
+  userInfo,
   socketInfo,
 } from '../../store/states';
 import flexCenter from '../shared/FlexCenterContainer';
@@ -19,7 +19,7 @@ import { putNodesData } from '../../service/nodeRequests';
 
 export default function NodeDetail() {
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
-  const userData = useRecoilValue(currentUserInfo);
+  const userData = useRecoilValue(userInfo);
   const mindMapData = useRecoilValue(mindMapInfo);
   const nodeId = useRecoilValue(clickedNodeId);
   const socket = useRecoilValue(socketInfo);

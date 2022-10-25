@@ -49,7 +49,7 @@ export default function MindMap({ loginData, mindMapId }) {
     socket.emit('joinMindMap', mindMapId);
 
     setSocket(socket);
-    receiveSocket(socket, setNodeData);
+    receiveSocket(socket, setNodeData, setMindMapData);
 
     return () => {
       socket.emit('leaveMindMap', mindMapId);
