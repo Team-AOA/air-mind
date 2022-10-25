@@ -22,6 +22,7 @@ import {
   FAIL_DELETE_MIND_MAP,
   FAIL_DELETE_MIND_MAP_BY_SERVER_PROBLEM,
   FAIL_CHANGE_MIND_MAP_PUBLIC_OPTION,
+  DELETE_CONFIRM,
 } from '../../constants/constants';
 import debounce from '../../utils/debounce';
 
@@ -74,7 +75,7 @@ export default function MindMapInfo({ mindMapId }) {
     if (currentUser && Object.keys(currentUser).length > 0) {
       try {
         if (authorId === userId) {
-          const confirmCheck = window.confirm('정말 삭제하시겠습니까?');
+          const confirmCheck = window.confirm(DELETE_CONFIRM);
 
           if (!confirmCheck) {
             return;
