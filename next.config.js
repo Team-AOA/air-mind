@@ -9,7 +9,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ['192.168.0.91'],
+    domains: [process.env.NEXT_PUBLIC_CLIENT_URL],
   },
 };
 
