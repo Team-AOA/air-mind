@@ -121,7 +121,7 @@ export default function NodeDetail() {
                   const { _id: id } = img;
                   return (
                     <NodeImg
-                      src={process.env.NEXT_PUBLIC_BASE_URL + img.path}
+                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/${img.path}`}
                       alt={img.originalName}
                       key={id}
                       className="img"

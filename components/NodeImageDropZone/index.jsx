@@ -14,20 +14,20 @@ export default function NodeImageDropZone({
   addImage,
 }) {
   const uploadFile = useRef();
-  const [onImgDropZone, setOnImgDropZone] = useState(false);
+  const [isImgDropZone, setIsImgDropZone] = useState(false);
 
   const handleOnImgDropZone = e => {
     e.preventDefault();
     e.stopPropagation();
 
-    setOnImgDropZone(false);
+    setIsImgDropZone(false);
   };
 
   const handleOffImgDropZone = e => {
     e.preventDefault();
     e.stopPropagation();
 
-    setOnImgDropZone(true);
+    setIsImgDropZone(true);
   };
 
   // eslint-disable-next-line consistent-return
@@ -48,11 +48,11 @@ export default function NodeImageDropZone({
 
     try {
       const response = await putImagesData(userId, mindMapId, nodeId, formData);
-      setOnImgDropZone(false);
+      setIsImgDropZone(false);
       addImage(response.node.images);
     } catch (error) {
       if (error.code === 400) {
-        setOnImgDropZone(false);
+        setIsImgDropZone(false);
         return alert(error.message);
       }
     }
@@ -68,7 +68,7 @@ export default function NodeImageDropZone({
       onDragOver={handleOffImgDropZone}
       onDragLeave={handleOnImgDropZone}
       onDrop={handleDrop}
-      onImgDropZone={onImgDropZone}
+      isImgDropZone={isImgDropZone}
     >
       <Image
         src="/images/noun-drag-and-drop-4076502.png"
@@ -114,9 +114,9 @@ const ImageDropArea = styled(flexCenter)`
   border: 1px solid #eff0f5;
   border-radius: 10px;
   background-color: ${props =>
-    props.onImgDropZone ? '#d1ecfe' : 'rgba(255, 255, 255, 0.8)'};
+    props.isImgDropZone ? '#d1ecfe' : 'rgba(255, 255, 255, 0.8)'};
   transition: 0.2s ease;
-  transform: ${props => (props.onImgDropZone ? 'scale(1.02)' : 'scale(1)')};
+  transform: ${props => (props.isImgDropZone ? 'scale(1.02)' : 'scale(1)')};
 
   input {
     border: 0;
