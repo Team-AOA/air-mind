@@ -6,7 +6,7 @@ const receiveSocket = (
   setMindMapData,
   router,
   setSocketUserData,
-  isFoldLock,
+  setIsFoldLock,
 ) => {
   socket.on('receiveColor', (nodeId, color) => {
     setNodeData(prev => {
@@ -105,6 +105,15 @@ const receiveSocket = (
   });
 
   socket.on('receiveFold', (isFold, nodeId) => {
+    let isFoldLock = false;
+    setIsFoldLock(prevIsFold => {
+      console.log('isFoldLock: ', prevIsFold);
+      if (prevIsFold) {
+        isFoldLock = true;
+      }
+      return prevIsFold;
+    });
+
     if (isFoldLock) {
       setNodeData(prev => {
         if (!prev[nodeId]) {

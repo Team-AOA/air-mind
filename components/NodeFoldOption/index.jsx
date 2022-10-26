@@ -25,25 +25,26 @@ export default function NodeFoldOption({ x, y, nodeId, isFold }) {
 
   const foldHandler = e => {
     e.stopPropagation();
-    if (currentUser && Object.keys(currentUser).length > 0) {
-      setNodeData(prev => {
-        const temp = { ...prev };
-        const tempSel = { ...temp[nodeId] };
-
-        tempSel.attribute = {
-          ...tempSel.attribute,
-          isFold: !tempSel.attribute.isFold,
-        };
-        temp[nodeId] = tempSel;
-
-        if (isFoldLock) {
-          putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
-          socket.emit('fold', !tempSel.attribute.isFold, mindMapId, nodeId);
-        }
-
-        return temp;
-      });
+    if (isFoldLock && (!currentUser || Object.keys(currentUser).length <= 0)) {
+      return;
     }
+    setNodeData(prev => {
+      const temp = { ...prev };
+      const tempSel = { ...temp[nodeId] };
+
+      tempSel.attribute = {
+        ...tempSel.attribute,
+        isFold: !tempSel.attribute.isFold,
+      };
+      temp[nodeId] = tempSel;
+
+      if (isFoldLock && currentUser && Object.keys(currentUser).length > 0) {
+        putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
+        socket.emit('fold', !tempSel.attribute.isFold, mindMapId, nodeId);
+      }
+
+      return temp;
+    });
   };
 
   useEffect(() => {

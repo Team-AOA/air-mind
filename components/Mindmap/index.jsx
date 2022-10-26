@@ -44,7 +44,7 @@ export default function MindMap({ mindMapId }) {
   const setSocket = useSetRecoilState(socketInfo);
   const router = useRouter();
   const setSocketUserData = useSetRecoilState(socketUserInfo);
-  const isFoldLock = useRecoilValue(foldLockInfo);
+  const setIsFoldLock = useSetRecoilState(foldLockInfo);
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -60,7 +60,7 @@ export default function MindMap({ mindMapId }) {
       setMindMapData,
       router,
       setSocketUserData,
-      isFoldLock,
+      setIsFoldLock,
     );
 
     return () => {
