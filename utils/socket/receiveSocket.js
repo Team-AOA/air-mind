@@ -71,13 +71,15 @@ const receiveSocket = (
 
       const tempData = { ...prev };
       const { _id: newId } = newNode.node;
-      const newParent = {
-        ...tempData[nodeId],
-        children: [...tempData[nodeId].children, newId],
-      };
 
-      tempData[nodeId] = newParent;
-      tempData[newId] = newNode.node;
+      if (tempData[nodeId].children.indexOf(newId) === -1) {
+        const newParent = {
+          ...tempData[nodeId],
+          children: [...tempData[nodeId].children, newId],
+        };
+        tempData[nodeId] = newParent;
+        tempData[newId] = newNode.node;
+      }
 
       return { ...prev, ...tempData };
     });
