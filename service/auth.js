@@ -26,8 +26,8 @@ export async function login() {
       throw Error('Authentication Error');
     }
 
-    setCookie('loginData', idToken, { secure: true });
-    setCookie('loginData-id', id, { secure: true });
+    setCookie('loginData', idToken, { secure: false }); // true 일 경우 https 접속을 지원하지 않는다면 쿠키가 저장되지 않으므로, 그 경우 false 로 설정해야 함
+    setCookie('loginData-id', id, { secure: false });
     setCookie('loginTime', new Date());
 
     response.token = idToken;

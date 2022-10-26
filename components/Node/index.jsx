@@ -85,7 +85,6 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
   }, [node]);
 
   const onClickHandler = e => {
-    console.log(nodeId, currentNodeId);
     e.stopPropagation();
     if (!isOpenNodeRightOptionMenu) {
       setNodeRightOptionMode(true);

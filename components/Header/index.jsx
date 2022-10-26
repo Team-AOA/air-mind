@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-// eslint-disable-next-line camelcase
-import jwt_decode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { getCookie, deleteCookie } from 'cookies-next';
 import styled from 'styled-components';
@@ -29,7 +28,7 @@ export default function Header() {
 
     if (loginData !== 'notAuth' && !userInfo.username) {
       try {
-        const userData = jwt_decode(loginData);
+        const userData = jwtDecode(loginData);
         const userId = getCookie('loginData-id');
         const { name, email, picture } = userData;
 
@@ -110,7 +109,7 @@ export default function Header() {
           </HeaderRightSide>
         ) : (
           <HeaderRightSide>
-            <HeaderMyWorkButton onClick={() => router.push('mind-map')}>
+            <HeaderMyWorkButton onClick={() => router.push('my-works')}>
               My Work
             </HeaderMyWorkButton>
             <HeaderLoginButton onClick={clickLogOutHandler}>

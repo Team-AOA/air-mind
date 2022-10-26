@@ -10,6 +10,12 @@ const DELETE_CONFIRM_MESSAGE = 'Are you sure you want to delete?';
 
 const AUTH_EXPIRED = 'Your certification has expired. Please log in again.';
 
+const FOLD_UNLOCK_MESSAGE =
+  'You can fold/unfold nodes independently, but your folding action will not be saved.';
+
+const FOLD_LOCK_MESSAGE =
+  'This will reset your fold/unfold conditions with recently saved data.';
+
 module.exports = {
   FAIL_GET_MIND_MAPS,
   FAIL_DELETE_MIND_MAP,
@@ -17,4 +23,6 @@ module.exports = {
   FAIL_CHANGE_MIND_MAP_PUBLIC_OPTION,
   DELETE_CONFIRM_MESSAGE,
   AUTH_EXPIRED,
+  FOLD_UNLOCK_MESSAGE,
+  FOLD_LOCK_MESSAGE,
 };

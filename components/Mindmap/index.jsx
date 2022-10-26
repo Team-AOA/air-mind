@@ -17,6 +17,7 @@ import {
   isOpenNodeOptionModal,
   socketInfo,
   socketUserInfo,
+  foldLockInfo,
 } from '../../store/states';
 import Header from '../Header';
 import NodeComment from '../NodeComment';
@@ -43,6 +44,7 @@ export default function MindMap({ mindMapId }) {
   const setSocket = useSetRecoilState(socketInfo);
   const router = useRouter();
   const setSocketUserData = useSetRecoilState(socketUserInfo);
+  const isFoldLock = useRecoilValue(foldLockInfo);
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -58,6 +60,7 @@ export default function MindMap({ mindMapId }) {
       setMindMapData,
       router,
       setSocketUserData,
+      isFoldLock,
     );
 
     return () => {

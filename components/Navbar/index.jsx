@@ -8,13 +8,21 @@ import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { NavBarButton } from '../shared/Button';
 
 import { createMindMapData } from '../../service/mindMapRequests';
-import { currentUserInfo, errorInfo, mindMapInfo } from '../../store/states';
+import {
+  currentUserInfo,
+  errorInfo,
+  foldLockInfo,
+  mindMapInfo,
+  userInfo,
+} from '../../store/states';
 
 export default function NavBar() {
   const router = useRouter();
   const setError = useSetRecoilState(errorInfo);
+  const setUserData = useSetRecoilState(userInfo);
   const setMindMapData = useSetRecoilState(mindMapInfo);
   const currentUser = useRecoilValue(currentUserInfo);
+  const setIsFoldLock = useSetRecoilState(foldLockInfo);
 
   const handleCreateButton = async () => {
     if (currentUser && Object.keys(currentUser).length > 0) {
@@ -24,6 +32,8 @@ export default function NavBar() {
         const { mindMap } = data;
         const { _id: mindMapId } = mindMap;
 
+        setIsFoldLock(true);
+        setUserData(currentUser);
         setMindMapData(mindMap);
 
         router.push({

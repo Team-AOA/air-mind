@@ -6,6 +6,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { putNodesData } from '../../service/nodeRequests';
 import {
   currentUserInfo,
+  foldLockInfo,
   mindMapInfo,
   nodesInfo,
   socketInfo,
@@ -20,6 +21,7 @@ export default function NodeFoldOption({ x, y, nodeId, isFold }) {
   const { _id: mindMapId } = mindMap;
   const { _id: userId } = mindMap.author;
   const socket = useRecoilValue(socketInfo);
+  const isFoldLock = useRecoilValue(foldLockInfo);
 
   const foldHandler = e => {
     e.stopPropagation();
@@ -34,9 +36,10 @@ export default function NodeFoldOption({ x, y, nodeId, isFold }) {
         };
         temp[nodeId] = tempSel;
 
-        putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
-
-        socket.emit('fold', !tempSel.attribute.isFold, mindMapId, nodeId);
+        if (isFoldLock) {
+          putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
+          socket.emit('fold', !tempSel.attribute.isFold, mindMapId, nodeId);
+        }
 
         return temp;
       });

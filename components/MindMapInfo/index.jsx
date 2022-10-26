@@ -3,8 +3,9 @@ import Image from 'next/image';
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
 import router from 'next/router';
 import PropTypes from 'prop-types';
-
 import styled from 'styled-components';
+
+import { TbLock as LockIcon, TbLockOpen as UnlockIcon } from 'react-icons/tb';
 
 import flexCenter from '../shared/FlexCenterContainer';
 import {
@@ -13,16 +14,21 @@ import {
   mindMapInfo,
   currentUserInfo,
   socketInfo,
+  foldLockInfo,
+  nodesInfo,
 } from '../../store/states';
 import {
   deleteMindMapData,
   updateMindMapData,
 } from '../../service/mindMapRequests';
+import { getNodesData } from '../../service/nodeRequests';
 import {
   FAIL_DELETE_MIND_MAP,
   FAIL_DELETE_MIND_MAP_BY_SERVER_PROBLEM,
   FAIL_CHANGE_MIND_MAP_PUBLIC_OPTION,
   DELETE_CONFIRM_MESSAGE,
+  FOLD_UNLOCK_MESSAGE,
+  FOLD_LOCK_MESSAGE,
 } from '../../constants/constants';
 import debounce from '../../utils/debounce';
 
@@ -31,18 +37,15 @@ export default function MindMapInfo({ mindMapId }) {
   const setError = useSetRecoilState(errorInfo);
   const userData = useRecoilValue(userInfo);
   const currentUser = useRecoilValue(currentUserInfo);
+  const { _id: currentUserId } = currentUser;
   const socket = useRecoilValue(socketInfo);
+  const [isFoldLock, setIsFoldLock] = useRecoilState(foldLockInfo);
+  const setNodeData = useSetRecoilState(nodesInfo);
 
   let userId;
-  let authorId;
 
   if (userData && Object.keys(userData).length > 0) {
     ({ _id: userId } = userData);
-  }
-
-  if (mindMapData && Object.keys(mindMapData).length > 0) {
-    const { author } = mindMapData;
-    ({ _id: authorId } = author);
   }
 
   const handleMindMapTitle = event => {
@@ -67,7 +70,8 @@ export default function MindMapInfo({ mindMapId }) {
   const handlePublicOption = async event => {
     if (currentUser && Object.keys(currentUser).length > 0) {
       try {
-        if (authorId === userId) {
+        console.log(userId, currentUserId);
+        if (userId === currentUserId) {
           const newMindMapData = { ...mindMapData, access: event.target.value };
 
           setMindMapData(newMindMapData);
@@ -92,7 +96,7 @@ export default function MindMapInfo({ mindMapId }) {
   const handleMindMapDelete = async () => {
     if (currentUser && Object.keys(currentUser).length > 0) {
       try {
-        if (authorId === userId) {
+        if (userId === currentUserId) {
           const confirmCheck = window.confirm(DELETE_CONFIRM_MESSAGE);
 
           if (!confirmCheck) {
@@ -116,6 +120,38 @@ export default function MindMapInfo({ mindMapId }) {
     }
   };
 
+  const handleFoldSharingOption = async () => {
+    if (isFoldLock) {
+      const confirmCheck = window.confirm(FOLD_UNLOCK_MESSAGE);
+
+      if (!confirmCheck) {
+        return;
+      }
+
+      setIsFoldLock(false);
+    } else {
+      const confirmCheck = window.confirm(FOLD_LOCK_MESSAGE);
+
+      if (!confirmCheck) {
+        return;
+      }
+
+      const responseNodes = await getNodesData(
+        userId,
+        mindMapId,
+        mindMapData.author,
+        50,
+      );
+
+      if (responseNodes.result === 'error') {
+        throw responseNodes.error;
+      }
+
+      setNodeData(responseNodes.node);
+      setIsFoldLock(true);
+    }
+  };
+
   return (
     <MindMapInfoWrapper>
       <MindMapTitle
@@ -129,6 +165,10 @@ export default function MindMapInfo({ mindMapId }) {
         <MindMapPublicOption>public</MindMapPublicOption>
         <MindMapPrivateOption>private</MindMapPrivateOption>
       </MindMapPublicSelect>
+      <Icon onClick={handleFoldSharingOption}>
+        {isFoldLock && <LockIcon className="lockButton" />}
+        {!isFoldLock && <UnlockIcon className="lockButton" />}
+      </Icon>
       <Icon onClick={handleMindMapDelete}>
         <Image
           src="/images/recycle-bin.png"
