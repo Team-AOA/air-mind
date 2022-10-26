@@ -21,7 +21,8 @@ export default function NodeFoldOption({ x, y, nodeId, isFold }) {
   const { _id: userId } = mindMap.author;
   const socket = useRecoilValue(socketInfo);
 
-  const foldHandler = () => {
+  const foldHandler = e => {
+    e.stopPropagation();
     if (currentUser && Object.keys(currentUser).length > 0) {
       setNodeData(prev => {
         const temp = { ...prev };
@@ -49,7 +50,13 @@ export default function NodeFoldOption({ x, y, nodeId, isFold }) {
   }, [isFold, nodeId, nodeData]);
 
   return (
-    <foreignObject x={x - 20} y={y} width={50} height={50}>
+    <foreignObject
+      x={x - 20}
+      y={y}
+      width={25}
+      height={25}
+      onClick={foldHandler}
+    >
       <FoldButton onClick={foldHandler}>
         {isFold ? numberOfChildren : '-'}
       </FoldButton>

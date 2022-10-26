@@ -7,9 +7,11 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import NodeHoverOption from '../NodeHoverOption';
 import NodeFoldOption from '../NodeFoldOption';
 import NodeFetchButton from '../NodeFetchButton';
+import NodeCoworkers from '../NodeCoworkers';
 import NODE_COLOR from '../../constants/nodeColor';
 import NODE_SIZE from '../../constants/nodeSize';
 import setMovePosition from '../../utils/d3/setMovePosition';
+import makeAncestors from '../../utils/makeAncestors';
 import {
   isOpenNodeOptionModal,
   clickedNodeId,
@@ -18,7 +20,7 @@ import {
   socketInfo,
 } from '../../store/states';
 
-export default function Node({ nodeId, nodeData, setNodeData }) {
+export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
   const [isOptionMode, setIsOptionMode] = useState(false);
   const isOpenNodeRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
   const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
@@ -26,6 +28,7 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
   const currentNodeId = useRecoilValue(clickedNodeId);
   const currentUser = useRecoilValue(currentUserInfo);
   const mindMap = useRecoilValue(mindMapInfo);
+  const { _id: mindMapId } = mindMap;
   const [textX, setTextX] = useState();
   const [textY, setTextY] = useState();
   const socket = useRecoilValue(socketInfo);
@@ -81,12 +84,31 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
     );
   }, [node]);
 
-  const onClickHandler = () => {
-    if (nodeId === currentNodeId || !isOpenNodeRightOptionMenu) {
-      setNodeRightOptionMode(!isOpenNodeRightOptionMenu);
+  const onClickHandler = e => {
+    console.log(nodeId, currentNodeId);
+    e.stopPropagation();
+    if (!isOpenNodeRightOptionMenu) {
+      setNodeRightOptionMode(true);
+      setClickedNodeId(nodeId);
+      socket.emit(
+        'enterNode',
+        currentUser,
+        makeAncestors(nodeId, nodeData),
+        mindMapId,
+      );
+    } else if (nodeId === currentNodeId) {
+      setNodeRightOptionMode(false);
+      setClickedNodeId('');
+      socket.emit('leaveNode', currentUser, mindMapId);
+    } else {
+      setClickedNodeId(nodeId);
+      socket.emit(
+        'enterNode',
+        currentUser,
+        makeAncestors(nodeId, nodeData),
+        mindMapId,
+      );
     }
-
-    setClickedNodeId(nodeId);
   };
 
   return (
@@ -97,6 +119,7 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
       y={nodeY}
       onMouseOver={() => setIsOptionMode(true)}
       onMouseOut={() => setIsOptionMode(false)}
+      onClick={onClickHandler}
     >
       <RectSvg
         x={nodeX}
@@ -105,9 +128,8 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
         height={nodeHeight}
         rx={20}
         selectedColor={nodeColor}
-        onClick={onClickHandler}
       />
-      <text ref={textRef} x={textX} y={textY} onClick={onClickHandler}>
+      <text ref={textRef} x={textX} y={textY}>
         {nodeTitle}
       </text>
       {isOptionMode && (
@@ -125,6 +147,7 @@ export default function Node({ nodeId, nodeData, setNodeData }) {
       {node?.children.length > 0 && !nodeData[node?.children[0]] && (
         <NodeFetchButton x={nodeX} y={nodeY} nodeId={nodeId} />
       )}
+      <NodeCoworkers x={nodeX} y={nodeY} socketUsers={socketUsers} />
     </g>
   );
 }
@@ -137,4 +160,5 @@ Node.propTypes = {
   nodeId: PropTypes.string.isRequired,
   nodeData: PropTypes.object.isRequired,
   setNodeData: PropTypes.func.isRequired,
+  socketUsers: PropTypes.object.isRequired,
 };

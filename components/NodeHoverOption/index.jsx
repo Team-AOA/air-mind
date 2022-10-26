@@ -48,7 +48,8 @@ export default function NodeHoverOption({
   const { _id: mindMapId } = mindMap;
   const { _id: userId } = mindMap.author;
 
-  const onClickColorPalette = item => {
+  const onClickColorPalette = (e, item) => {
+    e.stopPropagation();
     if (currentUser && Object.keys(currentUser).length > 0) {
       setNodeData(prev => {
         const temp = { ...prev };
@@ -71,7 +72,8 @@ export default function NodeHoverOption({
     }
   };
 
-  const onClickResize = change => {
+  const onClickResize = (e, change) => {
+    e.stopPropagation();
     if (currentUser && Object.keys(currentUser).length > 0) {
       setNodeData(prev => {
         const temp = { ...prev };
@@ -144,7 +146,8 @@ export default function NodeHoverOption({
     }
   };
 
-  const deleteNode = async () => {
+  const deleteNode = async e => {
+    e.stopPropagation();
     if (currentUser && Object.keys(currentUser).length > 0) {
       deleteNodeHelper(nodeId, nodeData, setNodeData);
       await deleteNodesData(userId, mindMapId, nodeId);
@@ -162,7 +165,7 @@ export default function NodeHoverOption({
               <ColorButton
                 key={item}
                 selectedColor={NODE_COLOR[item]}
-                onClick={() => onClickColorPalette(item)}
+                onClick={e => onClickColorPalette(e, item)}
               />
             ))}
           </ColorPalette>
@@ -171,11 +174,11 @@ export default function NodeHoverOption({
           <SizePalette>
             <BiggerIcon
               className="sizeButton"
-              onClick={() => onClickResize('bigger')}
+              onClick={e => onClickResize(e, 'bigger')}
             />
             <SmallerIcon
               className="sizeButton"
-              onClick={() => onClickResize('smaller')}
+              onClick={e => onClickResize(e, 'smaller')}
             />
           </SizePalette>
         )}
@@ -185,27 +188,48 @@ export default function NodeHoverOption({
         >
           <Icon
             className="leftIcon"
-            onClick={() => setIsSelectColorMode(prev => !prev)}
+            onClick={e => {
+              e.stopPropagation();
+              setIsSelectColorMode(prev => !prev);
+            }}
           >
             <ColorButton selectedColor={selectedColor} />
           </Icon>
-          <Icon onClick={() => setIsSelectSizeMode(prev => !prev)}>
+          <Icon
+            onClick={e => {
+              e.stopPropagation();
+              setIsSelectSizeMode(prev => !prev);
+            }}
+          >
             <SizeIcon size="24" className="icon" />
           </Icon>
-          <Icon onClick={() => createNode(nodeId, mindMap.headNode)}>
+          <Icon
+            onClick={e => {
+              e.stopPropagation();
+              createNode(nodeId, mindMap.headNode);
+            }}
+          >
             <PlusIcon size="24" className="icon" />
           </Icon>
           {isHead && (
             <Icon
               className="rightIcon"
-              onClick={() => setNodeCommentMode(!isOpenCommentMenu)}
+              onClick={e => {
+                e.stopPropagation();
+                setNodeCommentMode(!isOpenCommentMenu);
+              }}
             >
               <CommentIcon size="24" className="icon" />
             </Icon>
           )}
           {!isHead && (
             <>
-              <Icon onClick={() => setNodeCommentMode(!isOpenCommentMenu)}>
+              <Icon
+                onClick={e => {
+                  e.stopPropagation();
+                  setNodeCommentMode(!isOpenCommentMenu);
+                }}
+              >
                 <CommentIcon size="24" className="icon" />
               </Icon>
               <Icon className="rightIcon" onClick={deleteNode}>

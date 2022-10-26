@@ -14,7 +14,8 @@ export default function NodeFetchButton({ x, y, nodeId }) {
   const { _id: mindMapId } = mindMapData;
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
 
-  const nodeFetcher = async () => {
+  const nodeFetcher = async e => {
+    e.stopPropagation();
     try {
       const response = await getNodesData(userId, mindMapId, nodeId);
 

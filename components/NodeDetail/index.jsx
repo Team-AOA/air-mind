@@ -81,7 +81,10 @@ export default function NodeDetail() {
           width="20px"
           height="20px"
           className="closeIcon"
-          onClick={() => setNodeRightOptionMode(false)}
+          onClick={() => {
+            setNodeRightOptionMode(false);
+            socket.emit('leaveNode', currentUser, mindMapId);
+          }}
         />
       </MenuBody>
       <ScrollWrapper>
@@ -90,14 +93,14 @@ export default function NodeDetail() {
             <TitleMenu className="title">
               <MenuTitle>Title</MenuTitle>
               <TitleInput
-                value={nodeData[nodeId]?.title}
+                value={nodeData[nodeId]?.title || ''}
                 onChange={writeTitleHandler}
               />
             </TitleMenu>
             <DescriptionMenu className="description">
               <MenuTitle>Description</MenuTitle>
               <DescriptionTextArea
-                value={nodeData[nodeId]?.content}
+                value={nodeData[nodeId]?.content || ''}
                 onChange={writeDescriptionHandler}
               />
             </DescriptionMenu>
