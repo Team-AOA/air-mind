@@ -1,11 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
 import router from 'next/router';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
-import { TbLock as LockIcon, TbLockOpen as UnlockIcon } from 'react-icons/tb';
 
 import flexCenter from '../shared/FlexCenterContainer';
 import {
@@ -41,6 +39,9 @@ export default function MindMapInfo({ mindMapId }) {
   const socket = useRecoilValue(socketInfo);
   const [isFoldLock, setIsFoldLock] = useRecoilState(foldLockInfo);
   const setNodeData = useSetRecoilState(nodesInfo);
+  const [title, setTitle] = useState(() =>
+    mindMapData.title ? mindMapData.title : 'Untitled',
+  );
 
   let userId;
 
@@ -51,7 +52,7 @@ export default function MindMapInfo({ mindMapId }) {
   const handleMindMapTitle = event => {
     if (currentUser && Object.keys(currentUser).length > 0) {
       const newMindMapData = { ...mindMapData, title: event.target.value };
-
+      setTitle(event.target.value);
       setMindMapData(newMindMapData);
 
       debounce(() => {
@@ -153,10 +154,7 @@ export default function MindMapInfo({ mindMapId }) {
 
   return (
     <MindMapInfoWrapper>
-      <MindMapTitle
-        value={mindMapData.title || 'Untitled'}
-        onChange={handleMindMapTitle}
-      />
+      <MindMapTitle value={title} onChange={handleMindMapTitle} />
       <MindMapPublicSelect
         onChange={handlePublicOption}
         value={mindMapData.access}
@@ -165,8 +163,21 @@ export default function MindMapInfo({ mindMapId }) {
         <MindMapPrivateOption>private</MindMapPrivateOption>
       </MindMapPublicSelect>
       <Icon onClick={handleFoldSharingOption}>
-        {isFoldLock && <LockIcon className="lockButton" />}
-        {!isFoldLock && <UnlockIcon className="lockButton" />}
+        {isFoldLock ? (
+          <Image
+            src="/images/lock.png"
+            width="50px"
+            height="50px"
+            className="lockButton"
+          />
+        ) : (
+          <Image
+            src="/images/unlock.png"
+            width="50px"
+            height="50px"
+            className="lockButton"
+          />
+        )}
       </Icon>
       <Icon onClick={handleMindMapDelete}>
         <Image

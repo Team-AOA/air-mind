@@ -78,5 +78,5 @@ NodeWithLine.propTypes = {
   childNodeId: PropTypes.string.isRequired,
   nodeData: PropTypes.object.isRequired,
   setNodeData: PropTypes.func.isRequired,
-  socketUsers: PropTypes.object.isRequired,
+  socketUsers: PropTypes.array.isRequired,
 };
