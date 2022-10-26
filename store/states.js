@@ -64,6 +64,11 @@ const socketUserInfo = atom({
   default: {},
 });
 
+const foldLockInfo = atom({
+  key: 'foldLockInfo',
+  default: true,
+});
+
 export {
   currentUserInfo,
   userInfo,
@@ -77,4 +82,5 @@ export {
   socketInfo,
   deleteInfo,
   socketUserInfo,
+  foldLockInfo,
 };

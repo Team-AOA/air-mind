@@ -14,9 +14,10 @@ const deleteNodeHelper = (nodeId, nodeData, setNodeData) => {
   while (nodeQueue.length > 0) {
     const tempNodeId = nodeQueue.shift();
 
-    nodeQueue.push(...nodeData[tempNodeId].children);
-
-    delete tempData[tempNodeId];
+    if (nodeData[tempNodeId]) {
+      nodeQueue.push(...nodeData[tempNodeId].children);
+      delete tempData[tempNodeId];
+    }
   }
 
   setNodeData(tempData);

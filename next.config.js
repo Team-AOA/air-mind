@@ -9,7 +9,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ['localhost'],
+    domains: ['192.168.0.91'],
   },
 };
 

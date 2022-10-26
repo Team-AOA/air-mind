@@ -6,9 +6,14 @@ const receiveSocket = (
   setMindMapData,
   router,
   setSocketUserData,
+  isFoldLock,
 ) => {
   socket.on('receiveColor', (nodeId, color) => {
     setNodeData(prev => {
+      if (!prev[nodeId]) {
+        return prev;
+      }
+
       const temp = { ...prev };
       const tempSel = { ...temp[nodeId] };
 
@@ -24,6 +29,10 @@ const receiveSocket = (
 
   socket.on('receiveTitle', (nodeId, updatedContent) => {
     setNodeData(prev => {
+      if (!prev[nodeId]) {
+        return prev;
+      }
+
       const temp = { ...prev };
       const tempSel = { ...temp[nodeId] };
 
@@ -36,6 +45,10 @@ const receiveSocket = (
 
   socket.on('receiveContent', (nodeId, updatedDescription) => {
     setNodeData(prev => {
+      if (!prev[nodeId]) {
+        return prev;
+      }
+
       const temp = { ...prev };
       const tempSel = { ...temp[nodeId] };
 
@@ -52,6 +65,10 @@ const receiveSocket = (
 
   socket.on('receiveAddNode', (newNode, nodeId) => {
     setNodeData(prev => {
+      if (!prev[nodeId]) {
+        return prev;
+      }
+
       const tempData = { ...prev };
       const { _id: newId } = newNode.node;
       const newParent = {
@@ -68,6 +85,10 @@ const receiveSocket = (
 
   socket.on('receivePosition', (nodeId, updatedPositionX, updatedPositionY) => {
     setNodeData(prev => {
+      if (!prev[nodeId]) {
+        return prev;
+      }
+
       const temp = { ...prev };
       const tempSel = { ...temp[nodeId] };
 
@@ -84,21 +105,31 @@ const receiveSocket = (
   });
 
   socket.on('receiveFold', (isFold, nodeId) => {
-    setNodeData(prev => {
-      const temp = { ...prev };
-      const tempSel = { ...temp[nodeId] };
-      tempSel.attribute = {
-        ...tempSel.attribute,
-        isFold: !isFold,
-      };
-      temp[nodeId] = tempSel;
+    if (isFoldLock) {
+      setNodeData(prev => {
+        if (!prev[nodeId]) {
+          return prev;
+        }
 
-      return temp;
-    });
+        const temp = { ...prev };
+        const tempSel = { ...temp[nodeId] };
+        tempSel.attribute = {
+          ...tempSel.attribute,
+          isFold: !isFold,
+        };
+        temp[nodeId] = tempSel;
+
+        return temp;
+      });
+    }
   });
 
   socket.on('receiveSizeChange', (nodeId, change) => {
     setNodeData(prev => {
+      if (!prev[nodeId]) {
+        return prev;
+      }
+
       const temp = { ...prev };
       const tempSel = { ...temp[nodeId] };
 
@@ -170,9 +201,7 @@ const receiveSocket = (
   socket.on('deleteUser', currentUserId => {
     setSocketUserData(prev => {
       const tempData = { ...prev };
-      console.log('a: ', tempData, currentUserId);
       delete tempData[currentUserId];
-      console.log('b: ', tempData, currentUserId);
 
       return tempData;
     });

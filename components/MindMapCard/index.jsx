@@ -7,7 +7,12 @@ import Thumbnail from 'react-webpage-thumbnail';
 
 import { CgFileDocument as DocumentIcon } from 'react-icons/cg';
 import { TbShieldLock as LockIcon } from 'react-icons/tb';
-import { mindMapInfo, userInfo, currentUserInfo } from '../../store/states';
+import {
+  mindMapInfo,
+  userInfo,
+  currentUserInfo,
+  foldLockInfo,
+} from '../../store/states';
 import { deleteMindMapData } from '../../service/mindMapRequests';
 import { DELETE_CONFIRM_MESSAGE } from '../../constants/constants';
 
@@ -22,6 +27,7 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
   const [modalShow, setModalShow] = useState(false);
   const [url, setUrl] = useState('');
   const { _id: mindMapId } = mindMap;
+  const setIsFoldLock = useSetRecoilState(foldLockInfo);
 
   useEffect(() => {
     if (!mindMap) return;
@@ -35,9 +41,8 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
   };
 
   const mindMapLoader = () => {
+    setIsFoldLock(true);
     setMindMapData(mindMap);
-
-    if (!mindMap) return;
 
     setUserData(mindMap.author);
     Router.push(`/mind-map/${mindMapId}`);
