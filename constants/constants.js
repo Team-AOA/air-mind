@@ -20,6 +20,9 @@ const FOLD_LOCK_MESSAGE =
 
 const NO_PERMISSION_MESSAGE = 'Please Log In';
 
+const IMAGES_MAXIMUM_LENGTH_MESSAGE =
+  'A maximum of 3 can be uploaded at one time.';
+
 module.exports = {
   FAIL_GET_MIND_MAPS,
   FAIL_DELETE_MIND_MAP,
@@ -31,4 +34,5 @@ module.exports = {
   FOLD_UNLOCK_MESSAGE,
   FOLD_LOCK_MESSAGE,
   NO_PERMISSION_MESSAGE,
+  IMAGES_MAXIMUM_LENGTH_MESSAGE,
 };

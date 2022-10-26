@@ -85,8 +85,8 @@ export default function Header() {
             <div>
               <Image
                 src="/images/air_mind_logo.png"
-                width="80px"
-                height="80px"
+                width="55px"
+                height="55px"
                 className="homeIcon"
               />
             </div>
@@ -150,7 +150,7 @@ const HeaderLeftSide = styled.div`
   flex-direction: row;
   align-items: center;
   margin-right: auto;
-  margin-left: 10px;
+  margin-left: 30px;
 
   .homeIcon {
     cursor: pointer;

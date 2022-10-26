@@ -75,7 +75,7 @@ export default function NodeDetail() {
     <Container isOpen={isOpenNodeRightOptionMenu}>
       <MenuBody className="closeButton">
         <Image
-          src="/images/fast-forward.png"
+          src="/images/close.png"
           width="20px"
           height="20px"
           className="closeIcon"
@@ -119,7 +119,7 @@ export default function NodeDetail() {
                   const { _id: id } = img;
                   return (
                     <NodeImg
-                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/${img.path}`}
+                      src={img.path}
                       alt={img.originalName}
                       key={id}
                       className="img"
@@ -155,7 +155,9 @@ const Container = styled(flexCenter)`
     cursor: pointer;
   }
 
-  .closeIcon:hover {
+  .closeIcon {
+    margin: 10px;
+    padding-right: 10px;
     border-bottom: 1px solid black;
   }
 `;

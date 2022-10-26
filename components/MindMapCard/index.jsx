@@ -84,7 +84,7 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
     inputRef.current.focus();
 
     setIsTitleEditMode(true);
-    setModalShow(!modalShow);
+    setModalShow(false);
   };
 
   const renameSubmitHandler = e => {
@@ -118,6 +118,7 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
                 ref={inputRef}
                 value={title}
                 onChange={e => setTitle(e.target.value)}
+                onClick={renameHandler}
                 readOnly={!istitleEditMode}
               />
               {istitleEditMode && (
