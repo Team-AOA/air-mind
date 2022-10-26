@@ -65,12 +65,10 @@ export default function NodeDetail() {
   };
 
   const addImageHandler = imageArray => {
-    if (currentUser && Object.keys(currentUser).length > 0) {
-      const tempData = { ...nodeData };
-      tempData[nodeId] = { ...tempData[nodeId], images: imageArray };
+    const tempData = { ...nodeData };
+    tempData[nodeId] = { ...tempData[nodeId], images: imageArray };
 
-      setNodeData(tempData);
-    }
+    setNodeData(tempData);
   };
 
   return (

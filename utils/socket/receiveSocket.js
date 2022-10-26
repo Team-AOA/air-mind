@@ -71,13 +71,15 @@ const receiveSocket = (
 
       const tempData = { ...prev };
       const { _id: newId } = newNode.node;
-      const newParent = {
-        ...tempData[nodeId],
-        children: [...tempData[nodeId].children, newId],
-      };
 
-      tempData[nodeId] = newParent;
-      tempData[newId] = newNode.node;
+      if (tempData[nodeId].children.indexOf(newId) === -1) {
+        const newParent = {
+          ...tempData[nodeId],
+          children: [...tempData[nodeId].children, newId],
+        };
+        tempData[nodeId] = newParent;
+        tempData[newId] = newNode.node;
+      }
 
       return { ...prev, ...tempData };
     });
@@ -193,6 +195,26 @@ const receiveSocket = (
 
   socket.on('receiveDeleteMindMap', () => {
     router.push('/');
+  });
+
+  socket.on('receiveAddComment', (nodeId, comment) => {
+    setNodeData(prev => {
+      const tempData = { ...prev };
+      const node = { ...tempData[nodeId] };
+
+      node.comments = [...node.comments, comment];
+      tempData[nodeId] = node;
+
+      return tempData;
+    });
+  });
+
+  socket.on('receiveAddImages', (nodeId, images) => {
+    setNodeData(prev => {
+      const tempData = { ...prev };
+      tempData[nodeId] = { ...tempData[nodeId], images };
+      return tempData;
+    });
   });
 
   socket.on('insertUser', (currentUserId, profile, nodeAncestorList) => {

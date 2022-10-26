@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import Image from 'next/image';
 import styled from 'styled-components';
 
+import { useRecoilValue } from 'recoil';
 import { putImagesData } from '../../service/nodeRequests';
 import flexCenter from '../shared/FlexCenterContainer';
 import { Button } from '../shared/Button';
+import { currentUserInfo, socketInfo } from '../../store/states';
 
 export default function NodeImageDropZone({
   userId,
@@ -15,6 +17,8 @@ export default function NodeImageDropZone({
 }) {
   const uploadFile = useRef();
   const [isImgDropZone, setIsImgDropZone] = useState(false);
+  const currentUserData = useRecoilValue(currentUserInfo);
+  const socket = useRecoilValue(socketInfo);
 
   const handleOnImgDropZone = e => {
     e.preventDefault();
@@ -46,14 +50,22 @@ export default function NodeImageDropZone({
 
     images?.forEach(image => formData.append('images', image));
 
-    try {
-      const response = await putImagesData(userId, mindMapId, nodeId, formData);
-      setIsImgDropZone(false);
-      addImage(response.node.images);
-    } catch (error) {
-      if (error.code === 400) {
+    if (currentUserData && Object.keys(currentUserData).length > 0) {
+      try {
+        const response = await putImagesData(
+          userId,
+          mindMapId,
+          nodeId,
+          formData,
+        );
         setIsImgDropZone(false);
-        return alert(error.message);
+        addImage(response.node.images);
+        socket.emit('addImages', mindMapId, nodeId, response.node.images);
+      } catch (error) {
+        if (error.code === 400) {
+          setIsImgDropZone(false);
+          return alert(error.message);
+        }
       }
     }
   };

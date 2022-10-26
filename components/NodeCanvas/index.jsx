@@ -13,6 +13,7 @@ import {
   currentUserInfo,
   mindMapInfo,
   socketInfo,
+  isOpenNodeCommentModal,
 } from '../../store/states';
 
 export default function NodeCanvas({ headNode }) {
@@ -23,6 +24,7 @@ export default function NodeCanvas({ headNode }) {
   const socketUserData = useRecoilValue(socketUserInfo);
   const [decidedSocketUser, setDecidedSocketUser] = useState({});
   const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
+  const setNodeCommentMode = useSetRecoilState(isOpenNodeCommentModal);
   const currentUser = useRecoilValue(currentUserInfo);
   const mindMapData = useRecoilValue(mindMapInfo);
   const { _id: mindMapId } = mindMapData;
@@ -51,6 +53,7 @@ export default function NodeCanvas({ headNode }) {
 
   const optionHandler = () => {
     setNodeRightOptionMode(false);
+    setNodeCommentMode(false);
     socket.emit('leaveNode', currentUser, mindMapId);
   };
 

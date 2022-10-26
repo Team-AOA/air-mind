@@ -18,6 +18,7 @@ import {
   nodesInfo,
   currentUserInfo,
   clickedNodeId,
+  isOpenNodeOptionModal,
 } from '../../store/states';
 import NODE_COLOR from '../../constants/nodeColor';
 import flexCenter from '../shared/FlexCenterContainer';
@@ -39,6 +40,7 @@ export default function NodeHoverOption({
   const [isSelectColorMode, setIsSelectColorMode] = useState(false);
   const [isSelectSizeMode, setIsSelectSizeMode] = useState(false);
   const setNodeCommentMode = useSetRecoilState(isOpenNodeCommentModal);
+  const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
   const setClickedNodeId = useSetRecoilState(clickedNodeId);
   const prevClickedNodeId = useRecoilValue(clickedNodeId);
   const isOpenCommentMenu = useRecoilValue(isOpenNodeCommentModal);
@@ -157,6 +159,11 @@ export default function NodeHoverOption({
 
       socket.emit('deleteNode', nodeId, nodeData, userId, mindMapId);
     }
+
+    setClickedNodeId('');
+    setNodeRightOptionMode(false);
+    setNodeCommentMode(false);
+    socket.emit('leaveNode', currentUser, mindMapId);
   };
 
   const commentNode = e => {

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import Thumbnail from 'react-webpage-thumbnail';
 
 import { CgFileDocument as DocumentIcon } from 'react-icons/cg';
@@ -48,7 +48,7 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
     setMindMapData(mindMap);
 
     setUserData(mindMap.author);
-    Router.push(`/mind-map/${mindMapId}`);
+    router.push(`/mind-map/${mindMapId}`);
   };
 
   const deleteHandler = async () => {
