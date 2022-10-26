@@ -40,5 +40,5 @@ const Icon = styled.img`
 NodeCoworkers.propTypes = {
   x: PropTypes.node.isRequired,
   y: PropTypes.node.isRequired,
-  socketUsers: PropTypes.object.isRequired,
+  socketUsers: PropTypes.array.isRequired,
 };

@@ -5,8 +5,6 @@ import router from 'next/router';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { TbLock as LockIcon, TbLockOpen as UnlockIcon } from 'react-icons/tb';
-
 import flexCenter from '../shared/FlexCenterContainer';
 import {
   userInfo,
@@ -165,8 +163,21 @@ export default function MindMapInfo({ mindMapId }) {
         <MindMapPrivateOption>private</MindMapPrivateOption>
       </MindMapPublicSelect>
       <Icon onClick={handleFoldSharingOption}>
-        {isFoldLock && <LockIcon className="lockButton" />}
-        {!isFoldLock && <UnlockIcon className="lockButton" />}
+        {isFoldLock ? (
+          <Image
+            src="/images/lock.png"
+            width="50px"
+            height="50px"
+            className="lockButton"
+          />
+        ) : (
+          <Image
+            src="/images/unlock.png"
+            width="50px"
+            height="50px"
+            className="lockButton"
+          />
+        )}
       </Icon>
       <Icon onClick={handleMindMapDelete}>
         <Image
