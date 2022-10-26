@@ -70,7 +70,6 @@ export default function MindMapInfo({ mindMapId }) {
   const handlePublicOption = async event => {
     if (currentUser && Object.keys(currentUser).length > 0) {
       try {
-        console.log(userId, currentUserId);
         if (userId === currentUserId) {
           const newMindMapData = { ...mindMapData, access: event.target.value };
 
@@ -139,7 +138,7 @@ export default function MindMapInfo({ mindMapId }) {
       const responseNodes = await getNodesData(
         userId,
         mindMapId,
-        mindMapData.author,
+        mindMapData.headNode,
         50,
       );
 
