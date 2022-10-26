@@ -4,10 +4,11 @@ import Image from 'next/image';
 import styled from 'styled-components';
 
 import { useRecoilValue } from 'recoil';
-import { putImagesData } from '../../service/nodeRequests';
 import flexCenter from '../shared/FlexCenterContainer';
-import { Button } from '../shared/Button';
 import { currentUserInfo, socketInfo } from '../../store/states';
+import { postImagesData } from '../../service/nodeRequests';
+import { Button } from '../shared/Button';
+import { IMAGES_MAXIMUM_LENGTH_MESSAGE } from '../../constants/constants';
 
 export default function NodeImageDropZone({
   userId,
@@ -38,13 +39,12 @@ export default function NodeImageDropZone({
   const handleDrop = async e => {
     e.preventDefault();
     e.stopPropagation();
-
     const images = e.dataTransfer
       ? [...e.dataTransfer.files]
       : [...e.target.files];
 
     if (images.length > 3) {
-      return alert('A maximum of 3 can be uploaded at one time. ');
+      return alert(IMAGES_MAXIMUM_LENGTH_MESSAGE);
     }
     const formData = new FormData();
 
@@ -52,7 +52,7 @@ export default function NodeImageDropZone({
 
     if (currentUserData && Object.keys(currentUserData).length > 0) {
       try {
-        const response = await putImagesData(
+        const response = await postImagesData(
           userId,
           mindMapId,
           nodeId,

@@ -46,10 +46,10 @@ export async function postCommentsData(userId, mindMapId, nodeId, commentData) {
   });
 }
 
-export async function putImagesData(userId, mindMapId, nodeId, imageData) {
+export async function postImagesData(userId, mindMapId, nodeId, imageData) {
   return API({
-    method: 'put',
-    url: `/users/${userId}/mind-maps/${mindMapId}/nodes/${nodeId}`,
+    method: 'post',
+    url: `/users/${userId}/mind-maps/${mindMapId}/nodes/${nodeId}/images`,
     data: imageData,
   });
 }
