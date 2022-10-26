@@ -111,7 +111,6 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
   };
 
   const hoverHandler = () => {
-    setClickedNodeId(nodeId);
     setIsOptionMode(true);
   };
 
