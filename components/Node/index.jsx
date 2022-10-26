@@ -110,13 +110,17 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
     }
   };
 
+  const hoverHandler = () => {
+    setIsOptionMode(true);
+  };
+
   return (
     <g
       id={`node${nodeId}`}
       ref={groupRef}
       x={nodeX}
       y={nodeY}
-      onMouseOver={() => setIsOptionMode(true)}
+      onMouseOver={hoverHandler}
       onMouseOut={() => setIsOptionMode(false)}
       onClick={onClickHandler}
     >

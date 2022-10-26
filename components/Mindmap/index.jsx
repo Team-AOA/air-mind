@@ -110,7 +110,7 @@ export default function MindMap({ mindMapId }) {
           </RightMenuWrapper>
         </RightMenuContainer>
       </RightMenu>
-      <NodeCanvas headNode={mindMapData.headNode} />
+      <NodeCanvas headNode={mindMapData?.headNode} />
     </Container>
   );
 }

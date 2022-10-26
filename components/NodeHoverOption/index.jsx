@@ -17,6 +17,7 @@ import {
   socketInfo,
   nodesInfo,
   currentUserInfo,
+  clickedNodeId,
 } from '../../store/states';
 import NODE_COLOR from '../../constants/nodeColor';
 import flexCenter from '../shared/FlexCenterContainer';
@@ -38,6 +39,8 @@ export default function NodeHoverOption({
   const [isSelectColorMode, setIsSelectColorMode] = useState(false);
   const [isSelectSizeMode, setIsSelectSizeMode] = useState(false);
   const setNodeCommentMode = useSetRecoilState(isOpenNodeCommentModal);
+  const setClickedNodeId = useSetRecoilState(clickedNodeId);
+  const prevClickedNodeId = useRecoilValue(clickedNodeId);
   const isOpenCommentMenu = useRecoilValue(isOpenNodeCommentModal);
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
   const mindMap = useRecoilValue(mindMapInfo);
@@ -156,6 +159,18 @@ export default function NodeHoverOption({
     }
   };
 
+  const commentNode = e => {
+    e.stopPropagation();
+    setClickedNodeId(nodeId);
+
+    if (prevClickedNodeId === nodeId) {
+      setNodeCommentMode(!isOpenCommentMenu);
+      return;
+    }
+
+    setNodeCommentMode(true);
+  };
+
   return (
     <foreignObject x={x + 20} y={y - 180} width={125} height={180}>
       <HoverContainer>
@@ -212,24 +227,13 @@ export default function NodeHoverOption({
             <PlusIcon size="24" className="icon" />
           </Icon>
           {isHead && (
-            <Icon
-              className="rightIcon"
-              onClick={e => {
-                e.stopPropagation();
-                setNodeCommentMode(!isOpenCommentMenu);
-              }}
-            >
+            <Icon className="rightIcon" onClick={commentNode}>
               <CommentIcon size="24" className="icon" />
             </Icon>
           )}
           {!isHead && (
             <>
-              <Icon
-                onClick={e => {
-                  e.stopPropagation();
-                  setNodeCommentMode(!isOpenCommentMenu);
-                }}
-              >
+              <Icon onClick={commentNode}>
                 <CommentIcon size="24" className="icon" />
               </Icon>
               <Icon className="rightIcon" onClick={deleteNode}>

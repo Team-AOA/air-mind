@@ -105,17 +105,25 @@ export default function Header() {
                 <HeaderLoginButton>Log In</HeaderLoginButton>
               </div>
             </Link>
-            <ProfileIcon src={userInfo.profile || 'guest'} alt="profile" />
+            <ProfileIcon
+              src={userInfo.profile || 'guest'}
+              alt="profile"
+              size="medium"
+            />
           </HeaderRightSide>
         ) : (
           <HeaderRightSide>
-            <HeaderMyWorkButton onClick={() => router.push('my-works')}>
+            <HeaderMyWorkButton onClick={() => router.push('/my-works')}>
               My Work
             </HeaderMyWorkButton>
             <HeaderLoginButton onClick={clickLogOutHandler}>
               LogOut
             </HeaderLoginButton>
-            <ProfileIcon src={userInfo.profile || 'guest'} alt="profile" />
+            <ProfileIcon
+              src={userInfo.profile || 'guest'}
+              alt="profile"
+              size="medium"
+            />
           </HeaderRightSide>
         )}
       </HeaderWrapper>

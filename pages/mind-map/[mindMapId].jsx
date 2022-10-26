@@ -7,5 +7,5 @@ export default function MindMapPage() {
   const router = useRouter();
   const { mindMapId } = router.query;
 
-  return <MindMap mindMapId={mindMapId} />;
+  return <MindMap mindMapId={mindMapId || ''} />;
 }

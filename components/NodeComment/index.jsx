@@ -1,45 +1,38 @@
 import React, { useEffect, useRef, useState } from 'react';
-// import axios from 'axios';
 import styled from 'styled-components';
+import { v4 as uuidv4 } from 'uuid';
 
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  clickedNodeId,
+  isOpenNodeCommentModal,
+  mindMapInfo,
+  nodesInfo,
+  userInfo,
+  currentUserInfo,
+} from '../../store/states';
 import flexCenter from '../shared/FlexCenterContainer';
 import { Button } from '../shared/Button';
-import { getCommentsData, postCommentsData } from '../../service/nodeRequests';
-
-import { isOpenNodeCommentModal, clickedNodeId } from '../../store/states';
+import { postCommentsData } from '../../service/nodeRequests';
+import ProfileIcon from '../shared/ProfileIcon';
+import { NO_PERMISSION_MESSAGE } from '../../constants/constants';
 
 export default function NodeComment() {
   const commentList = useRef();
-  const [allComments, setAllComments] = useState([]);
-  // const [newComment, setNewComment] = useState('');
+  const [nodeData, setNodeData] = useRecoilState(nodesInfo);
+  const mindMapData = useRecoilValue(mindMapInfo);
+
+  const userData = useRecoilValue(userInfo);
+  const nodeId = useRecoilValue(clickedNodeId);
+  const currentUser = useRecoilValue(currentUserInfo);
+
   const isOpenCommentMenu = useRecoilValue(isOpenNodeCommentModal);
   const setNodeCommentMode = useSetRecoilState(isOpenNodeCommentModal);
 
-  const nodeId = useRecoilValue(clickedNodeId);
+  const [currentComment, setCurrentComment] = useState('');
 
-  useEffect(() => {
-    const getComments = async () => {
-      try {
-        // Todo
-        console.log(nodeId);
-        const response = await getCommentsData();
-        setAllComments([...response.data.data]);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getComments();
-  }, []);
-
-  const createCommentHandler = async () => {
-    try {
-      // Todo
-      await postCommentsData();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { _id: userId } = userData;
+  const { _id: mindMapId } = mindMapData;
 
   const scrollToBottom = () => {
     if (commentList.current) {
@@ -47,21 +40,48 @@ export default function NodeComment() {
     }
   };
 
-  const createCommentElement = commentsArray => {
-    return commentsArray.map(comment => {
-      const { _id: id } = comment;
-      return (
-        <div key={id}>
-          <Author>{comment.author}</Author>
-          <Content>{comment.content}</Content>
-        </div>
-      );
-    });
-  };
-
   useEffect(() => {
     scrollToBottom();
-  }, [allComments]);
+  }, [nodeData, currentComment]);
+
+  const createCommentClickHandler = async () => {
+    if (!nodeId) return;
+    if (!currentUser.username) {
+      alert(NO_PERMISSION_MESSAGE);
+      return;
+    }
+
+    try {
+      const tempData = { ...nodeData };
+      const currentCommentsArray = [...tempData[nodeId].comments];
+
+      const comment = {
+        author: currentUser.username,
+        content: currentComment,
+        profile: currentUser.profile,
+      };
+
+      await postCommentsData(userId, mindMapId, nodeId, comment);
+
+      currentCommentsArray.push(comment);
+
+      tempData[nodeId] = {
+        ...tempData[nodeId],
+        comments: currentCommentsArray,
+      };
+
+      setNodeData(tempData);
+    } catch (error) {
+      console.log(error);
+    }
+    setCurrentComment('');
+  };
+
+  const onKeyDownHandler = e => {
+    if (e.code === 'Enter') {
+      createCommentClickHandler();
+    }
+  };
 
   return (
     <CommentContainer isOpen={isOpenCommentMenu}>
@@ -70,11 +90,31 @@ export default function NodeComment() {
       </ButtonWrapper>
       <CommentBody>
         <CommentList ref={commentList}>
-          {createCommentElement(allComments)}
+          {nodeId &&
+            nodeData[nodeId]?.comments.map(comment => {
+              return (
+                <Comment key={uuidv4()}>
+                  <ProfileIcon
+                    src={comment?.profile}
+                    alt="profile"
+                    size="small"
+                  />
+                  <div>
+                    <Author>{comment?.author}</Author>
+                    <Content>{comment?.content}</Content>
+                  </div>
+                </Comment>
+              );
+            })}
         </CommentList>
         <CommentTextBar>
-          <CommentTextArea placeholder="Add to the discussion" />
-          <Button className="submitButton" onClick={createCommentHandler}>
+          <CommentTextArea
+            placeholder="Add to the discussion"
+            value={currentComment}
+            onChange={e => setCurrentComment(e.target.value)}
+            onKeyDown={onKeyDownHandler}
+          />
+          <Button className="submitButton" onClick={createCommentClickHandler}>
             Send
           </Button>
         </CommentTextBar>
@@ -124,6 +164,15 @@ const Author = styled.div`
 
 const Content = styled.div`
   padding: 5px 14px 10px 14px;
+`;
+
+const Comment = styled.div`
+  display: flex;
+
+  .profile {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 const CommentList = styled.div`

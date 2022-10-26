@@ -7,7 +7,10 @@ import Header from '../Header';
 import NavBar from '../Navbar';
 import MindMapCard from '../MindMapCard';
 
-import { getMyMindMapData } from '../../service/mindMapRequests';
+import {
+  getMyMindMapData,
+  updateMindMapData,
+} from '../../service/mindMapRequests';
 import { currentUserInfo } from '../../store/states';
 
 export default function MyWorks() {
@@ -23,9 +26,11 @@ export default function MyWorks() {
 
         setMyMindMapData(data.mindMap);
       } catch (error) {
+        console.log(error);
         setCurrentError(error);
       }
     };
+
     if (currentUserId) {
       fetchMyMindMapData(currentUserId);
     }
@@ -45,7 +50,7 @@ export default function MyWorks() {
       });
       setMyMindMapData(updatedMindmaps);
 
-      return setMyMindMapData(authorId, mindMapId, updatedMindMap);
+      return updateMindMapData(authorId, mindMapId, updatedMindMap);
     },
     [myMindMapData],
   );

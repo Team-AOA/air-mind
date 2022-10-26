@@ -6,7 +6,7 @@ import Router, { useRouter } from 'next/router';
 import Thumbnail from 'react-webpage-thumbnail';
 
 import { CgFileDocument as DocumentIcon } from 'react-icons/cg';
-import { TbShieldLock as LockIcon } from 'react-icons/tb';
+import { SlLock as LockIcon } from 'react-icons/sl';
 import {
   mindMapInfo,
   userInfo,
@@ -14,10 +14,13 @@ import {
   foldLockInfo,
 } from '../../store/states';
 import { deleteMindMapData } from '../../service/mindMapRequests';
-import { DELETE_CONFIRM_MESSAGE } from '../../constants/constants';
+import {
+  DELETE_CONFIRM_MESSAGE,
+  FAIL_RENAME_MIND_MAP,
+} from '../../constants/constants';
 
 export default function MindMapCard({ mindMap, renameTitleHandler }) {
-  const [title, setTitle] = useState(mindMap.title);
+  const [title, setTitle] = useState(mindMap.title || '');
   const [istitleEditMode, setIsTitleEditMode] = useState(false);
   const inputRef = useRef();
   const router = useRouter();
@@ -49,9 +52,12 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
   };
 
   const deleteHandler = async () => {
-    setModalShow(!modalShow);
-
     if (!mindMap) return;
+
+    if (currentUser.email !== mindMap.author.email) {
+      alert(FAIL_RENAME_MIND_MAP);
+      return;
+    }
 
     const confirmCheck = window.confirm(DELETE_CONFIRM_MESSAGE);
 
@@ -65,10 +71,16 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
       console.log(error);
     }
 
+    setModalShow(!modalShow);
     router.reload('/');
   };
 
   const renameHandler = () => {
+    if (currentUser.email !== mindMap.author.email) {
+      alert(FAIL_RENAME_MIND_MAP);
+      return;
+    }
+
     inputRef.current.focus();
 
     setIsTitleEditMode(true);
@@ -80,8 +92,7 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
     setIsTitleEditMode(false);
 
     const { _id: authorId } = mindMap.author;
-    if (currentUser.id !== authorId) return;
-
+    if (currentUser.email !== mindMap.author.email) return;
     renameTitleHandler(authorId, mindMapId, title);
   };
 
@@ -92,6 +103,7 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
           <LockPageWrapper>
             <LockIcon className="lockIcon" size={50} />
             <PrivatePageThumbnail />
+            <Thumbnail url={url} className="thumbnail" />
           </LockPageWrapper>
         ) : (
           <Thumbnail url={url} className="thumbnail" />
@@ -165,6 +177,10 @@ const Wrapper = styled.div`
   width: 300px;
   height: 100%;
   cursor: pointer;
+
+  .thumbnail {
+    position: relative;
+  }
 `;
 
 const LockPageWrapper = styled.div`
@@ -178,16 +194,42 @@ const LockPageWrapper = styled.div`
 
   .lockIcon {
     position: absolute;
-    z-index: 1;
+    z-index: 2;
+    width: 100%;
   }
 `;
 
 const PrivatePageThumbnail = styled.div`
   width: inherit;
   height: inherit;
-  background-image: linear-gradient(to right, #8e2de2, #4a00e0);
-  position: relative;
+  /* background-image: linear-gradient(to right, #8e2de2, #4a00e0); */
+  opacity: 0.15;
+  background-color: #0073ff;
+  position: absolute;
+  z-index: 1;
 `;
+
+// const LockPageWrapper = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   position: relative;
+//   width: inherit;
+//   height: 100%;
+//   color: white;
+
+//   .lockIcon {
+//     position: absolute;
+//     z-index: 1;
+//   }
+// `;
+
+// const PrivatePageThumbnail = styled.div`
+//   width: inherit;
+//   height: inherit;
+//   background-image: linear-gradient(to right, #8e2de2, #4a00e0);
+//   position: relative;
+// `;
 
 const Footer = styled.div`
   display: flex;
