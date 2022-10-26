@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
 import router from 'next/router';
@@ -41,6 +41,9 @@ export default function MindMapInfo({ mindMapId }) {
   const socket = useRecoilValue(socketInfo);
   const [isFoldLock, setIsFoldLock] = useRecoilState(foldLockInfo);
   const setNodeData = useSetRecoilState(nodesInfo);
+  const [title, setTitle] = useState(() =>
+    mindMapData.title ? mindMapData.title : 'Untitled',
+  );
 
   let userId;
 
@@ -51,7 +54,7 @@ export default function MindMapInfo({ mindMapId }) {
   const handleMindMapTitle = event => {
     if (currentUser && Object.keys(currentUser).length > 0) {
       const newMindMapData = { ...mindMapData, title: event.target.value };
-
+      setTitle(event.target.value);
       setMindMapData(newMindMapData);
 
       debounce(() => {
@@ -153,10 +156,7 @@ export default function MindMapInfo({ mindMapId }) {
 
   return (
     <MindMapInfoWrapper>
-      <MindMapTitle
-        value={mindMapData.title || 'Untitled'}
-        onChange={handleMindMapTitle}
-      />
+      <MindMapTitle value={title} onChange={handleMindMapTitle} />
       <MindMapPublicSelect
         onChange={handlePublicOption}
         value={mindMapData.access}
