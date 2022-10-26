@@ -40,7 +40,7 @@ export async function getCommentsData(userId, mindMapId, nodeId) {
 
 export async function postCommentsData(userId, mindMapId, nodeId, commentData) {
   return API({
-    method: 'get',
+    method: 'post',
     url: `/users/${userId}/mind-maps/${mindMapId}/nodes/${nodeId}/comments`,
     data: commentData,
   });
