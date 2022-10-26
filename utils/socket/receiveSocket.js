@@ -197,6 +197,26 @@ const receiveSocket = (
     router.push('/');
   });
 
+  socket.on('receiveAddComment', (nodeId, comment) => {
+    setNodeData(prev => {
+      const tempData = { ...prev };
+      const node = { ...tempData[nodeId] };
+
+      node.comments = [...node.comments, comment];
+      tempData[nodeId] = node;
+
+      return tempData;
+    });
+  });
+
+  socket.on('receiveAddImages', (nodeId, images) => {
+    setNodeData(prev => {
+      const tempData = { ...prev };
+      tempData[nodeId] = { ...tempData[nodeId], images };
+      return tempData;
+    });
+  });
+
   socket.on('insertUser', (currentUserId, profile, nodeAncestorList) => {
     setSocketUserData(prev => {
       const tempData = { ...prev };

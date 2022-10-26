@@ -10,6 +10,7 @@ import {
   nodesInfo,
   userInfo,
   currentUserInfo,
+  socketInfo,
 } from '../../store/states';
 import flexCenter from '../shared/FlexCenterContainer';
 import { Button } from '../shared/Button';
@@ -21,15 +22,17 @@ export default function NodeComment() {
   const commentList = useRef();
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
   const mindMapData = useRecoilValue(mindMapInfo);
-
   const userData = useRecoilValue(userInfo);
   const nodeId = useRecoilValue(clickedNodeId);
   const currentUser = useRecoilValue(currentUserInfo);
+
+  const socket = useRecoilValue(socketInfo);
 
   const isOpenCommentMenu = useRecoilValue(isOpenNodeCommentModal);
   const setNodeCommentMode = useSetRecoilState(isOpenNodeCommentModal);
 
   const [currentComment, setCurrentComment] = useState('');
+  const [keyTransfer, setKeyTransfer] = useState(false);
 
   const { _id: userId } = userData;
   const { _id: mindMapId } = mindMapData;
@@ -62,6 +65,7 @@ export default function NodeComment() {
       };
 
       await postCommentsData(userId, mindMapId, nodeId, comment);
+      socket.emit('addComment', nodeId, mindMapId, comment);
 
       currentCommentsArray.push(comment);
 
@@ -78,13 +82,18 @@ export default function NodeComment() {
   };
 
   const onKeyDownHandler = e => {
-    if (e.code === 'Enter') {
+    if (e.code === 'Enter' && currentComment && keyTransfer) {
       createCommentClickHandler();
+      setKeyTransfer(false);
     }
   };
 
+  const modalCloseHandler = e => {
+    e.stopPropagation();
+  };
+
   return (
-    <CommentContainer isOpen={isOpenCommentMenu}>
+    <CommentContainer isOpen={isOpenCommentMenu} onClick={modalCloseHandler}>
       <ButtonWrapper>
         <CloseButton onClick={() => setNodeCommentMode(false)}>X</CloseButton>
       </ButtonWrapper>
@@ -112,7 +121,10 @@ export default function NodeComment() {
             placeholder="Add to the discussion"
             value={currentComment}
             onChange={e => setCurrentComment(e.target.value)}
-            onKeyDown={onKeyDownHandler}
+            onKeyDown={e => {
+              setKeyTransfer(true);
+              onKeyDownHandler(e);
+            }}
           />
           <Button className="submitButton" onClick={createCommentClickHandler}>
             Send

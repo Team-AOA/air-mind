@@ -25,10 +25,6 @@ import NodeDetail from '../NodeDetail';
 import flexCenter from '../shared/FlexCenterContainer';
 import pageLoader from '../../utils/pageLoader';
 
-const socket = io(process.env.NEXT_PUBLIC_BASE_URL, {
-  transports: [`websocket`],
-});
-
 const NodeCanvas = dynamic(() => import('../NodeCanvas'), {
   ssr: false,
 });
@@ -41,12 +37,22 @@ export default function MindMap({ mindMapId }) {
   const setError = useSetRecoilState(errorInfo);
   const isOpenNodeCommentMenu = useRecoilValue(isOpenNodeCommentModal);
   const isOpenNodeOptionMenu = useRecoilValue(isOpenNodeOptionModal);
-  const setSocket = useSetRecoilState(socketInfo);
+  const [socket, setSocket] = useRecoilState(socketInfo);
   const router = useRouter();
   const setSocketUserData = useSetRecoilState(socketUserInfo);
   const setIsFoldLock = useSetRecoilState(foldLockInfo);
 
   useEffect(() => {
+    if (!socket || Object.keys(socket).length <= 0) {
+      setSocket(
+        io(process.env.NEXT_PUBLIC_BASE_URL, {
+          transports: ['websocket'],
+        }),
+      );
+
+      return () => {};
+    }
+
     socket.on('connect', () => {
       console.log(' client socket connected');
     });
@@ -68,7 +74,7 @@ export default function MindMap({ mindMapId }) {
       socket.off('broadcast');
       setSocket({});
     };
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     return preventBodyScrolling();
