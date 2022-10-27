@@ -8,7 +8,7 @@
     "start": "next start",
     "pre-commit": "lint-staged && rm -rf .git/hooks && ln -s ../.husky .git/hooks",
     "prepare": "husky install && husky add .husky/pre-commit 'npm run pre-commit'",
-    "netlify-deploy": "next build && next export"
+    "netlify-deploy": "next build && next start"
   },
   "lint-staged": {
     "**/*.{js,jsx,html,css}": [
