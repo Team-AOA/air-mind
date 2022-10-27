@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import ProfileIcon from '../shared/ProfileIcon1';
+import ProfileIcon from '../shared/profileicon';
 
 export default function NodeCoworkers({ x, y, socketUsers }) {
   return (

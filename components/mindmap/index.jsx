@@ -6,8 +6,8 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 import { io } from 'socket.io-client';
-import receiveSocket from '../../utils/socket/receiveSocket';
-import preventBodyScrolling from '../../utils/preventBodyScrolling';
+import receiveSocket from '../../utils/socket/receiveSocket1';
+import preventBodyScrolling from '../../utils/preventBodyScrolling1';
 import {
   userInfo,
   errorInfo,
@@ -19,11 +19,11 @@ import {
   socketUserInfo,
   foldLockInfo,
 } from '../../store/states';
-import Header from '../Header1';
+import Header from '../header';
 import NodeComment from '../NodeComment1';
 import NodeDetail from '../NodeDetail1';
 import flexCenter from '../shared/FlexCenterContainer1';
-import pageLoader from '../../utils/pageLoader';
+import pageLoader from '../../utils/pageLoader1';
 
 const NodeCanvas = dynamic(() => import('../NodeCanvas1'), {
   ssr: false,

@@ -13,11 +13,11 @@ import {
   currentUserInfo,
   foldLockInfo,
 } from '../../store/states';
-import { deleteMindMapData } from '../../service/mindMapRequests1';
+import { deleteMindMapData } from '../../service/mindmaprequests';
 import {
   DELETE_CONFIRM_MESSAGE,
   FAIL_RENAME_MIND_MAP,
-} from '../../constants/constants1';
+} from '../../constants/constants';
 
 export default function MindMapCard({ mindMap, renameTitleHandler }) {
   const [title, setTitle] = useState(mindMap.title || '');

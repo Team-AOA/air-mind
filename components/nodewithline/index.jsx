@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
 import PropTypes from 'prop-types';
-import Node from '../Node1';
+import Node from '../node';
 import NODE_SIZE from '../../constants/nodeSize1';
 
 export default function NodeWithLine({

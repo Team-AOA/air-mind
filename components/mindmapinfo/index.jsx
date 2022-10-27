@@ -18,7 +18,7 @@ import {
 import {
   deleteMindMapData,
   updateMindMapData,
-} from '../../service/mindMapRequests1';
+} from '../../service/mindmaprequests';
 import { getNodesData } from '../../service/nodeRequests1';
 import {
   FAIL_DELETE_MIND_MAP,
@@ -27,7 +27,7 @@ import {
   DELETE_CONFIRM_MESSAGE,
   FOLD_UNLOCK_MESSAGE,
   FOLD_LOCK_MESSAGE,
-} from '../../constants/constants1';
+} from '../../constants/constants';
 import debounce from '../../utils/debounce';
 
 export default function MindMapInfo({ mindMapId }) {

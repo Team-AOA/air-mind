@@ -2,45 +2,39 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { useRecoilValue } from 'recoil';
-import Header from '../Header1';
-import NavBar from '../Navbar1';
-import MindMapCard from '../MindMapCard1';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import Header from '../header';
+import NavBar from '../navbar';
+import MindMapCard from '../mindmapcard';
 
-import {
-  getMyMindMapData,
+import getPublicMindMapData, {
   updateMindMapData,
-} from '../../service/mindMapRequests1';
-import { currentUserInfo } from '../../store/states';
+} from '../../service/mindmaprequests';
+import { errorInfo } from '../../store/states';
 
-export default function MyWorks() {
-  const [myMindMapData, setMyMindMapData] = useState([]);
-  const [currentError, setCurrentError] = useState({});
-  const currentUserData = useRecoilValue(currentUserInfo);
-  const { _id: currentUserId } = currentUserData;
+export default function Home() {
+  const [mindMapData, setMindMapData] = useState([]);
+  const setCurrentError = useSetRecoilState(errorInfo);
+  const currentError = useRecoilValue(errorInfo);
 
   useEffect(() => {
-    const fetchMyMindMapData = async id => {
+    const fetchPublicMindMapData = async () => {
       try {
-        const data = await getMyMindMapData(id);
+        const data = await getPublicMindMapData();
 
-        setMyMindMapData(data.mindMap);
+        setMindMapData(data.mindMap);
       } catch (error) {
-        console.log(error);
         setCurrentError(error);
       }
     };
-
-    if (currentUserId) {
-      fetchMyMindMapData(currentUserId);
-    }
-  }, [currentUserId]);
+    fetchPublicMindMapData();
+  }, [setMindMapData]);
 
   const renameHandler = useCallback(
     (authorId, mindMapId, updatedTitle) => {
       let updatedMindMap;
 
-      const updatedMindmaps = myMindMapData.map(mindMap => {
+      const updatedMindmaps = mindMapData.map(mindMap => {
         const { _id: id } = mindMap;
         if (id === mindMapId) {
           updatedMindMap = { ...mindMap, title: updatedTitle };
@@ -48,11 +42,11 @@ export default function MyWorks() {
         }
         return mindMap;
       });
-      setMyMindMapData(updatedMindmaps);
+      setMindMapData(updatedMindmaps);
 
       return updateMindMapData(authorId, mindMapId, updatedMindMap);
     },
-    [myMindMapData],
+    [mindMapData],
   );
 
   return (
@@ -63,17 +57,16 @@ export default function MyWorks() {
         <ErrorMessage>{currentError.message}</ErrorMessage>
       )}
       <MindMapsWrapper>
-        {myMindMapData[0] &&
-          myMindMapData.map(mindMap => {
-            const { _id: id } = mindMap;
-            return (
-              <MindMapCard
-                key={id}
-                mindMap={mindMap}
-                renameTitleHandler={renameHandler}
-              />
-            );
-          })}
+        {mindMapData.map(mindMap => {
+          const { _id: id } = mindMap;
+          return (
+            <MindMapCard
+              key={id}
+              mindMap={mindMap}
+              renameTitleHandler={renameHandler}
+            />
+          );
+        })}
       </MindMapsWrapper>
     </Wrapper>
   );
@@ -84,7 +77,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: relative;
   height: 100%;
   width: 100%;
   margin: 0;

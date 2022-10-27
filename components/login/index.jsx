@@ -8,7 +8,7 @@ import { currentUserInfo } from '../../store/states';
 
 import { login } from '../../service/auth';
 import googleDocsIcon from '../../public/images/btn_google_signin_light_pressed_web@2x.png';
-import Header from '../Header1';
+import Header from '../header';
 import flexCenter from '../shared/FlexCenterContainer1';
 
 export default function Login() {

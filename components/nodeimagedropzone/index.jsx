@@ -7,8 +7,8 @@ import { useRecoilValue } from 'recoil';
 import flexCenter from '../shared/FlexCenterContainer1';
 import { currentUserInfo, socketInfo } from '../../store/states';
 import { postImagesData } from '../../service/nodeRequests1';
-import { Button } from '../shared/Button1';
-import { IMAGES_MAXIMUM_LENGTH_MESSAGE } from '../../constants/constants1';
+import { Button } from '../shared/button';
+import { IMAGES_MAXIMUM_LENGTH_MESSAGE } from '../../constants/constants';
 
 export default function NodeImageDropZone({
   userId,
