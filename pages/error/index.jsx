@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import NotFoundPage from '../../components/Error/404';
-import InternalError from '../../components/Error/500';
+import NotFoundPage from '../../components/error/404';
+import InternalError from '../../components/error/500';
 
 export default function Error({ errorStatus }) {
   const isError404 = errorStatus === 404;
