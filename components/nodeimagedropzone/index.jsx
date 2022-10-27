@@ -4,9 +4,9 @@ import Image from 'next/image';
 import styled from 'styled-components';
 
 import { useRecoilValue } from 'recoil';
-import flexCenter from '../shared/FlexCenterContainer1';
+import flexCenter from '../shared/flexcentercontainer';
 import { currentUserInfo, socketInfo } from '../../store/states';
-import { postImagesData } from '../../service/nodeRequests1';
+import { postImagesData } from '../../service/noderequests';
 import { Button } from '../shared/button';
 import { IMAGES_MAXIMUM_LENGTH_MESSAGE } from '../../constants/constants';
 

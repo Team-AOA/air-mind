@@ -5,7 +5,7 @@ import router from 'next/router';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import flexCenter from '../shared/FlexCenterContainer1';
+import flexCenter from '../shared/flexcentercontainer';
 import {
   userInfo,
   errorInfo,
@@ -19,7 +19,7 @@ import {
   deleteMindMapData,
   updateMindMapData,
 } from '../../service/mindmaprequests';
-import { getNodesData } from '../../service/nodeRequests1';
+import { getNodesData } from '../../service/noderequests';
 import {
   FAIL_DELETE_MIND_MAP,
   FAIL_DELETE_MIND_MAP_BY_SERVER_PROBLEM,

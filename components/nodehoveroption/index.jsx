@@ -20,15 +20,15 @@ import {
   clickedNodeId,
   isOpenNodeOptionModal,
 } from '../../store/states';
-import NODE_COLOR from '../../constants/nodeColor1';
-import flexCenter from '../shared/FlexCenterContainer1';
-import calculateNewNodePosition from '../../utils/d3/calculateNewNodePosition1';
-import deleteNodeHelper from '../../utils/deleteNodeHelper1';
+import NODE_COLOR from '../../constants/nodecolor';
+import flexCenter from '../shared/flexcentercontainer';
+import calculateNewNodePosition from '../../utils/d3/calculatenewnodeposition';
+import deleteNodeHelper from '../../utils/deletenodehelper';
 import {
   deleteNodesData,
   postNodesData,
   putNodesData,
-} from '../../service/nodeRequests1';
+} from '../../service/noderequests';
 
 export default function NodeHoverOption({
   x,
