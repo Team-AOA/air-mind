@@ -51,10 +51,6 @@ export default function Login() {
   );
 }
 
-// Login.propTypes = {
-//   loginData: PropTypes.node.isRequired,
-// };
-
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
