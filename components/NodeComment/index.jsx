@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+
+import Image from 'next/image';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -95,7 +97,13 @@ export default function NodeComment() {
   return (
     <CommentContainer isOpen={isOpenCommentMenu} onClick={modalCloseHandler}>
       <ButtonWrapper>
-        <CloseButton onClick={() => setNodeCommentMode(false)}>X</CloseButton>
+        <Image
+          src="/images/close.png"
+          width="20px"
+          height="20px"
+          className="closeIcon"
+          onClick={() => setNodeCommentMode(false)}
+        />
       </ButtonWrapper>
       <CommentBody>
         <CommentList ref={commentList}>
@@ -151,22 +159,15 @@ const CommentContainer = styled(flexCenter)`
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-  width: 400px;
-  height: 50px;
+  width: 100%;
+  margin: 10px 15px 10px 0;
   transition: background-color 0.3s ease;
-`;
 
-const CloseButton = styled.div`
-  width: 20px;
-  height: 20px;
-  padding: 10px;
-  transition: background-color 0.3s ease;
-  font-size: 30px;
-  text-align: center;
-  cursor: pointer;
-
-  &:hover {
-    color: gray;
+  .closeIcon {
+    width: 30px
+    margin: 10px;
+    padding-right: 10px;
+    cursor: pointer;
   }
 `;
 
