@@ -217,10 +217,10 @@ const receiveSocket = (
     });
   });
 
-  socket.on('insertUser', (currentUserId, profile, nodeAncestorList) => {
+  socket.on('insertUser', (socketId, profile, nodeAncestorList) => {
     setSocketUserData(prev => {
       const tempData = { ...prev };
-      tempData[currentUserId] = {
+      tempData[socketId] = {
         nodeAncestorList,
         profile,
       };
@@ -229,10 +229,10 @@ const receiveSocket = (
     });
   });
 
-  socket.on('deleteUser', currentUserId => {
+  socket.on('deleteUser', socketId => {
     setSocketUserData(prev => {
       const tempData = { ...prev };
-      delete tempData[currentUserId];
+      delete tempData[socketId];
 
       return tempData;
     });

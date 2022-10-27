@@ -163,7 +163,7 @@ export default function NodeHoverOption({
     setClickedNodeId('');
     setNodeRightOptionMode(false);
     setNodeCommentMode(false);
-    socket.emit('leaveNode', currentUser, mindMapId);
+    socket.emit('leaveNode', socket.id, mindMapId);
   };
 
   const commentNode = e => {
