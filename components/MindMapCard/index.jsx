@@ -21,7 +21,7 @@ import {
 
 export default function MindMapCard({ mindMap, renameTitleHandler }) {
   const [title, setTitle] = useState(mindMap.title || '');
-  const [istitleEditMode, setIsTitleEditMode] = useState(false);
+  const [isTitleEditMode, setIsTitleEditMode] = useState(false);
   const inputRef = useRef();
   const router = useRouter();
   const setUserData = useSetRecoilState(userInfo);
@@ -119,9 +119,9 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
                 value={title}
                 onChange={e => setTitle(e.target.value)}
                 onClick={renameHandler}
-                readOnly={!istitleEditMode}
+                readOnly={!isTitleEditMode}
               />
-              {istitleEditMode && (
+              {isTitleEditMode && (
                 <TitleButton type="submit" onClick={renameSubmitHandler}>
                   ✔
                 </TitleButton>
@@ -209,28 +209,6 @@ const PrivatePageThumbnail = styled.div`
   position: absolute;
   z-index: 1;
 `;
-
-// const LockPageWrapper = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   position: relative;
-//   width: inherit;
-//   height: 100%;
-//   color: white;
-
-//   .lockIcon {
-//     position: absolute;
-//     z-index: 1;
-//   }
-// `;
-
-// const PrivatePageThumbnail = styled.div`
-//   width: inherit;
-//   height: inherit;
-//   background-image: linear-gradient(to right, #8e2de2, #4a00e0);
-//   position: relative;
-// `;
 
 const Footer = styled.div`
   display: flex;
