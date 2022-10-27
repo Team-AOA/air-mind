@@ -13,7 +13,7 @@ export default function Document() {
         <title>에어마인드</title>
         <meta
           property="keywords"
-          content="마인드맵, 협업툴, 회의, 마인드맵 회의, 브레인스토밍, 실시간 회의"
+          content="마인드맵, 협업툴, 회의, 마인드맵 회의, 브레인스토밍, 실시간 회의, 실시간 마인드맵"
         />
         <meta
           property="description"
