@@ -91,19 +91,21 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
       setClickedNodeId(nodeId);
       socket.emit(
         'enterNode',
-        currentUser,
+        socket.id,
+        currentUser.profile,
         makeAncestors(nodeId, nodeData),
         mindMapId,
       );
     } else if (nodeId === currentNodeId) {
       setNodeRightOptionMode(false);
       setClickedNodeId('');
-      socket.emit('leaveNode', currentUser, mindMapId);
+      socket.emit('leaveNode', socket.id, mindMapId);
     } else {
       setClickedNodeId(nodeId);
       socket.emit(
         'enterNode',
-        currentUser,
+        socket.id,
+        currentUser.profile,
         makeAncestors(nodeId, nodeData),
         mindMapId,
       );

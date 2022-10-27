@@ -81,7 +81,7 @@ export default function NodeDetail() {
           className="closeIcon"
           onClick={() => {
             setNodeRightOptionMode(false);
-            socket.emit('leaveNode', currentUser, mindMapId);
+            socket.emit('leaveNode', socket.id, mindMapId);
           }}
         />
       </MenuBody>

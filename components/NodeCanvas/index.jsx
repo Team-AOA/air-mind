@@ -10,7 +10,6 @@ import {
   nodesInfo,
   socketUserInfo,
   isOpenNodeOptionModal,
-  currentUserInfo,
   mindMapInfo,
   socketInfo,
   isOpenNodeCommentModal,
@@ -25,7 +24,6 @@ export default function NodeCanvas({ headNode }) {
   const [decidedSocketUser, setDecidedSocketUser] = useState({});
   const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
   const setNodeCommentMode = useSetRecoilState(isOpenNodeCommentModal);
-  const currentUser = useRecoilValue(currentUserInfo);
   const mindMapData = useRecoilValue(mindMapInfo);
   const { _id: mindMapId } = mindMapData;
   const socket = useRecoilValue(socketInfo);
@@ -54,7 +52,7 @@ export default function NodeCanvas({ headNode }) {
   const optionHandler = () => {
     setNodeRightOptionMode(false);
     setNodeCommentMode(false);
-    socket.emit('leaveNode', currentUser, mindMapId);
+    socket.emit('leaveNode', socket.id, mindMapId);
   };
 
   return (
