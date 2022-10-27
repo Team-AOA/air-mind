@@ -19,13 +19,13 @@ import {
   socketUserInfo,
   foldLockInfo,
 } from '../../store/states';
-import Header from '../Header';
-import NodeComment from '../NodeComment';
-import NodeDetail from '../NodeDetail';
-import flexCenter from '../shared/FlexCenterContainer';
+import Header from '../Header1';
+import NodeComment from '../NodeComment1';
+import NodeDetail from '../NodeDetail1';
+import flexCenter from '../shared/FlexCenterContainer1';
 import pageLoader from '../../utils/pageLoader';
 
-const NodeCanvas = dynamic(() => import('../NodeCanvas'), {
+const NodeCanvas = dynamic(() => import('../NodeCanvas1'), {
   ssr: false,
 });
 

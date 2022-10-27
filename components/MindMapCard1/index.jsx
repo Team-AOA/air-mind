@@ -17,7 +17,7 @@ import { deleteMindMapData } from '../../service/mindMapRequests';
 import {
   DELETE_CONFIRM_MESSAGE,
   FAIL_RENAME_MIND_MAP,
-} from '../../constants/constants';
+} from '../../constants/constants1';
 
 export default function MindMapCard({ mindMap, renameTitleHandler }) {
   const [title, setTitle] = useState(mindMap.title || '');

@@ -4,11 +4,11 @@ import Image from 'next/image';
 import styled from 'styled-components';
 
 import { useRecoilValue } from 'recoil';
-import flexCenter from '../shared/FlexCenterContainer';
+import flexCenter from '../shared/FlexCenterContainer1';
 import { currentUserInfo, socketInfo } from '../../store/states';
 import { postImagesData } from '../../service/nodeRequests';
-import { Button } from '../shared/Button';
-import { IMAGES_MAXIMUM_LENGTH_MESSAGE } from '../../constants/constants';
+import { Button } from '../shared/Button1';
+import { IMAGES_MAXIMUM_LENGTH_MESSAGE } from '../../constants/constants1';
 
 export default function NodeImageDropZone({
   userId,

@@ -13,8 +13,8 @@ import {
   socketInfo,
   currentUserInfo,
 } from '../../store/states';
-import flexCenter from '../shared/FlexCenterContainer';
-import NodeImageDropZone from '../NodeImageDropZone';
+import flexCenter from '../shared/FlexCenterContainer1';
+import NodeImageDropZone from '../NodeImageDropZone1';
 import debounce from '../../utils/debounce';
 import { putNodesData } from '../../service/nodeRequests';
 

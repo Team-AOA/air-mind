@@ -20,8 +20,8 @@ import {
   clickedNodeId,
   isOpenNodeOptionModal,
 } from '../../store/states';
-import NODE_COLOR from '../../constants/nodeColor';
-import flexCenter from '../shared/FlexCenterContainer';
+import NODE_COLOR from '../../constants/nodeColor1';
+import flexCenter from '../shared/FlexCenterContainer1';
 import calculateNewNodePosition from '../../utils/d3/calculateNewNodePosition';
 import deleteNodeHelper from '../../utils/deleteNodeHelper';
 import {

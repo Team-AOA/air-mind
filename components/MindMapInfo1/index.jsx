@@ -5,7 +5,7 @@ import router from 'next/router';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import flexCenter from '../shared/FlexCenterContainer';
+import flexCenter from '../shared/FlexCenterContainer1';
 import {
   userInfo,
   errorInfo,
@@ -27,7 +27,7 @@ import {
   DELETE_CONFIRM_MESSAGE,
   FOLD_UNLOCK_MESSAGE,
   FOLD_LOCK_MESSAGE,
-} from '../../constants/constants';
+} from '../../constants/constants1';
 import debounce from '../../utils/debounce';
 
 export default function MindMapInfo({ mindMapId }) {

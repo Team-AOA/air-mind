@@ -4,12 +4,12 @@ import styled from 'styled-components';
 import * as d3 from 'd3';
 
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import NodeHoverOption from '../NodeHoverOption';
-import NodeFoldOption from '../NodeFoldOption';
-import NodeFetchButton from '../NodeFetchButton';
-import NodeCoworkers from '../NodeCoworkers';
-import NODE_COLOR from '../../constants/nodeColor';
-import NODE_SIZE from '../../constants/nodeSize';
+import NodeHoverOption from '../NodeHoverOption1';
+import NodeFoldOption from '../NodeFoldOption1';
+import NodeFetchButton from '../NodeFetchButton1';
+import NodeCoworkers from '../NodeCoworkers1';
+import NODE_COLOR from '../../constants/nodeColor1';
+import NODE_SIZE from '../../constants/nodeSize1';
 import setMovePosition from '../../utils/d3/setMovePosition';
 import makeAncestors from '../../utils/makeAncestors';
 import {

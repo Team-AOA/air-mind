@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
 import PropTypes from 'prop-types';
-import Node from '../Node';
-import NODE_SIZE from '../../constants/nodeSize';
+import Node from '../Node1';
+import NODE_SIZE from '../../constants/nodeSize1';
 
 export default function NodeWithLine({
   parentNodeId,

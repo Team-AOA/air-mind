@@ -14,11 +14,11 @@ import {
   currentUserInfo,
   socketInfo,
 } from '../../store/states';
-import flexCenter from '../shared/FlexCenterContainer';
-import { Button } from '../shared/Button';
+import flexCenter from '../shared/FlexCenterContainer1';
+import { Button } from '../shared/Button1';
 import { postCommentsData } from '../../service/nodeRequests';
-import ProfileIcon from '../shared/ProfileIcon';
-import { NO_PERMISSION_MESSAGE } from '../../constants/constants';
+import ProfileIcon from '../shared/ProfileIcon1';
+import { NO_PERMISSION_MESSAGE } from '../../constants/constants1';
 
 export default function NodeComment() {
   const commentList = useRef();

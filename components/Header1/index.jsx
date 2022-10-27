@@ -9,10 +9,10 @@ import styled from 'styled-components';
 
 import { currentUserInfo } from '../../store/states';
 import { logOut } from '../../service/auth';
-import { HeaderButton } from '../shared/Button';
-import ProfileIcon from '../shared/ProfileIcon';
-import MindMapInfo from '../MindMapInfo';
-import { AUTH_EXPIRED } from '../../constants/constants';
+import { HeaderButton } from '../shared/Button1';
+import ProfileIcon from '../shared/ProfileIcon1';
+import MindMapInfo from '../MindMapInfo1';
+import { AUTH_EXPIRED } from '../../constants/constants1';
 
 export default function Header() {
   const [mounted, setMounted] = useState(false);
