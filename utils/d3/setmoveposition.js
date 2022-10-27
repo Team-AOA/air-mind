@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { putNodesData } from '../../service/nodeRequests1';
+import { putNodesData } from '../../service/noderequests';
 
 export default function setMovePosition(
   ref,

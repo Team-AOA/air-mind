@@ -9,7 +9,7 @@ import { currentUserInfo } from '../../store/states';
 import { login } from '../../service/auth';
 import googleDocsIcon from '../../public/images/btn_google_signin_light_pressed_web@2x.png';
 import Header from '../header';
-import flexCenter from '../shared/FlexCenterContainer1';
+import flexCenter from '../shared/flexcentercontainer';
 
 export default function Login() {
   const saveUserData = useSetRecoilState(currentUserInfo);

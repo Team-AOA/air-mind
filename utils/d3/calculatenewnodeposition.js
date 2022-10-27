@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import NODE_SIZE from '../../constants/nodeSize1';
+import NODE_SIZE from '../../constants/nodesize';
 
 const calculateNewNodePosition = (nodeId, headNodeId) => {
   const node = d3.select(`#node${nodeId}`);

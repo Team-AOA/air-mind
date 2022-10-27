@@ -13,10 +13,10 @@ import {
   socketInfo,
   currentUserInfo,
 } from '../../store/states';
-import flexCenter from '../shared/FlexCenterContainer1';
-import NodeImageDropZone from '../NodeImageDropZone1';
+import flexCenter from '../shared/flexcentercontainer';
+import NodeImageDropZone from '../nodeimagedropzone';
 import debounce from '../../utils/debounce';
-import { putNodesData } from '../../service/nodeRequests1';
+import { putNodesData } from '../../service/noderequests';
 
 export default function NodeDetail() {
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);

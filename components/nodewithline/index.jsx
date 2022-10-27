@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 
 import PropTypes from 'prop-types';
 import Node from '../node';
-import NODE_SIZE from '../../constants/nodeSize1';
+import NODE_SIZE from '../../constants/nodesize';
 
 export default function NodeWithLine({
   parentNodeId,

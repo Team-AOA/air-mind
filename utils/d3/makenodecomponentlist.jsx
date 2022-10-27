@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Node from '../../components/node';
-import NodeWithLine from '../../components/NodeWithLine1';
+import NodeWithLine from '../../components/nodewithline';
 
 const makeNodeComponentList = (
   nodeData,

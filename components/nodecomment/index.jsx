@@ -14,9 +14,9 @@ import {
   currentUserInfo,
   socketInfo,
 } from '../../store/states';
-import flexCenter from '../shared/FlexCenterContainer1';
+import flexCenter from '../shared/flexcentercontainer';
 import { Button } from '../shared/button';
-import { postCommentsData } from '../../service/nodeRequests1';
+import { postCommentsData } from '../../service/noderequests';
 import ProfileIcon from '../shared/profileicon';
 import { NO_PERMISSION_MESSAGE } from '../../constants/constants';
 
@@ -164,7 +164,7 @@ const ButtonWrapper = styled.div`
   transition: background-color 0.3s ease;
 
   .closeIcon {
-    width: 30px
+    width: 30px;
     margin: 10px;
     padding-right: 10px;
     cursor: pointer;

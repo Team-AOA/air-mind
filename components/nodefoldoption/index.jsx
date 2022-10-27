@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { putNodesData } from '../../service/nodeRequests1';
+import { putNodesData } from '../../service/noderequests';
 import {
   currentUserInfo,
   foldLockInfo,
@@ -11,7 +11,7 @@ import {
   nodesInfo,
   socketInfo,
 } from '../../store/states';
-import countChildren from '../../utils/countChildren';
+import countChildren from '../../utils/countchildren';
 
 export default function NodeFoldOption({ x, y, nodeId, isFold }) {
   const [numberOfChildren, setNumberOfChildren] = useState();

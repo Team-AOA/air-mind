@@ -3,9 +3,9 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import zoomPanning from '../../utils/d3/zoomPanning';
-import makeNodeComponentList from '../../utils/d3/makeNodeComponentList';
-import decideSocketUserNode from '../../utils/decideSocketUserNode';
+import zoomPanning from '../../utils/d3/zoompanning';
+import makeNodeComponentList from '../../utils/d3/makenodecomponentlist';
+import decideSocketUserNode from '../../utils/decidesocketusernode';
 import {
   nodesInfo,
   socketUserInfo,

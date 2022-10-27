@@ -2,7 +2,7 @@ import React from 'react';
 
 import { RecoilRoot } from 'recoil';
 import PropTypes from 'prop-types';
-import GlobalStyle from '../components/shared/GlobalStyle';
+import GlobalStyle from '../components/shared/globalstyle';
 
 function MyApp({ Component, pageProps }) {
   return (
