@@ -16,7 +16,7 @@ import {
 import flexCenter from '../shared/FlexCenterContainer1';
 import NodeImageDropZone from '../NodeImageDropZone1';
 import debounce from '../../utils/debounce';
-import { putNodesData } from '../../service/nodeRequests';
+import { putNodesData } from '../../service/nodeRequests1';
 
 export default function NodeDetail() {
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);

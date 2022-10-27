@@ -22,13 +22,13 @@ import {
 } from '../../store/states';
 import NODE_COLOR from '../../constants/nodeColor1';
 import flexCenter from '../shared/FlexCenterContainer1';
-import calculateNewNodePosition from '../../utils/d3/calculateNewNodePosition';
-import deleteNodeHelper from '../../utils/deleteNodeHelper';
+import calculateNewNodePosition from '../../utils/d3/calculateNewNodePosition1';
+import deleteNodeHelper from '../../utils/deleteNodeHelper1';
 import {
   deleteNodesData,
   postNodesData,
   putNodesData,
-} from '../../service/nodeRequests';
+} from '../../service/nodeRequests1';
 
 export default function NodeHoverOption({
   x,

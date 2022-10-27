@@ -16,7 +16,7 @@ import {
 } from '../../store/states';
 import flexCenter from '../shared/FlexCenterContainer1';
 import { Button } from '../shared/Button1';
-import { postCommentsData } from '../../service/nodeRequests';
+import { postCommentsData } from '../../service/nodeRequests1';
 import ProfileIcon from '../shared/ProfileIcon1';
 import { NO_PERMISSION_MESSAGE } from '../../constants/constants1';
 

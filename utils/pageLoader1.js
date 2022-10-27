@@ -1,6 +1,6 @@
 import { getCookie } from 'cookies-next';
-import { getMindMapAccessInfo } from '../service/mindMapRequests';
-import { getNodesData } from '../service/nodeRequests';
+import { getMindMapAccessInfo } from '../service/mindMapRequests1';
+import { getNodesData } from '../service/nodeRequests1';
 
 const pageLoader = async (
   userData,

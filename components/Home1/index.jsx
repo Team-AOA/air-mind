@@ -9,7 +9,7 @@ import MindMapCard from '../MindMapCard1';
 
 import getPublicMindMapData, {
   updateMindMapData,
-} from '../../service/mindMapRequests';
+} from '../../service/mindMapRequests1';
 import { errorInfo } from '../../store/states';
 
 export default function Home() {

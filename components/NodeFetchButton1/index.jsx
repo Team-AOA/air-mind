@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { getNodesData } from '../../service/nodeRequests';
+import { getNodesData } from '../../service/nodeRequests1';
 
 import { mindMapInfo, nodesInfo, userInfo } from '../../store/states';
 

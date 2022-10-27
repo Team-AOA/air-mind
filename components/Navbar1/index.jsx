@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { NavBarButton } from '../shared/Button1';
 
-import { createMindMapData } from '../../service/mindMapRequests';
+import { createMindMapData } from '../../service/mindMapRequests1';
 import {
   currentUserInfo,
   errorInfo,

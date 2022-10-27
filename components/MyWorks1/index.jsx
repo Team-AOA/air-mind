@@ -10,7 +10,7 @@ import MindMapCard from '../MindMapCard1';
 import {
   getMyMindMapData,
   updateMindMapData,
-} from '../../service/mindMapRequests';
+} from '../../service/mindMapRequests1';
 import { currentUserInfo } from '../../store/states';
 
 export default function MyWorks() {

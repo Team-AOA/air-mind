@@ -13,7 +13,7 @@ import {
   currentUserInfo,
   foldLockInfo,
 } from '../../store/states';
-import { deleteMindMapData } from '../../service/mindMapRequests';
+import { deleteMindMapData } from '../../service/mindMapRequests1';
 import {
   DELETE_CONFIRM_MESSAGE,
   FAIL_RENAME_MIND_MAP,

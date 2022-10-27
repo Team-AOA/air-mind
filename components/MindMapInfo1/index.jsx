@@ -18,8 +18,8 @@ import {
 import {
   deleteMindMapData,
   updateMindMapData,
-} from '../../service/mindMapRequests';
-import { getNodesData } from '../../service/nodeRequests';
+} from '../../service/mindMapRequests1';
+import { getNodesData } from '../../service/nodeRequests1';
 import {
   FAIL_DELETE_MIND_MAP,
   FAIL_DELETE_MIND_MAP_BY_SERVER_PROBLEM,

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { putNodesData } from '../../service/nodeRequests';
+import { putNodesData } from '../../service/nodeRequests1';
 import {
   currentUserInfo,
   foldLockInfo,

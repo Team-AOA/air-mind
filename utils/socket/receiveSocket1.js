@@ -1,4 +1,4 @@
-import deleteNodeHelper from '../deleteNodeHelper';
+import deleteNodeHelper from '../deleteNodeHelper1';
 
 const receiveSocket = (
   socket,
