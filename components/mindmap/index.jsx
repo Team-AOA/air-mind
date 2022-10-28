@@ -16,6 +16,7 @@ import {
   mindMapInfo,
   isOpenNodeCommentModal,
   isOpenNodeOptionModal,
+  clickedImgPath,
   socketInfo,
   socketUserInfo,
   foldLockInfo,
@@ -37,8 +38,14 @@ export default function MindMap({ mindMapId }) {
   const [userData, setUserData] = useRecoilState(userInfo);
   const [mindMapData, setMindMapData] = useRecoilState(mindMapInfo);
   const setError = useSetRecoilState(errorInfo);
-  const isOpenNodeCommentMenu = useRecoilValue(isOpenNodeCommentModal);
-  const isOpenNodeOptionMenu = useRecoilValue(isOpenNodeOptionModal);
+  const [isOpenNodeCommentMenu, setIsOpenNodeCommentMenu] = useRecoilState(
+    isOpenNodeCommentModal,
+  );
+  const [isOpenNodeOptionMenu, setIsOpenNodeOptionMenu] = useRecoilState(
+    isOpenNodeOptionModal,
+  );
+  const clickedImagePath = useRecoilValue(clickedImgPath);
+  const setClickedImagePath = useSetRecoilState(clickedImgPath);
   const [socket, setSocket] = useRecoilState(socketInfo);
   const router = useRouter();
   const setSocketUserData = useSetRecoilState(socketUserInfo);
@@ -47,6 +54,9 @@ export default function MindMap({ mindMapId }) {
   const setSearched = useSetRecoilState(searchInfo);
 
   useEffect(() => {
+    setIsOpenNodeCommentMenu(false);
+    setIsOpenNodeOptionMenu(false);
+
     if (!socket || Object.keys(socket).length <= 0) {
       setSocket(
         io(process.env.NEXT_PUBLIC_BASE_URL, {
@@ -111,6 +121,11 @@ export default function MindMap({ mindMapId }) {
     <Container>
       <Header />
       {isOpenNodeCommentMenu && <NodeComment />}
+      {clickedImagePath && (
+        <ImageModal onClick={() => setClickedImagePath('')}>
+          <img src={clickedImagePath} alt="nodeImage" />
+        </ImageModal>
+      )}
       <RightMenu>
         <RightMenuContainer>
           <RightMenuWrapper>
@@ -147,6 +162,23 @@ MindMap.propTypes = {
 const Container = styled.div`
   height: 100vh;
   border: 1px solid black;
+`;
+
+const ImageModal = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  /* background-color: blue; */
+  /* opacity: 30%; */
+
+  img {
+    /* width: 100%; */
+    height: inherit;
+  }
 `;
 
 const RightMenu = styled.div`

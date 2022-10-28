@@ -1,33 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Image from 'next/image';
 import styled from 'styled-components';
 
 import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
+import { RiDeleteBin6Line as RecycleBinIcon } from 'react-icons/ri';
 import {
   clickedNodeId,
   isOpenNodeOptionModal,
+  clickedImgPath,
   mindMapInfo,
   nodesInfo,
   userInfo,
   socketInfo,
   currentUserInfo,
 } from '../../store/states';
+
 import flexCenter from '../shared/flexcentercontainer';
 import NodeImageDropZone from '../nodeimagedropzone';
 import debounce from '../../utils/debounce';
-import { putNodesData } from '../../service/noderequests';
+import { putNodesData, deleteImagesData } from '../../service/noderequests';
 
 export default function NodeDetail() {
+  const [isVisibleBin, setIsVisibleBin] = useState(false);
+  const [hoverImgPath, setHoverImgPath] = useState('');
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
   const userData = useRecoilValue(userInfo);
   const mindMapData = useRecoilValue(mindMapInfo);
   const nodeId = useRecoilValue(clickedNodeId);
   const socket = useRecoilValue(socketInfo);
   const currentUser = useRecoilValue(currentUserInfo);
-
   const isOpenNodeRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
   const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
+  const setClickedImagePath = useSetRecoilState(clickedImgPath);
 
   const { _id: userId } = userData;
   const { _id: mindMapId } = mindMapData;
@@ -69,6 +74,24 @@ export default function NodeDetail() {
     tempData[nodeId] = { ...tempData[nodeId], images: imageArray };
 
     setNodeData(tempData);
+  };
+
+  const clickImageHandler = imgPath => {
+    setClickedImagePath(imgPath);
+  };
+
+  const imgHoverHandler = id => {
+    setHoverImgPath(id);
+    setIsVisibleBin(true);
+  };
+
+  const imgHoverOutHandler = () => {
+    setHoverImgPath('');
+    setIsVisibleBin(false);
+  };
+
+  const imgDeleteHandler = imgPath => {
+    deleteImagesData(userId, mindMapId, nodeId, imgPath);
   };
 
   return (
@@ -114,19 +137,30 @@ export default function NodeDetail() {
             </ImageMenu>
             <ImageList>
               <MenuTitle>Image List</MenuTitle>
-              <ImageWrapper>
+              <ImagesWrapper>
                 {nodeData[nodeId]?.images.map(img => {
                   const { _id: id } = img;
                   return (
-                    <NodeImg
-                      src={img.path}
-                      alt={img.originalName}
-                      key={id}
-                      className="img"
-                    />
+                    <ImageWrapper
+                      onMouseEnter={() => imgHoverHandler(img.path)}
+                      onMouseLeave={imgHoverOutHandler}
+                    >
+                      {isVisibleBin && hoverImgPath === img.path && (
+                        <IconWrapper onClick={() => imgDeleteHandler(img.path)}>
+                          <RecycleBinIcon size={22} className="bin" />
+                        </IconWrapper>
+                      )}
+                      <NodeImg
+                        src={img.path}
+                        alt={img.originalName}
+                        key={id}
+                        className="img"
+                        onClick={() => clickImageHandler(img.path)}
+                      />
+                    </ImageWrapper>
                   );
                 })}
-              </ImageWrapper>
+              </ImagesWrapper>
             </ImageList>
           </MenuWrapper>
         </Scroll>
@@ -241,7 +275,7 @@ const DescriptionTextArea = styled.textarea`
 
 const ImageMenu = styled(MenuBody)``;
 
-const ImageWrapper = styled(flexCenter)`
+const ImagesWrapper = styled(flexCenter)`
   flex-direction: row;
   flex-wrap: wrap;
   margin: 10px 0;
@@ -256,7 +290,40 @@ const ImageList = styled(MenuBody)`
   }
 `;
 
-const NodeImg = styled.img`
+const ImageWrapper = styled(flexCenter)`
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  margin: 10px 0;
+  position: relative;
+
+  width: 130px;
+  /* height: 100px; */
+`;
+
+const IconWrapper = styled.div`
+  text-align: right;
+  position: absolute;
   width: 100px;
-  margin: 10px;
+  margin: 5px 15px 0 0;
+  z-index: 4;
+  font-weight: 900;
+  cursor: pointer;
+
+  .bin {
+    border-radius: 50px;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 5px;
+    color: black;
+
+    &:hover {
+      color: #a00000;
+    }
+  }
+`;
+
+const NodeImg = styled.img`
+  width: 130px;
+  margin: 20px;
+  cursor: pointer;
 `;

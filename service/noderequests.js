@@ -53,3 +53,11 @@ export async function postImagesData(userId, mindMapId, nodeId, imageData) {
     data: imageData,
   });
 }
+
+export async function deleteImagesData(userId, mindMapId, nodeId, imageData) {
+  return API({
+    method: 'put',
+    url: `/users/${userId}/mind-maps/${mindMapId}/nodes/${nodeId}/images`,
+    data: { path: imageData },
+  });
+}
