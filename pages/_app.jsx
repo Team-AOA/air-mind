@@ -25,10 +25,10 @@ function MyApp({ Component, pageProps }) {
         />
         <meta
           property="og:image"
-          content="{{url_for('images', filename='air_mind_logo.png')}}"
+          content="https://kr.object.ncloudstorage.com/air-mind-images/air_mind_logo.png1666976956732.png"
         />
         <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
+        <meta property="og:image:height" content="620" />
       </Head>
       <GlobalStyle />
       <Component {...pageProps} />
