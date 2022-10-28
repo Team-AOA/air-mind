@@ -35,9 +35,11 @@ export async function getStaticPaths() {
   const { mindMapId: mindMapIdList } = await getAllMindMapId();
   const paths = [];
 
-  mindMapIdList.forEach(mindMapId => {
-    paths.push({ params: { mindMapId } });
-  });
+  if (mindMapIdList) {
+    mindMapIdList.forEach(mindMapId => {
+      paths.push({ params: { mindMapId } });
+    });
+  }
 
   return {
     paths,
