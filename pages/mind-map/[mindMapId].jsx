@@ -5,7 +5,7 @@ import MindMap from '../../components/mindmap';
 import getPublicMindMapData from '../../service/mindmaprequests';
 
 export default function MindMapPage({ mindMaps, mindMapId }) {
-  const metaMindMap = mindMaps.filter(mindMap => {
+  const metaMindMap = mindMaps?.filter(mindMap => {
     const { _id: id } = mindMap;
     return id === mindMapId;
   });
@@ -13,8 +13,8 @@ export default function MindMapPage({ mindMaps, mindMapId }) {
   return (
     <>
       <Head />
-      <meta name="title" title={metaMindMap[0].title} />
-      <meta name="description" content={metaMindMap[0].access} />
+      <meta name="title" title={metaMindMap && metaMindMap[0].title} />
+      <meta name="description" content={metaMindMap && metaMindMap[0].access} />
       <MindMap mindMapId={mindMapId} />;
     </>
   );
