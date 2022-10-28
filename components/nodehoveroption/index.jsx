@@ -29,6 +29,7 @@ import {
   postNodesData,
   putNodesData,
 } from '../../service/noderequests';
+import { DELETE_CONFIRM_MESSAGE } from '../../constants/constants';
 
 export default function NodeHoverOption({
   x,
@@ -153,6 +154,12 @@ export default function NodeHoverOption({
 
   const deleteNode = async e => {
     e.stopPropagation();
+
+    const confirmCheck = window.confirm(DELETE_CONFIRM_MESSAGE);
+    if (!confirmCheck) {
+      return;
+    }
+
     if (currentUser && Object.keys(currentUser).length > 0) {
       deleteNodeHelper(nodeId, nodeData, setNodeData);
       await deleteNodesData(userId, mindMapId, nodeId);
