@@ -14,6 +14,7 @@ import {
   currentUserInfo,
   socketInfo,
 } from '../../store/states';
+import generatetimeformat from '../../utils/generatetime';
 import flexCenter from '../shared/flexcentercontainer';
 import { Button } from '../shared/button';
 import { postCommentsData } from '../../service/noderequests';
@@ -59,11 +60,13 @@ export default function NodeComment() {
     try {
       const tempData = { ...nodeData };
       const currentCommentsArray = [...tempData[nodeId].comments];
+      const date = new window.Date();
 
       const comment = {
         author: currentUser.username,
         content: currentComment,
         profile: currentUser.profile,
+        createdAt: date.toISOString(),
       };
 
       await postCommentsData(userId, mindMapId, nodeId, comment);
@@ -109,6 +112,7 @@ export default function NodeComment() {
         <CommentList ref={commentList}>
           {nodeId &&
             nodeData[nodeId]?.comments.map(comment => {
+              const date = generatetimeformat(comment?.createdAt);
               return (
                 <Comment key={uuidv4()}>
                   <ProfileIcon
@@ -116,10 +120,15 @@ export default function NodeComment() {
                     alt="profile"
                     size="small"
                   />
-                  <div>
-                    <Author>{comment?.author}</Author>
-                    <Content>{comment?.content}</Content>
-                  </div>
+                  <CommentContent>
+                    <ContentBody>
+                      <Author>{comment?.author}</Author>
+                      <Content>{comment?.content}</Content>
+                    </ContentBody>
+                    <Date>
+                      <div>{date}</div>
+                    </Date>
+                  </CommentContent>
                 </Comment>
               );
             })}
@@ -172,20 +181,35 @@ const ButtonWrapper = styled.div`
 `;
 
 const Author = styled.div`
-  padding: 4px 14px;
+  padding: 0 14px;
 `;
 
 const Content = styled.div`
-  padding: 5px 14px 10px 14px;
+  padding: 5px 14px 0 14px;
 `;
 
 const Comment = styled.div`
   display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  word-break: break-all;
 
   .profile {
     width: 20px;
     height: 20px;
   }
+`;
+
+const CommentContent = styled.div`
+  display: flex;
+  align-items: flex-end;
+`;
+
+const ContentBody = styled.div``;
+
+const Date = styled.div`
+  font-size: 13px;
+  color: gray;
 `;
 
 const CommentList = styled.div`

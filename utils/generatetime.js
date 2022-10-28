@@ -1,11 +1,8 @@
-export default function generateTimeFormat(stringDate) {
+export default function generatetimeformat(stringDate) {
   const targetDateTime = new Date(stringDate).getTime();
   const koreaTimezoneOffset = 3600000 * 9;
-  const fiveMinutestoMs = 300000;
 
-  const currentDate = new window.Date(
-    targetDateTime * 1 + koreaTimezoneOffset + fiveMinutestoMs,
-  )
+  const currentDate = new window.Date(targetDateTime * 1 + koreaTimezoneOffset)
     .toISOString()
     .slice(0, 16);
 
