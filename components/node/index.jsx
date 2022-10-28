@@ -30,8 +30,8 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
   const currentUser = useRecoilValue(currentUserInfo);
   const mindMap = useRecoilValue(mindMapInfo);
   const { _id: mindMapId } = mindMap;
-  const [textX, setTextX] = useState();
-  const [textY, setTextY] = useState();
+  const [textX, setTextX] = useState(0);
+  const [textY, setTextY] = useState(0);
   const socket = useRecoilValue(socketInfo);
   const searched = useRecoilValue(searchInfo);
   const isSearched = searched.has(nodeId);
@@ -138,9 +138,9 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
         selectedColor={nodeColor}
         isSearched={isSearched}
       />
-      <text ref={textRef} x={textX} y={textY}>
+      <TextSvg ref={textRef} x={textX} y={textY - 8} dominantBaseline="middle">
         {nodeTitle}
-      </text>
+      </TextSvg>
       {isOptionMode && (
         <NodeHoverOption
           x={nodeX}
@@ -165,6 +165,11 @@ const RectSvg = styled.rect`
   fill: ${props => props.selectedColor};
   stroke: ${props => (props.isSearched ? 'red' : 'none')};
   stroke-width: 4;
+`;
+
+const TextSvg = styled.text`
+  font-size: 18px;
+  font-weight: 500;
 `;
 
 Node.propTypes = {

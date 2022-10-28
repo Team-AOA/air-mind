@@ -43,6 +43,11 @@ const isOpenNodeOptionModal = atom({
   default: false,
 });
 
+const clickedImgPath = atom({
+  key: `clickedImgPath/${v4}`,
+  default: '',
+});
+
 const clickedNodeId = atom({
   key: `clickedNodeId/${v4}`,
   default: '',
@@ -89,4 +94,5 @@ export {
   socketUserInfo,
   foldLockInfo,
   searchInfo,
+  clickedImgPath,
 };

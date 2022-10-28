@@ -152,6 +152,12 @@ export default function MindMapInfo({ mindMapId }) {
     }
   };
 
+  const copyUrlHandler = async () => {
+    const path = window.location.href;
+    await navigator.clipboard.writeText(path);
+    alert(`Copied the text: ${path}`);
+  };
+
   return (
     <MindMapInfoWrapper>
       <MindMapTitle value={title} onChange={handleMindMapTitle} />
@@ -162,31 +168,41 @@ export default function MindMapInfo({ mindMapId }) {
         <MindMapPublicOption>public</MindMapPublicOption>
         <MindMapPrivateOption>private</MindMapPrivateOption>
       </MindMapPublicSelect>
-      <Icon onClick={handleFoldSharingOption}>
-        {isFoldLock ? (
+      <Icons>
+        <Icon onClick={handleFoldSharingOption}>
+          {isFoldLock ? (
+            <Image
+              src="/images/unlock.png"
+              width="30px"
+              height="30px"
+              className="lockButton"
+            />
+          ) : (
+            <Image
+              src="/images/lock.png"
+              width="30px"
+              height="30px"
+              className="lockButton"
+            />
+          )}
+        </Icon>
+        <Icon onClick={handleMindMapDelete}>
           <Image
-            src="/images/lock.png"
-            width="50px"
-            height="50px"
-            className="lockButton"
+            src="/images/recycle-bin.png"
+            width="30px"
+            height="30px"
+            className="icon"
           />
-        ) : (
+        </Icon>
+        <Icon onClick={copyUrlHandler}>
           <Image
-            src="/images/unlock.png"
-            width="50px"
-            height="50px"
-            className="lockButton"
+            src="/images/link.png"
+            width="30px"
+            height="30px"
+            className="icon"
           />
-        )}
-      </Icon>
-      <Icon onClick={handleMindMapDelete}>
-        <Image
-          src="/images/recycle-bin.png"
-          width="50px"
-          height="50px"
-          className="icon"
-        />
-      </Icon>
+        </Icon>
+      </Icons>
     </MindMapInfoWrapper>
   );
 }
@@ -198,35 +214,50 @@ MindMapInfo.propTypes = {
 const Icon = styled(flexCenter)`
   width: 40px;
   height: 35px;
-  border-right: 1px solid #e6e6e6;
   cursor: pointer;
-  background-color: white;
   transition: background-color 0.3s ease;
-  margin-left: 10px;
+
   &:hover {
-    background-color: #dbdbdb;
+    &:hover {
+      filter: invert(12%) sepia(14%) saturate(3643%) hue-rotate(24deg)
+        brightness(96%) contrast(104%);
+    }
   }
+`;
+
+const Icons = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  margin-left: 10px;
+  color: white;
+  filter: invert(100%);
 `;
 
 const MindMapInfoWrapper = styled.div`
   display: flex;
-  flex-direction: row;
 `;
 
 const MindMapTitle = styled.input`
-  width: 90%;
-  font-size: 20px;
+  width: 140%;
+  background-color: #4d6ef4;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 18px;
+  padding: 0 10px;
 `;
 
 const MindMapPublicSelect = styled.select`
-  width: 30%;
+  width: 60%;
   height: 35px;
   border: none;
+  border-radius: 5px;
   background: white;
   color: gray;
   font-size: 14px;
   padding-left: 5px;
-  margin-left: 10px;
+  margin-left: 20px;
 `;
 
 const MindMapPublicOption = styled.option`

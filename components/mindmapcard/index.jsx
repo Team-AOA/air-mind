@@ -365,6 +365,7 @@ const BottomButton = styled.div`
   display: flex;
   transform: translateX(-10px);
   height: 20px;
+  align-items: center;
 `;
 
 const AccessIcon = styled.div`
