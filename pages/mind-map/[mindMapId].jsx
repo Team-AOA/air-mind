@@ -23,7 +23,6 @@ export default function MindMapPage({ mindMaps, mindMapId }) {
 export async function getStaticProps(context) {
   const { mindMapId } = context.params;
   const data = await getPublicMindMapData();
-
   const mindMaps = await data.mindMap;
 
   return {
