@@ -18,6 +18,17 @@ function MyApp({ Component, pageProps }) {
           property="description"
           content="실시간으로 마인드맵을 이용하여 회의를 진행하거나 아이디어를 공유할 수 있습니다."
         />
+        <meta property="og:title" content="에어마인드" />
+        <meta
+          property="og:description"
+          content="실시간으로 마인드맵을 이용하여 회의를 진행하거나 아이디어를 공유할 수 있습니다."
+        />
+        <meta
+          property="og:image"
+          content="{{url_for('images', filename='air_mind_logo.png')}}"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
       </Head>
       <GlobalStyle />
       <Component {...pageProps} />
