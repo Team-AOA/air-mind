@@ -90,8 +90,16 @@ export default function NodeDetail() {
     setIsVisibleBin(false);
   };
 
-  const imgDeleteHandler = imgPath => {
-    deleteImagesData(userId, mindMapId, nodeId, imgPath);
+  const imgDeleteHandler = async imgPath => {
+    const updatedNode = await deleteImagesData(
+      userId,
+      mindMapId,
+      nodeId,
+      imgPath,
+    );
+    const tempData = { ...nodeData };
+    tempData[nodeId] = { ...tempData[nodeId], images: updatedNode.node.images };
+    setNodeData(tempData);
   };
 
   return (
@@ -142,6 +150,7 @@ export default function NodeDetail() {
                   const { _id: id } = img;
                   return (
                     <ImageWrapper
+                      key={id}
                       onMouseEnter={() => imgHoverHandler(img.path)}
                       onMouseLeave={imgHoverOutHandler}
                     >
@@ -153,7 +162,6 @@ export default function NodeDetail() {
                       <NodeImg
                         src={img.path}
                         alt={img.originalName}
-                        key={id}
                         className="img"
                         onClick={() => clickImageHandler(img.path)}
                       />
