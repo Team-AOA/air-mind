@@ -2,46 +2,41 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import MindMap from '../../components/mindmap';
-import getPublicMindMapData from '../../service/mindmaprequests';
+import {
+  getMindMapAccessInfo,
+  getAllMindMapId,
+} from '../../service/mindmaprequests';
 
-export default function MindMapPage({ mindMaps, mindMapId }) {
-  const metaMindMap = mindMaps?.filter(mindMap => {
-    const { _id: id } = mindMap;
-    return id === mindMapId;
-  });
-
+export default function MindMapPage({ title, mindMapId }) {
   return (
     <>
       <Head />
-      <meta name="title" title={metaMindMap && metaMindMap[0].title} />
-      <meta name="description" content={metaMindMap && metaMindMap[0].access} />
-      <MindMap mindMapId={mindMapId} />;
+      <meta name="title" title={title} />
+      <MindMap mindMapId={mindMapId} />
     </>
   );
 }
 
 export async function getStaticProps(context) {
   const { mindMapId } = context.params;
-  const data = await getPublicMindMapData();
-  const mindMaps = await data.mindMap;
+  const data = await getMindMapAccessInfo('anonymous', mindMapId);
+
+  const title = data.mindMap?.title || '';
 
   return {
     props: {
-      mindMaps,
+      title,
       mindMapId,
     },
   };
 }
 
 export async function getStaticPaths() {
-  const data = await getPublicMindMapData();
-  const mindMaps = await data.mindMap;
+  const { mindMapId: mindMapIdList } = await getAllMindMapId();
   const paths = [];
 
-  mindMaps.map(mindMap => {
-    const { _id: mindMapId } = mindMap;
+  mindMapIdList.forEach(mindMapId => {
     paths.push({ params: { mindMapId } });
-    return mindMap;
   });
 
   return {
@@ -51,6 +46,6 @@ export async function getStaticPaths() {
 }
 
 MindMapPage.propTypes = {
-  mindMaps: PropTypes.array.isRequired,
+  title: PropTypes.string.isRequired,
   mindMapId: PropTypes.string.isRequired,
 };
