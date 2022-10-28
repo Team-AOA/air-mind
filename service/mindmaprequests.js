@@ -7,6 +7,12 @@ export default async function getPublicMindMapData() {
     params: { access: 'public', max: 15 },
   });
 }
+export async function getAllMindMapId() {
+  return API({
+    method: 'get',
+    url: '/all-mind-maps-id',
+  });
+}
 
 export async function getMyMindMapData(userId) {
   return API({
