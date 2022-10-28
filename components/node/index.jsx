@@ -136,7 +136,7 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
         height={nodeHeight}
         rx={20}
         selectedColor={nodeColor}
-        stroke={isSearched}
+        isSearched={isSearched}
       />
       <text ref={textRef} x={textX} y={textY}>
         {nodeTitle}
@@ -163,7 +163,7 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
 
 const RectSvg = styled.rect`
   fill: ${props => props.selectedColor};
-  stroke: ${props => (props.stroke ? 'red' : 'none')};
+  stroke: ${props => (props.isSearched ? 'red' : 'none')};
   stroke-width: 4;
 `;
 
