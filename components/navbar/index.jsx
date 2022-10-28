@@ -58,13 +58,15 @@ export default function NavBar() {
         >
           Public
         </NavBarPublicButton>
-        <NavBarMyWorkButton
-          onClick={() => {
-            router.push('/my-works');
-          }}
-        >
-          My Work
-        </NavBarMyWorkButton>
+        {currentUser?.username && (
+          <NavBarMyWorkButton
+            onClick={() => {
+              router.push('/my-works');
+            }}
+          >
+            My Work
+          </NavBarMyWorkButton>
+        )}
       </NavBarWrapper>
     </NavBarContainer>
   );
@@ -73,23 +75,24 @@ export default function NavBar() {
 const NavBarContainer = styled.div`
   display: flex;
   flex-direction: row;
-  position: sticky;
   justify-content: center;
   align-items: flex-end;
+  position: sticky;
+  width: 100%;
+  height: 80px;
   z-index: 1;
   top: 100px;
   background-color: white;
-  height: 80px;
-  width: 100%;
 `;
 
 const NavBarWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  border-bottom: 3px solid #2c2c2c;
+  justify-content: flex-start;
+  margin: 0 10%;
   width: 90.5%;
+  border-bottom: 3px solid #2c2c2c;
 `;
 
 const NavBarCreateButton = styled(NavBarButton)`

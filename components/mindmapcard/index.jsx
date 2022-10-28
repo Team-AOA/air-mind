@@ -5,19 +5,26 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useRouter } from 'next/router';
 import Thumbnail from 'react-webpage-thumbnail';
 
-import { CgFileDocument as DocumentIcon } from 'react-icons/cg';
+import {
+  CgFileDocument as DocumentIcon,
+  // CgMenu as Option,
+} from 'react-icons/cg';
 import { SlLock as LockIcon } from 'react-icons/sl';
+import { CiSettings as Option } from 'react-icons/ci';
+
 import {
   mindMapInfo,
   userInfo,
   currentUserInfo,
   foldLockInfo,
 } from '../../store/states';
+
 import { deleteMindMapData } from '../../service/mindmaprequests';
 import {
   DELETE_CONFIRM_MESSAGE,
   FAIL_RENAME_MIND_MAP,
 } from '../../constants/constants';
+import generatedateformat from '../../utils/generatedateformat';
 
 export default function MindMapCard({ mindMap, renameTitleHandler }) {
   const [title, setTitle] = useState(mindMap.title || '');
@@ -128,25 +135,32 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
               )}
             </form>
           </ShortInfo>
-          <div className="infoAuthor">{mindMap.author?.userName}</div>
+          <AuthorDate>
+            <div className="infoAuthor">{mindMap.author?.userName}</div>
+          </AuthorDate>
         </FoooterLeft>
-        <OptionModal>
-          {modalShow && (
-            <OptionMenu>
-              <Menu className="open" onClick={mindMapLoader}>
-                Open
-              </Menu>
-              <Menu onClick={renameHandler}>Rename</Menu>
-              <Menu className="delete" onClick={deleteHandler}>
-                Delete
-              </Menu>
-            </OptionMenu>
-          )}
-          <BottomButton>
-            <AccessIcon access={mindMap.access}>{mindMap.access}</AccessIcon>
-            <DotButton onClick={modalShowOn}>•••</DotButton>
-          </BottomButton>
-        </OptionModal>
+        <FoooterRight>
+          <OptionModal>
+            {modalShow && (
+              <OptionMenu>
+                <Menu className="open" onClick={mindMapLoader}>
+                  Open
+                </Menu>
+                <Menu onClick={renameHandler}>Rename</Menu>
+                <Menu className="delete" onClick={deleteHandler}>
+                  Delete
+                </Menu>
+              </OptionMenu>
+            )}
+            <BottomButton>
+              <AccessIcon access={mindMap.access}>{mindMap.access}</AccessIcon>
+              <DotButton onClick={modalShowOn}>
+                <Option size={21} />
+              </DotButton>
+            </BottomButton>
+          </OptionModal>
+          <Date className="date">{generatedateformat(mindMap?.createdAt)}</Date>
+        </FoooterRight>
       </Footer>
     </Card>
   );
@@ -215,7 +229,7 @@ const Footer = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   width: 90%;
-  height: 10%;
+  height: 50px;
   margin: 10px;
 `;
 
@@ -230,12 +244,6 @@ const FoooterLeft = styled.div`
   .documentIcon {
     margin-right: 5px;
   }
-
-  .infoAuthor {
-    margin-left: 30px;
-    color: gray;
-    font-size: 13px;
-  }
 `;
 
 const ShortInfo = styled.div`
@@ -249,6 +257,17 @@ const ShortInfo = styled.div`
   .infoAuthor {
     font-size: 80%;
     overflow: hidden;
+  }
+`;
+
+const AuthorDate = styled.div`
+  display: flex;
+  width: 100%;
+
+  .infoAuthor {
+    margin-left: 30px;
+    color: gray;
+    font-size: 13px;
   }
 `;
 
@@ -275,12 +294,25 @@ const TitleButton = styled.button`
   cursor: pointer;
 `;
 
-const OptionModal = styled.div`
-  width: 25%;
+const FoooterRight = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-end;
+`;
+
+const OptionModal = styled.div`
+  height: 25px;
+  margin: 3px 0;
+  display: flex;
+  /* justify-content: space-between; */
   align-items: center;
   z-index: 100;
+`;
+
+const Date = styled.div`
+  margin-right: 10px;
+  color: gray;
+  font-size: 13px;
 `;
 
 const OptionMenu = styled.div`
@@ -332,6 +364,7 @@ const Menu = styled.div`
 const BottomButton = styled.div`
   display: flex;
   transform: translateX(-10px);
+  height: 20px;
 `;
 
 const AccessIcon = styled.div`
@@ -346,10 +379,16 @@ const AccessIcon = styled.div`
 `;
 
 const DotButton = styled.div`
+  display: flex;
   cursor: pointer;
+  justify-content: center;
   align-self: center;
+  align-items: center;
+  width: 30px;
+  height: 20px;
   border-radius: 10%;
-  background-color: #eeeeee;
+  background-color: #f3f3f3;
+  color: gray;
 
   &:hover {
     background-color: rgb(255, 245, 209);
