@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { io } from 'socket.io-client';
 import receiveSocket from '../../utils/socket/receivesocker';
 import preventBodyScrolling from '../../utils/preventbodyscrolling';
+import makeSearched from '../../utils/makesearched';
 import {
   userInfo,
   errorInfo,
@@ -18,6 +19,7 @@ import {
   socketInfo,
   socketUserInfo,
   foldLockInfo,
+  searchInfo,
 } from '../../store/states';
 import Header from '../header';
 import NodeComment from '../nodecomment';
@@ -31,7 +33,7 @@ const NodeCanvas = dynamic(() => import('../nodecanvas'), {
 
 export default function MindMap({ mindMapId }) {
   const [isSearchMode, setIsSearchMode] = useState(false);
-  const setNodeData = useSetRecoilState(nodesInfo);
+  const [nodeData, setNodeData] = useRecoilState(nodesInfo);
   const [userData, setUserData] = useRecoilState(userInfo);
   const [mindMapData, setMindMapData] = useRecoilState(mindMapInfo);
   const setError = useSetRecoilState(errorInfo);
@@ -41,6 +43,8 @@ export default function MindMap({ mindMapId }) {
   const router = useRouter();
   const setSocketUserData = useSetRecoilState(socketUserInfo);
   const setIsFoldLock = useSetRecoilState(foldLockInfo);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const setSearched = useSetRecoilState(searchInfo);
 
   useEffect(() => {
     if (!socket || Object.keys(socket).length <= 0) {
@@ -95,6 +99,14 @@ export default function MindMap({ mindMapId }) {
     }
   }, [mindMapId]);
 
+  useEffect(() => {
+    if (!searchKeyword) {
+      setSearched(new Set());
+    }
+
+    setSearched(makeSearched(nodeData, searchKeyword));
+  }, [nodeData, searchKeyword]);
+
   return (
     <Container>
       <Header />
@@ -108,9 +120,16 @@ export default function MindMap({ mindMapId }) {
                 width="50px"
                 height="50px"
                 className="dragIcon"
-                onClick={() => setIsSearchMode(!isSearchMode)}
+                onClick={() => {
+                  setIsSearchMode(!isSearchMode);
+                  setSearchKeyword('');
+                }}
               />
-              <SearchInput searchMode={isSearchMode} />
+              <SearchInput
+                searchMode={isSearchMode}
+                value={searchKeyword}
+                onChange={e => setSearchKeyword(e.target.value)}
+              />
             </SearchBar>
             {isOpenNodeOptionMenu && <NodeDetail />}
           </RightMenuWrapper>

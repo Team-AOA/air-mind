@@ -18,6 +18,7 @@ import {
   currentUserInfo,
   mindMapInfo,
   socketInfo,
+  searchInfo,
 } from '../../store/states';
 
 export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
@@ -32,6 +33,8 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
   const [textX, setTextX] = useState();
   const [textY, setTextY] = useState();
   const socket = useRecoilValue(socketInfo);
+  const searched = useRecoilValue(searchInfo);
+  const isSearched = searched.has(nodeId);
 
   const groupRef = useRef();
   const textRef = useRef();
@@ -133,6 +136,7 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
         height={nodeHeight}
         rx={20}
         selectedColor={nodeColor}
+        stroke={isSearched}
       />
       <text ref={textRef} x={textX} y={textY}>
         {nodeTitle}
@@ -159,6 +163,8 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
 
 const RectSvg = styled.rect`
   fill: ${props => props.selectedColor};
+  stroke: ${props => (props.stroke ? 'red' : 'none')};
+  stroke-width: 4;
 `;
 
 Node.propTypes = {

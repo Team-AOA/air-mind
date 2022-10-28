@@ -69,6 +69,11 @@ const foldLockInfo = atom({
   default: true,
 });
 
+const searchInfo = atom({
+  key: `searchInfo/${v4}`,
+  default: new Set(),
+});
+
 export {
   currentUserInfo,
   userInfo,
@@ -83,4 +88,5 @@ export {
   deleteInfo,
   socketUserInfo,
   foldLockInfo,
+  searchInfo,
 };
