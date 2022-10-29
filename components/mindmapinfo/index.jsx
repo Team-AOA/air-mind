@@ -153,6 +153,8 @@ export default function MindMapInfo({ mindMapId }) {
   };
 
   const copyUrlHandler = async () => {
+    if (!navigator.clipboard) return;
+
     const path = window.location.href;
     await navigator.clipboard.writeText(path);
     alert(`Copied the text: ${path}`);
