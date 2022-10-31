@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import styled from 'styled-components';
+import { useSetRecoilState, useRecoilState } from 'recoil';
 import { io } from 'socket.io-client';
+
+import Header from '../header';
+import NodeComment from '../nodecomment';
+import NodeDetail from '../nodedetail';
+import flexCenter from '../shared/flexcentercontainer';
+
 import receiveSocket from '../../utils/socket/receivesocker';
 import preventBodyScrolling from '../../utils/preventbodyscrolling';
 import makeSearched from '../../utils/makesearched';
@@ -22,10 +28,6 @@ import {
   foldLockInfo,
   searchInfo,
 } from '../../store/states';
-import Header from '../header';
-import NodeComment from '../nodecomment';
-import NodeDetail from '../nodedetail';
-import flexCenter from '../shared/flexcentercontainer';
 import pageLoader from '../../utils/pageloader';
 
 const NodeCanvas = dynamic(() => import('../nodecanvas'), {
@@ -33,25 +35,27 @@ const NodeCanvas = dynamic(() => import('../nodecanvas'), {
 });
 
 export default function MindMap({ mindMapId }) {
-  const [isSearchMode, setIsSearchMode] = useState(false);
+  const router = useRouter();
+
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
   const [userData, setUserData] = useRecoilState(userInfo);
   const [mindMapData, setMindMapData] = useRecoilState(mindMapInfo);
-  const setError = useSetRecoilState(errorInfo);
   const [isOpenNodeCommentMenu, setIsOpenNodeCommentMenu] = useRecoilState(
     isOpenNodeCommentModal,
   );
   const [isOpenNodeOptionMenu, setIsOpenNodeOptionMenu] = useRecoilState(
     isOpenNodeOptionModal,
   );
-  const clickedImagePath = useRecoilValue(clickedImgPath);
-  const setClickedImagePath = useSetRecoilState(clickedImgPath);
+  const [clickedImagePath, setClickedImagePath] =
+    useRecoilState(clickedImgPath);
   const [socket, setSocket] = useRecoilState(socketInfo);
-  const router = useRouter();
+  const setSearched = useSetRecoilState(searchInfo);
+  const setError = useSetRecoilState(errorInfo);
   const setSocketUserData = useSetRecoilState(socketUserInfo);
   const setIsFoldLock = useSetRecoilState(foldLockInfo);
+
+  const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState('');
-  const setSearched = useSetRecoilState(searchInfo);
 
   useEffect(() => {
     setIsOpenNodeCommentMenu(false);

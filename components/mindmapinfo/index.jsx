@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import Image from 'next/image';
-import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
-import router from 'next/router';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import Image from 'next/image';
+import router from 'next/router';
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
 
 import flexCenter from '../shared/flexcentercontainer';
+
 import {
   userInfo,
   errorInfo,
@@ -32,13 +33,14 @@ import debounce from '../../utils/debounce';
 
 export default function MindMapInfo({ mindMapId }) {
   const [mindMapData, setMindMapData] = useRecoilState(mindMapInfo);
+  const [isFoldLock, setIsFoldLock] = useRecoilState(foldLockInfo);
   const setError = useSetRecoilState(errorInfo);
+  const setNodeData = useSetRecoilState(nodesInfo);
   const userData = useRecoilValue(userInfo);
   const currentUser = useRecoilValue(currentUserInfo);
   const { _id: currentUserId } = currentUser;
   const socket = useRecoilValue(socketInfo);
-  const [isFoldLock, setIsFoldLock] = useRecoilState(foldLockInfo);
-  const setNodeData = useSetRecoilState(nodesInfo);
+
   const [title, setTitle] = useState(() =>
     mindMapData.title ? mindMapData.title : 'Untitled',
   );

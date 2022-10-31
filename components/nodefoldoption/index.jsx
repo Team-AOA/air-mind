@@ -14,14 +14,15 @@ import {
 import countChildren from '../../utils/countchildren';
 
 export default function NodeFoldOption({ x, y, nodeId, isFold }) {
-  const [numberOfChildren, setNumberOfChildren] = useState();
-  const mindMap = useRecoilValue(mindMapInfo);
-  const currentUser = useRecoilValue(currentUserInfo);
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
+  const mindMap = useRecoilValue(mindMapInfo);
   const { _id: mindMapId } = mindMap;
-  const { _id: userId } = mindMap.author;
+  const { _id: authorId } = mindMap.author;
+  const currentUser = useRecoilValue(currentUserInfo);
   const socket = useRecoilValue(socketInfo);
   const isFoldLock = useRecoilValue(foldLockInfo);
+
+  const [numberOfChildren, setNumberOfChildren] = useState();
 
   const foldHandler = e => {
     e.stopPropagation();
@@ -39,7 +40,7 @@ export default function NodeFoldOption({ x, y, nodeId, isFold }) {
       temp[nodeId] = tempSel;
 
       if (isFoldLock && currentUser && Object.keys(currentUser).length > 0) {
-        putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
+        putNodesData(authorId, mindMapId, nodeId, temp[nodeId]);
         socket.emit('fold', !tempSel.attribute.isFold, mindMapId, nodeId);
       }
 
