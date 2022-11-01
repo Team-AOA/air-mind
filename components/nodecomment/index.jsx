@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-
 import Image from 'next/image';
 import styled from 'styled-components';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { v4 as uuidv4 } from 'uuid';
 
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import flexCenter from '../shared/flexcentercontainer';
+import { Button } from '../shared/button';
+import ProfileIcon from '../shared/profileicon';
+
 import {
   clickedNodeId,
   isOpenNodeCommentModal,
@@ -15,24 +18,21 @@ import {
   socketInfo,
 } from '../../store/states';
 import generatetimeformat from '../../utils/generatetime';
-import flexCenter from '../shared/flexcentercontainer';
-import { Button } from '../shared/button';
 import { postCommentsData } from '../../service/noderequests';
-import ProfileIcon from '../shared/profileicon';
 import { NO_PERMISSION_MESSAGE } from '../../constants/constants';
 
 export default function NodeComment() {
   const commentList = useRef();
+
+  const [nodeCommentMode, setNodeCommentMode] = useRecoilState(
+    isOpenNodeCommentModal,
+  );
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
   const mindMapData = useRecoilValue(mindMapInfo);
   const userData = useRecoilValue(userInfo);
-  const nodeId = useRecoilValue(clickedNodeId);
+  const currentNodeId = useRecoilValue(clickedNodeId);
   const currentUser = useRecoilValue(currentUserInfo);
-
   const socket = useRecoilValue(socketInfo);
-
-  const isOpenCommentMenu = useRecoilValue(isOpenNodeCommentModal);
-  const setNodeCommentMode = useSetRecoilState(isOpenNodeCommentModal);
 
   const [currentComment, setCurrentComment] = useState('');
   const [keyTransfer, setKeyTransfer] = useState(false);
@@ -51,7 +51,7 @@ export default function NodeComment() {
   }, [nodeData, currentComment]);
 
   const createCommentClickHandler = async () => {
-    if (!nodeId) return;
+    if (!currentNodeId) return;
     if (!currentUser.username) {
       alert(NO_PERMISSION_MESSAGE);
       return;
@@ -59,7 +59,7 @@ export default function NodeComment() {
 
     try {
       const tempData = { ...nodeData };
-      const currentCommentsArray = [...tempData[nodeId].comments];
+      const currentCommentsArray = [...tempData[currentNodeId].comments];
       const date = new window.Date();
 
       const comment = {
@@ -69,13 +69,13 @@ export default function NodeComment() {
         createdAt: date.toISOString(),
       };
 
-      await postCommentsData(userId, mindMapId, nodeId, comment);
-      socket.emit('addComment', nodeId, mindMapId, comment);
+      await postCommentsData(userId, mindMapId, currentNodeId, comment);
+      socket.emit('addComment', currentNodeId, mindMapId, comment);
 
       currentCommentsArray.push(comment);
 
-      tempData[nodeId] = {
-        ...tempData[nodeId],
+      tempData[currentNodeId] = {
+        ...tempData[currentNodeId],
         comments: currentCommentsArray,
       };
 
@@ -98,7 +98,7 @@ export default function NodeComment() {
   };
 
   return (
-    <CommentContainer isOpen={isOpenCommentMenu} onClick={modalCloseHandler}>
+    <CommentContainer isOpen={nodeCommentMode} onClick={modalCloseHandler}>
       <ButtonWrapper>
         <Image
           src="/images/close.png"
@@ -110,8 +110,8 @@ export default function NodeComment() {
       </ButtonWrapper>
       <CommentBody>
         <CommentList ref={commentList}>
-          {nodeId &&
-            nodeData[nodeId]?.comments.map(comment => {
+          {currentNodeId &&
+            nodeData[currentNodeId]?.comments.map(comment => {
               const date = generatetimeformat(comment?.createdAt);
               return (
                 <Comment key={uuidv4()}>

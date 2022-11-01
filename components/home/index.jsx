@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
 
-import { useRecoilValue, useSetRecoilState } from 'recoil';
 import Header from '../header';
 import NavBar from '../navbar';
 import MindMapCard from '../mindmapcard';
@@ -13,9 +12,9 @@ import getPublicMindMapData, {
 import { errorInfo } from '../../store/states';
 
 export default function Home() {
+  const [currentError, setCurrentError] = useRecoilState(errorInfo);
+
   const [mindMapData, setMindMapData] = useState([]);
-  const setCurrentError = useSetRecoilState(errorInfo);
-  const currentError = useRecoilValue(errorInfo);
 
   useEffect(() => {
     const fetchPublicMindMapData = async () => {

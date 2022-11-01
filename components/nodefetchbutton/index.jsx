@@ -1,18 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { getNodesData } from '../../service/noderequests';
 
+import { getNodesData } from '../../service/noderequests';
 import { mindMapInfo, nodesInfo, userInfo } from '../../store/states';
 
 export default function NodeFetchButton({ x, y, nodeId }) {
+  const [nodeData, setNodeData] = useRecoilState(nodesInfo);
   const userData = useRecoilValue(userInfo);
   const { _id: userId } = userData;
   const mindMapData = useRecoilValue(mindMapInfo);
   const { _id: mindMapId } = mindMapData;
-  const [nodeData, setNodeData] = useRecoilState(nodesInfo);
 
   const nodeFetcher = async e => {
     e.stopPropagation();

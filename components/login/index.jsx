@@ -1,19 +1,20 @@
 import React from 'react';
-import Image from 'next/image';
-
 import styled from 'styled-components';
-import { useSetRecoilState } from 'recoil';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { currentUserInfo } from '../../store/states';
+import { useSetRecoilState } from 'recoil';
 
-import { login } from '../../service/auth';
-import googleDocsIcon from '../../public/images/btn_google_signin_light_pressed_web@2x.png';
 import Header from '../header';
 import flexCenter from '../shared/flexcentercontainer';
 
+import { currentUserInfo } from '../../store/states';
+import { login } from '../../service/auth';
+import googleDocsIcon from '../../public/images/btn_google_signin_light_pressed_web@2x.png';
+
 export default function Login() {
-  const saveUserData = useSetRecoilState(currentUserInfo);
   const router = useRouter();
+
+  const saveUserData = useSetRecoilState(currentUserInfo);
 
   const clickLoginHandler = async () => {
     const response = await login();

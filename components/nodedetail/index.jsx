@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-
 import Image from 'next/image';
 import styled from 'styled-components';
-
 import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
 import { RiDeleteBin6Line as RecycleBinIcon } from 'react-icons/ri';
+
+import flexCenter from '../shared/flexcentercontainer';
+import NodeImageDropZone from '../nodeimagedropzone';
+
 import {
   clickedNodeId,
   isOpenNodeOptionModal,
@@ -15,24 +17,23 @@ import {
   socketInfo,
   currentUserInfo,
 } from '../../store/states';
-
-import flexCenter from '../shared/flexcentercontainer';
-import NodeImageDropZone from '../nodeimagedropzone';
 import debounce from '../../utils/debounce';
 import { putNodesData, deleteImagesData } from '../../service/noderequests';
 
 export default function NodeDetail() {
-  const [isVisibleBin, setIsVisibleBin] = useState(false);
-  const [hoverImgPath, setHoverImgPath] = useState('');
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
+  const [nodeRightOptionMode, setNodeRightOptionMode] = useRecoilState(
+    isOpenNodeOptionModal,
+  );
   const userData = useRecoilValue(userInfo);
   const mindMapData = useRecoilValue(mindMapInfo);
-  const nodeId = useRecoilValue(clickedNodeId);
+  const currentNodeId = useRecoilValue(clickedNodeId);
   const socket = useRecoilValue(socketInfo);
   const currentUser = useRecoilValue(currentUserInfo);
-  const isOpenNodeRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
-  const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
   const setClickedImagePath = useSetRecoilState(clickedImgPath);
+
+  const [isVisibleBin, setIsVisibleBin] = useState(false);
+  const [hoverImgPath, setHoverImgPath] = useState('');
 
   const { _id: userId } = userData;
   const { _id: mindMapId } = mindMapData;
@@ -41,15 +42,18 @@ export default function NodeDetail() {
     if (currentUser && Object.keys(currentUser).length > 0) {
       const tempData = { ...nodeData };
 
-      tempData[nodeId] = { ...tempData[nodeId], title: e.target.value };
+      tempData[currentNodeId] = {
+        ...tempData[currentNodeId],
+        title: e.target.value,
+      };
 
       setNodeData(tempData);
 
       debounce(() => {
-        putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
+        putNodesData(userId, mindMapId, currentNodeId, tempData[currentNodeId]);
       }, 1500);
 
-      socket.emit('titleChange', mindMapId, nodeId, e.target.value);
+      socket.emit('titleChange', mindMapId, currentNodeId, e.target.value);
     }
   };
 
@@ -57,21 +61,27 @@ export default function NodeDetail() {
     if (currentUser && Object.keys(currentUser).length > 0) {
       const tempData = { ...nodeData };
 
-      tempData[nodeId] = { ...tempData[nodeId], content: e.target.value };
+      tempData[currentNodeId] = {
+        ...tempData[currentNodeId],
+        content: e.target.value,
+      };
 
       setNodeData(tempData);
 
       debounce(() => {
-        putNodesData(userId, mindMapId, nodeId, tempData[nodeId]);
+        putNodesData(userId, mindMapId, currentNodeId, tempData[currentNodeId]);
       }, 1500);
 
-      socket.emit('contentChange', mindMapId, nodeId, e.target.value);
+      socket.emit('contentChange', mindMapId, currentNodeId, e.target.value);
     }
   };
 
   const addImageHandler = imageArray => {
     const tempData = { ...nodeData };
-    tempData[nodeId] = { ...tempData[nodeId], images: imageArray };
+    tempData[currentNodeId] = {
+      ...tempData[currentNodeId],
+      images: imageArray,
+    };
 
     setNodeData(tempData);
   };
@@ -94,16 +104,19 @@ export default function NodeDetail() {
     const updatedNode = await deleteImagesData(
       userId,
       mindMapId,
-      nodeId,
+      currentNodeId,
       imgPath,
     );
     const tempData = { ...nodeData };
-    tempData[nodeId] = { ...tempData[nodeId], images: updatedNode.node.images };
+    tempData[currentNodeId] = {
+      ...tempData[currentNodeId],
+      images: updatedNode.node.images,
+    };
     setNodeData(tempData);
   };
 
   return (
-    <Container isOpen={isOpenNodeRightOptionMenu}>
+    <Container isOpen={nodeRightOptionMode}>
       <MenuBody className="closeButton">
         <Image
           src="/images/close.png"
@@ -122,14 +135,14 @@ export default function NodeDetail() {
             <TitleMenu className="title">
               <MenuTitle>Title</MenuTitle>
               <TitleInput
-                value={nodeData[nodeId]?.title || ''}
+                value={nodeData[currentNodeId]?.title || ''}
                 onChange={writeTitleHandler}
               />
             </TitleMenu>
             <DescriptionMenu className="description">
               <MenuTitle>Description</MenuTitle>
               <DescriptionTextArea
-                value={nodeData[nodeId]?.content || ''}
+                value={nodeData[currentNodeId]?.content || ''}
                 onChange={writeDescriptionHandler}
               />
             </DescriptionMenu>
@@ -138,7 +151,7 @@ export default function NodeDetail() {
               <NodeImageDropZone
                 userId={userId}
                 mindMapId={mindMapId}
-                nodeId={nodeId}
+                currentNodeId={currentNodeId}
                 addImage={addImageHandler}
                 className="dragZone"
               />
@@ -146,7 +159,7 @@ export default function NodeDetail() {
             <ImageList>
               <MenuTitle>Image List</MenuTitle>
               <ImagesWrapper>
-                {nodeData[nodeId]?.images.map(img => {
+                {nodeData[currentNodeId]?.images.map(img => {
                   const { _id: id } = img;
                   return (
                     <ImageWrapper

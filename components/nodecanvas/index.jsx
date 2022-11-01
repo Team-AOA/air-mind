@@ -18,15 +18,17 @@ import {
 export default function NodeCanvas({ headNode }) {
   const groupRef = useRef();
   const wrapperRef = useRef();
+
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
-  const [nodeComponentList, setNodeComponentList] = useState([]);
-  const socketUserData = useRecoilValue(socketUserInfo);
-  const [decidedSocketUser, setDecidedSocketUser] = useState({});
   const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
   const setNodeCommentMode = useSetRecoilState(isOpenNodeCommentModal);
+  const socketUserData = useRecoilValue(socketUserInfo);
   const mindMapData = useRecoilValue(mindMapInfo);
   const { _id: mindMapId } = mindMapData;
   const socket = useRecoilValue(socketInfo);
+
+  const [nodeComponentList, setNodeComponentList] = useState([]);
+  const [decidedSocketUser, setDecidedSocketUser] = useState({});
 
   useEffect(() => {
     zoomPanning(groupRef);

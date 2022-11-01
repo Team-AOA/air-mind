@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useRouter } from 'next/router';
 import Thumbnail from 'react-webpage-thumbnail';
@@ -18,7 +18,6 @@ import {
   currentUserInfo,
   foldLockInfo,
 } from '../../store/states';
-
 import { deleteMindMapData } from '../../service/mindmaprequests';
 import {
   DELETE_CONFIRM_MESSAGE,
@@ -27,17 +26,21 @@ import {
 import generatedateformat from '../../utils/generatedateformat';
 
 export default function MindMapCard({ mindMap, renameTitleHandler }) {
-  const [title, setTitle] = useState(mindMap.title || '');
-  const [isTitleEditMode, setIsTitleEditMode] = useState(false);
-  const inputRef = useRef();
   const router = useRouter();
+
+  const inputRef = useRef();
+
   const setUserData = useSetRecoilState(userInfo);
   const currentUser = useRecoilValue(currentUserInfo);
   const setMindMapData = useSetRecoilState(mindMapInfo);
+  const setIsFoldLock = useSetRecoilState(foldLockInfo);
+
+  const [title, setTitle] = useState(mindMap.title || '');
+  const [isTitleEditMode, setIsTitleEditMode] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [url, setUrl] = useState('');
+
   const { _id: mindMapId } = mindMap;
-  const setIsFoldLock = useSetRecoilState(foldLockInfo);
 
   useEffect(() => {
     if (!mindMap) return;

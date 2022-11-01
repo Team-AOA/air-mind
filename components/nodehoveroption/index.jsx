@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
+import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
 import {
   BiCommentDetail as CommentIcon,
   BiPlusMedical as PlusIcon,
@@ -10,7 +10,9 @@ import {
 } from 'react-icons/bi';
 import { TbResize as SizeIcon } from 'react-icons/tb';
 import { RiDeleteBin6Line as RecycleBinIcon } from 'react-icons/ri';
-import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
+
+import flexCenter from '../shared/flexcentercontainer';
+
 import {
   isOpenNodeCommentModal,
   mindMapInfo,
@@ -21,7 +23,6 @@ import {
   isOpenNodeOptionModal,
 } from '../../store/states';
 import NODE_COLOR from '../../constants/nodecolor';
-import flexCenter from '../shared/flexcentercontainer';
 import calculateNewNodePosition from '../../utils/d3/calculatenewnodeposition';
 import deleteNodeHelper from '../../utils/deletenodehelper';
 import {
@@ -38,21 +39,21 @@ export default function NodeHoverOption({
   selectedColor,
   nodeId,
 }) {
-  const [isSelectColorMode, setIsSelectColorMode] = useState(false);
-  const [isSelectSizeMode, setIsSelectSizeMode] = useState(false);
-  const setNodeCommentMode = useSetRecoilState(isOpenNodeCommentModal);
-  const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
-  const setClickedNodeId = useSetRecoilState(clickedNodeId);
-  const prevClickedNodeId = useRecoilValue(clickedNodeId);
-  const isOpenCommentMenu = useRecoilValue(isOpenNodeCommentModal);
+  const [currentNodeId, setCurrentNodeId] = useRecoilState(clickedNodeId);
+  const [nodeCommentMode, setNodeCommentMode] = useRecoilState(
+    isOpenNodeCommentModal,
+  );
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
-  const mindMap = useRecoilValue(mindMapInfo);
-  const currentUser = useRecoilValue(currentUserInfo);
   const isHead = nodeData[nodeId]?.parent === undefined;
+  const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
+  const mindMap = useRecoilValue(mindMapInfo);
+  const { _id: mindMapId } = mindMap;
+  const { _id: authorId } = mindMap.author;
+  const currentUser = useRecoilValue(currentUserInfo);
   const socket = useRecoilValue(socketInfo);
 
-  const { _id: mindMapId } = mindMap;
-  const { _id: userId } = mindMap.author;
+  const [isSelectColorMode, setIsSelectColorMode] = useState(false);
+  const [isSelectSizeMode, setIsSelectSizeMode] = useState(false);
 
   const onClickColorPalette = (e, item) => {
     e.stopPropagation();
@@ -67,7 +68,7 @@ export default function NodeHoverOption({
         };
         temp[nodeId] = tempSel;
 
-        putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
+        putNodesData(authorId, mindMapId, nodeId, temp[nodeId]);
 
         return temp;
       });
@@ -118,7 +119,7 @@ export default function NodeHoverOption({
         };
         temp[nodeId] = tempSel;
 
-        putNodesData(userId, mindMapId, nodeId, temp[nodeId]);
+        putNodesData(authorId, mindMapId, nodeId, temp[nodeId]);
 
         return temp;
       });
@@ -131,7 +132,7 @@ export default function NodeHoverOption({
   const createNode = async (id, headId) => {
     if (currentUser && Object.keys(currentUser).length > 0) {
       const calculated = calculateNewNodePosition(id, headId);
-      const newNode = await postNodesData(userId, mindMapId, nodeId, {
+      const newNode = await postNodesData(authorId, mindMapId, nodeId, {
         attribute: calculated,
       });
 
@@ -162,12 +163,12 @@ export default function NodeHoverOption({
 
     if (currentUser && Object.keys(currentUser).length > 0) {
       deleteNodeHelper(nodeId, nodeData, setNodeData);
-      await deleteNodesData(userId, mindMapId, nodeId);
+      await deleteNodesData(authorId, mindMapId, nodeId);
 
-      socket.emit('deleteNode', nodeId, nodeData, userId, mindMapId);
+      socket.emit('deleteNode', nodeId, nodeData, authorId, mindMapId);
     }
 
-    setClickedNodeId('');
+    setCurrentNodeId('');
     setNodeRightOptionMode(false);
     setNodeCommentMode(false);
     socket.emit('leaveNode', socket.id, mindMapId);
@@ -175,10 +176,10 @@ export default function NodeHoverOption({
 
   const commentNode = e => {
     e.stopPropagation();
-    setClickedNodeId(nodeId);
+    setCurrentNodeId(nodeId);
 
-    if (prevClickedNodeId === nodeId) {
-      setNodeCommentMode(!isOpenCommentMenu);
+    if (currentNodeId === nodeId) {
+      setNodeCommentMode(!nodeCommentMode);
       return;
     }
 

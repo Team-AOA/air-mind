@@ -2,12 +2,13 @@ import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 import styled from 'styled-components';
-
 import { useRecoilValue } from 'recoil';
+
 import flexCenter from '../shared/flexcentercontainer';
+import { Button } from '../shared/button';
+
 import { currentUserInfo, socketInfo } from '../../store/states';
 import { postImagesData } from '../../service/noderequests';
-import { Button } from '../shared/button';
 import { IMAGES_MAXIMUM_LENGTH_MESSAGE } from '../../constants/constants';
 
 export default function NodeImageDropZone({
@@ -17,10 +18,11 @@ export default function NodeImageDropZone({
   addImage,
 }) {
   const uploadFile = useRef();
-  const [isImgDropZone, setIsImgDropZone] = useState(false);
+
   const currentUserData = useRecoilValue(currentUserInfo);
   const socket = useRecoilValue(socketInfo);
 
+  const [isImgDropZone, setIsImgDropZone] = useState(false);
   const handleOnImgDropZone = e => {
     e.preventDefault();
     e.stopPropagation();

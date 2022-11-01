@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import * as d3 from 'd3';
 
-import { useRecoilValue, useSetRecoilState } from 'recoil';
 import NodeHoverOption from '../nodehoveroption';
 import NodeFoldOption from '../nodefoldoption';
 import NodeFetchButton from '../nodefetchbutton';
 import NodeCoworkers from '../nodecoworkers';
+
 import NODE_COLOR from '../../constants/nodecolor';
 import NODE_SIZE from '../../constants/nodesize';
 import setMovePosition from '../../utils/d3/setmoveposition';
@@ -22,22 +23,24 @@ import {
 } from '../../store/states';
 
 export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
+  const groupRef = useRef();
+  const textRef = useRef();
+
   const [isOptionMode, setIsOptionMode] = useState(false);
-  const isOpenNodeRightOptionMenu = useRecoilValue(isOpenNodeOptionModal);
-  const setNodeRightOptionMode = useSetRecoilState(isOpenNodeOptionModal);
-  const setClickedNodeId = useSetRecoilState(clickedNodeId);
-  const currentNodeId = useRecoilValue(clickedNodeId);
+  const [nodeRightOptionMode, setNodeRightOptionMode] = useRecoilState(
+    isOpenNodeOptionModal,
+  );
+  const [currentNodeId, setCurrentNodeId] = useRecoilState(clickedNodeId);
   const currentUser = useRecoilValue(currentUserInfo);
   const mindMap = useRecoilValue(mindMapInfo);
   const { _id: mindMapId } = mindMap;
-  const [textX, setTextX] = useState(0);
-  const [textY, setTextY] = useState(0);
   const socket = useRecoilValue(socketInfo);
   const searched = useRecoilValue(searchInfo);
   const isSearched = searched.has(nodeId);
 
-  const groupRef = useRef();
-  const textRef = useRef();
+  const [textX, setTextX] = useState(0);
+  const [textY, setTextY] = useState(0);
+
   const node = nodeData[nodeId];
 
   let nodeAttribute;
@@ -89,9 +92,9 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
 
   const onClickHandler = e => {
     e.stopPropagation();
-    if (!isOpenNodeRightOptionMenu) {
+    if (!nodeRightOptionMode) {
       setNodeRightOptionMode(true);
-      setClickedNodeId(nodeId);
+      setCurrentNodeId(nodeId);
       socket.emit(
         'enterNode',
         socket.id,
@@ -101,10 +104,10 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
       );
     } else if (nodeId === currentNodeId) {
       setNodeRightOptionMode(false);
-      setClickedNodeId('');
+      setCurrentNodeId('');
       socket.emit('leaveNode', socket.id, mindMapId);
     } else {
-      setClickedNodeId(nodeId);
+      setCurrentNodeId(nodeId);
       socket.emit(
         'enterNode',
         socket.id,

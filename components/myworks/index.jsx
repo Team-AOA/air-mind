@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-
 import styled from 'styled-components';
-
 import { useRecoilValue } from 'recoil';
+
 import Header from '../header';
 import NavBar from '../navbar';
 import MindMapCard from '../mindmapcard';
@@ -14,10 +13,11 @@ import {
 import { currentUserInfo } from '../../store/states';
 
 export default function MyWorks() {
-  const [myMindMapData, setMyMindMapData] = useState([]);
-  const [currentError, setCurrentError] = useState({});
   const currentUserData = useRecoilValue(currentUserInfo);
   const { _id: currentUserId } = currentUserData;
+
+  const [myMindMapData, setMyMindMapData] = useState([]);
+  const [currentError, setCurrentError] = useState({});
 
   useEffect(() => {
     const fetchMyMindMapData = async id => {

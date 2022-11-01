@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import jwtDecode from 'jwt-decode';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { getCookie, deleteCookie } from 'cookies-next';
-import styled from 'styled-components';
+import jwtDecode from 'jwt-decode';
 
-import { currentUserInfo } from '../../store/states';
-import { logOut } from '../../service/auth';
+import MindMapInfo from '../mindmapinfo';
 import { HeaderButton } from '../shared/button';
 import ProfileIcon from '../shared/profileicon';
-import MindMapInfo from '../mindmapinfo';
+
+import { logOut } from '../../service/auth';
+import { currentUserInfo } from '../../store/states';
 import { AUTH_EXPIRED } from '../../constants/constants';
 
 export default function Header() {
-  const [mounted, setMounted] = useState(false);
   const router = useRouter();
-  const setUserInfo = useSetRecoilState(currentUserInfo);
-  const userInfo = useRecoilValue(currentUserInfo);
   const { mindMapId } = router.query;
+
+  const [userInfo, setUserInfo] = useRecoilState(currentUserInfo);
+
   const [isLogin, setIsLogin] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);

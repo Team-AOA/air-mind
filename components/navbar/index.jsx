@@ -1,10 +1,8 @@
 import React from 'react';
-
 import { useRouter } from 'next/router';
-
 import styled from 'styled-components';
-
 import { useSetRecoilState, useRecoilValue } from 'recoil';
+
 import { NavBarButton } from '../shared/button';
 
 import { createMindMapData } from '../../service/mindmaprequests';
@@ -18,11 +16,12 @@ import {
 
 export default function NavBar() {
   const router = useRouter();
+
   const setError = useSetRecoilState(errorInfo);
   const setUserData = useSetRecoilState(userInfo);
   const setMindMapData = useSetRecoilState(mindMapInfo);
-  const currentUser = useRecoilValue(currentUserInfo);
   const setIsFoldLock = useSetRecoilState(foldLockInfo);
+  const currentUser = useRecoilValue(currentUserInfo);
 
   const handleCreateButton = async () => {
     if (currentUser && Object.keys(currentUser).length > 0) {
