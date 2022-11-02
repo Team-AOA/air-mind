@@ -3,7 +3,7 @@ import { getCookie } from 'cookies-next';
 
 const API = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-  timeout: 1000,
+  timeout: 1500,
 });
 
 API.interceptors.request.use(
