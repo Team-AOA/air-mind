@@ -6,18 +6,7 @@ export default function MindMapThumbnail({ title, url, width }) {
   const [screenSize, setScreenSize] = useState({});
   const [ratio, setRatio] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-  const [timeOut, setTimeOut] = useState(1300);
   const containerRef = useRef(null);
-
-  useEffect(() => {
-    const timerId = setTimeout(() => {
-      setTimeOut(0);
-    }, 1500);
-
-    return () => {
-      clearTimeout(timerId);
-    };
-  }, []);
 
   useEffect(() => {
     if (!window) return;
@@ -31,9 +20,7 @@ export default function MindMapThumbnail({ title, url, width }) {
   }, [containerRef.current?.offsetWidth]);
 
   const siteLoaded = () => {
-    if (timeOut) {
-      setIsLoading(!isLoading);
-    }
+    setIsLoading(!isLoading);
   };
 
   return (
@@ -41,7 +28,7 @@ export default function MindMapThumbnail({ title, url, width }) {
       <Wrapper scale={ratio || 1}>
         {isLoading && (
           <Loading scale={ratio || 1}>
-            <span className={timeOut ? 'loader' : ''} />
+            <span className="loader" />
           </Loading>
         )}
         <Thumbnail
@@ -90,7 +77,7 @@ const Thumbnail = styled.iframe`
   border: none;
   border-radius: 0;
   pointer-events: none;
-  transform-origin: ${props => `-${props.scale + 2}% ${props.scale * -100}px`};
+  transform-origin: ${props => `-${props.scale + 7}% ${props.scale * -100}px`};
   transform: ${props => `scale(${props.scale + 0.1})`};
   z-index: 1;
 `;
