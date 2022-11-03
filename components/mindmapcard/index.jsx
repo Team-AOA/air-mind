@@ -3,14 +3,11 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useRouter } from 'next/router';
-import Thumbnail from 'react-webpage-thumbnail';
 
-import {
-  CgFileDocument as DocumentIcon,
-  // CgMenu as Option,
-} from 'react-icons/cg';
+import { CgFileDocument as DocumentIcon } from 'react-icons/cg';
 import { SlLock as LockIcon } from 'react-icons/sl';
 import { CiSettings as Option } from 'react-icons/ci';
+import MindMapThumbnail from '../mindmapthumbnail';
 
 import {
   mindMapInfo,
@@ -113,10 +110,20 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
           <LockPageWrapper>
             <LockIcon className="lockIcon" size={50} />
             <PrivatePageThumbnail />
-            <Thumbnail url={url} className="thumbnail" />
+            <MindMapThumbnail
+              title={`${mindMap.title} preview`}
+              url={url}
+              className="thumbnail"
+              width={300}
+            />
           </LockPageWrapper>
         ) : (
-          <Thumbnail url={url} className="thumbnail" />
+          <MindMapThumbnail
+            title={`${mindMap.title} preview`}
+            url={url}
+            className="thumbnail"
+            width={300}
+          />
         )}
       </Wrapper>
       <Footer>
@@ -179,8 +186,8 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   width: 95%;
-  height: 300px;
   border: 1px solid #e8e8e8;
   border-radius: 5px;
   padding: 10px;
@@ -193,11 +200,14 @@ const Card = styled.div`
 
 const Wrapper = styled.div`
   width: 300px;
-  height: 100%;
+  height: 230px;
   cursor: pointer;
 
   .thumbnail {
     position: relative;
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
   }
 `;
 
@@ -220,7 +230,6 @@ const LockPageWrapper = styled.div`
 const PrivatePageThumbnail = styled.div`
   width: inherit;
   height: inherit;
-  /* background-image: linear-gradient(to right, #8e2de2, #4a00e0); */
   opacity: 0.15;
   background-color: #0073ff;
   position: absolute;
@@ -233,7 +242,7 @@ const Footer = styled.div`
   align-items: flex-start;
   width: 90%;
   height: 50px;
-  margin: 10px;
+  margin: 10px 0 0 5px;
 `;
 
 const FoooterLeft = styled.div`
@@ -307,7 +316,6 @@ const OptionModal = styled.div`
   height: 25px;
   margin: 3px 0;
   display: flex;
-  /* justify-content: space-between; */
   align-items: center;
   z-index: 100;
 `;

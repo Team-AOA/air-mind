@@ -139,10 +139,10 @@ const HeaderWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   position: sticky;
+  width: 100%;
+  height: 100px;
   top: 0px;
   z-index: 10;
-  height: 100px;
-  width: 100%;
   padding: 0 10px;
   background-color: #2c2c2c;
 `;
