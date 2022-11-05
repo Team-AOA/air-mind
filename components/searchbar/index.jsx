@@ -11,9 +11,9 @@ export default function SearchBar() {
 }
 
 const SearchBarWrapper = styled.div`
-  position: relative;
   display: flex;
   flex-direction: row;
+  position: relative;
   left: 1700px;
 `;
 const SearchInput = styled.input``;

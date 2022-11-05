@@ -56,11 +56,11 @@ MindMapThumbnail.propTypes = {
 
 const Container = styled.div`
   display: block;
+  overflow: hidden;
   width: 100%;
   height: 100%;
-  pointer-events: none;
-  overflow: hidden;
   background-color: #f5f5f5;
+  pointer-events: none;
 `;
 
 const Wrapper = styled.div`
@@ -73,12 +73,12 @@ const Wrapper = styled.div`
 const Thumbnail = styled.iframe`
   display: block;
   position: absolute;
+  z-index: 1;
   border: none;
   border-radius: 0;
   pointer-events: none;
   transform-origin: ${props => `-${props.scale + 7}% ${props.scale * -100}px`};
   transform: ${props => `scale(${props.scale + 0.1})`};
-  z-index: 1;
 `;
 
 const Loading = styled.div`
@@ -86,20 +86,20 @@ const Loading = styled.div`
   align-items: center;
   justify-content: center;
   position: absolute;
-  transform: ${props => `translateY(${props.scale * 100}px)`};
+  z-index: 2;
   width: 100%;
   height: 100%;
   opacity: 100;
   background-color: #f5f5f5;
-  z-index: 2;
+  transform: ${props => `translateY(${props.scale * 100}px)`};
 
   .loader {
+    display: inline-block;
     width: 48px;
     height: 48px;
     border: 5px solid #fff;
     border-bottom-color: transparent;
     border-radius: 50%;
-    display: inline-block;
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
   }

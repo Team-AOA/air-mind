@@ -192,19 +192,19 @@ export default function NodeDetail() {
 
 const Container = styled(flexCenter)`
   flex-grow: 1;
+  z-index: 100;
   width: 100%;
   min-height: 500px;
   height: 100%;
-  z-index: 100;
   background-color: rgba(255, 255, 255, 0.7);
   transform: ${props => (props.isOpen ? 'translateX(0)' : 'translateX(400px)')};
   transition: all 0.6s ease-in-out;
 
   .closeButton {
+    flex-grow: 0;
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    flex-grow: 0;
     min-height: 30px;
     max-height: 30px;
     cursor: pointer;
@@ -218,29 +218,29 @@ const Container = styled(flexCenter)`
 `;
 
 const ScrollWrapper = styled.div`
-  width: 100%;
-  height: 90vh;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+  height: 90vh;
 `;
 
 const Scroll = styled.div`
-  overflow: auto;
   flex-grow: 1;
+  overflow: auto;
 `;
 
 const MenuWrapper = styled.div`
-  height: 100%;
-  justify-content: flex-start;
   flex-grow: 1;
+  justify-content: flex-start;
   width: 100%;
+  height: 100%;
   min-height: 150px;
 `;
 
 export const MenuBody = styled(flexCenter)`
-  justify-content: flex-start;
   flex-grow: 1;
+  justify-content: flex-start;
   width: 100%;
   min-height: 150px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -253,8 +253,8 @@ const MenuTitle = styled.div`
 `;
 
 const TitleMenu = styled(MenuBody)`
-  justify-content: space-between;
   flex-grow: 0;
+  justify-content: space-between;
   min-height: 100px;
   max-height: 100px;
 `;
@@ -262,9 +262,9 @@ const TitleMenu = styled(MenuBody)`
 const TitleInput = styled.input`
   width: 90%;
   height: 50px;
+  margin: 10px 0;
   border: 1px solid #eff0f5;
   border-radius: 10px;
-  margin: 10px 0;
   background-color: rgba(255, 255, 255, 0.8);
 
   &:focus {
@@ -279,10 +279,10 @@ const DescriptionMenu = styled(MenuBody)`
 `;
 
 const DescriptionTextArea = styled.textarea`
-  margin: 10px 0;
   width: 90%;
   height: 150px;
   max-height: 500px;
+  margin: 10px 0;
   border: 1px solid #eff0f5;
   border-radius: 10px;
   resize: none;
@@ -315,26 +315,24 @@ const ImageWrapper = styled(flexCenter)`
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
-  margin: 10px 0;
   position: relative;
-
+  margin: 10px 0;
   width: 130px;
-  /* height: 100px; */
 `;
 
 const IconWrapper = styled.div`
-  text-align: right;
   position: absolute;
+  z-index: 4;
   width: 100px;
   margin: 5px 15px 0 0;
-  z-index: 4;
+  text-align: right;
   font-weight: 900;
   cursor: pointer;
 
   .bin {
+    padding: 5px;
     border-radius: 50px;
     background-color: rgba(255, 255, 255, 0.5);
-    padding: 5px;
     color: black;
 
     &:hover {
