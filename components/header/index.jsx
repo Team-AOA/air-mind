@@ -90,6 +90,7 @@ export default function Header() {
                 width="55px"
                 height="55px"
                 className="homeIcon"
+                alt="airmind-logo"
               />
             </div>
           </Link>

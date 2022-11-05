@@ -151,7 +151,7 @@ export default function NodeDetail() {
               <NodeImageDropZone
                 userId={userId}
                 mindMapId={mindMapId}
-                currentNodeId={currentNodeId}
+                nodeId={currentNodeId}
                 addImage={addImageHandler}
                 className="dragZone"
               />

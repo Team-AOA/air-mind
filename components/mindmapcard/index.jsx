@@ -105,25 +105,15 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
 
   return (
     <Card>
-      <Wrapper onClick={mindMapLoader}>
+      <Wrapper onClick={mindMapLoader} data-testid="thumbnailWrapper">
         {mindMap.access === 'private' ? (
-          <LockPageWrapper>
+          <LockPageWrapper data-testid="lockWrapper">
             <LockIcon className="lockIcon" size={50} />
             <PrivatePageThumbnail />
-            <MindMapThumbnail
-              title={`${mindMap.title} preview`}
-              url={url}
-              className="thumbnail"
-              width={300}
-            />
+            <MindMapThumbnail url={url} className="thumbnail" width={300} />
           </LockPageWrapper>
         ) : (
-          <MindMapThumbnail
-            title={`${mindMap.title} preview`}
-            url={url}
-            className="thumbnail"
-            width={300}
-          />
+          <MindMapThumbnail url={url} className="thumbnail" width={300} />
         )}
       </Wrapper>
       <Footer>
@@ -164,9 +154,9 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
             )}
             <BottomButton>
               <AccessIcon access={mindMap.access}>{mindMap.access}</AccessIcon>
-              <DotButton onClick={modalShowOn}>
+              <OptionButton onClick={modalShowOn}>
                 <Option size={21} />
-              </DotButton>
+              </OptionButton>
             </BottomButton>
           </OptionModal>
           <Date className="date">{generatedateformat(mindMap?.createdAt)}</Date>
@@ -390,7 +380,7 @@ const AccessIcon = styled.div`
   color: white;
 `;
 
-const DotButton = styled.div`
+const OptionButton = styled.button`
   display: flex;
   cursor: pointer;
   justify-content: center;
@@ -399,6 +389,7 @@ const DotButton = styled.div`
   width: 30px;
   height: 20px;
   border-radius: 10%;
+  border: none;
   background-color: #f3f3f3;
   color: gray;
 

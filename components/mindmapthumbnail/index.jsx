@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-export default function MindMapThumbnail({ title, url, width }) {
+export default function MindMapThumbnail({ url, width }) {
   const [screenSize, setScreenSize] = useState({});
   const [ratio, setRatio] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
@@ -27,13 +27,13 @@ export default function MindMapThumbnail({ title, url, width }) {
     <Container ref={containerRef}>
       <Wrapper scale={ratio || 1}>
         {isLoading && (
-          <Loading scale={ratio || 1}>
+          <Loading data-testid="loading-element" scale={ratio || 1}>
             <span className="loader" />
           </Loading>
         )}
         <Thumbnail
           tabIndex="-1"
-          title={title}
+          title="mindmap-thumbnail"
           src={url}
           allow="src"
           sandbox="allow-scripts allow-same-origin"
@@ -50,7 +50,6 @@ export default function MindMapThumbnail({ title, url, width }) {
 }
 
 MindMapThumbnail.propTypes = {
-  title: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
 };
