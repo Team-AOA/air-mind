@@ -1,4 +1,6 @@
-![airmind-logo](/public/images/air_mind_logo.png)
+<div>
+  <img src="/public/images/air_mind_logo.png" alt="airmind-logo" width="200px" height="200px" />
+</div>
 
 # Air Mind
 
@@ -293,11 +295,11 @@ iframe을 이용하여 구현하였습니다. iframe의 속성인 sandbox를 `"a
 
 ## Member
 
-- 임태근
+- [임태근](https://github.com/dkqp)
   Contact: ltg0513@gmail.com
 
-- 최재혁
+- [최재혁](https://github.com/Sharpen-Cjh)
   Contact: jaehyeok92007@gmail.com
 
-- 임현정
+- [임현정](https://github.com/h-alex2)
   Contact: glowhyun1@gmail.com
