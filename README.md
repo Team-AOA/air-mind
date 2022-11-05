@@ -1,6 +1,9 @@
 <div>
-  <img src="/public/images/air_mind_logo.png" alt="airmind-logo" width="200px" height="200px" />
+  <img src="./public/images/air_mind_logo.png" alt="airmind-logo" width="200px" height="200px" />
 </div>
+  
+[Frontend Repository](https://github.com/Team-AOA/air-mind)
+[Backend Repository](https://github.com/Team-AOA/air-mind-server)
 
 # Air Mind
 
@@ -48,7 +51,7 @@
 
 #### Main page (게스트 유저)
 
-![main-page](/public/readme/1.main.gif)
+![main-page](./public/readme/1.main.gif)
 
 - Public 버전 마인드맵 리스트 확인
 - 마인드맵 페이지 썸네일 확인 기능
@@ -58,7 +61,7 @@
 
 #### Login page + Main page (로그인 유저)
 
-![login-page](/public/readme/2.login.gif)
+![login-page](./public/readme/2.login.gif)
 
 - Public 버전 마인드맵 리스트 확인
 - Firebase Google 로그인 사용
@@ -67,7 +70,7 @@
 
 #### My Work page
 
-![mywork-page](/public/readme/3.mywork.gif)
+![mywork-page](./public/readme/3.mywork.gif)
 
 - 유저 본인이 만든 전체 마인드맵 리스트 확인
 - 시간순으로 정렬
@@ -76,20 +79,20 @@
 
 #### Mind-map page - Node Menu
 
-![node-menu](/public/readme/4.node-menu.gif)
+![node-menu](./public/readme/4.node-menu.gif)
 
 - 노드 타이틀, 내용 입력 기능, 사진 추가(드래그 또는 선택) 기능, 사진 삭제 기능
 
 #### Mind-map page - Node Hover Option
 
-![node-hover](/public/readme/5.node-hover.gif)
+![node-hover](./public/readme/5.node-hover.gif)
 
 - 다른 유저의 노드(마인드맵을 이루는 박스) 색상 변경, 사이즈 변경, 노드 추가, 노드 삭제 모두 실시간으로 확인 가능
 - 자식 노드 안 보이게 fold 하는 기능
 
 #### Mind-map page - Real time Collaboration
 
-![socket](/public/readme/6.socket.gif)
+![socket](./public/readme/6.socket.gif)
 
 - 유저가 위치하고 있는 노드에 유저 아이콘 표시
 - 방해받기 금지 모드를 통해 다른 유저 노드 fold 이벤트 적용되지 않는 기능
@@ -238,7 +241,7 @@ hydration error를 발견했을 때는 프리렌더링 된 html 파일과 가상
 
 마인드맵을 구성하는 요소인 Node 데이터를 어떤 구조로 구성하고 관리할지도 저희가 고민한 부분이었습니다. 노드를 부모 노드로부터 자식 노드로 방향성을 가지도록 정의했기 때문에, 노드와 마인드맵의 관계보다 노드와 노드 간의 관계가 더욱 중요하다고 판단되었습니다. 또한, 생각이 계속해서 확장되고 세부사항으로 깊숙이 들어갈 수 있는 것처럼, 마인드맵 또한 무한히 많은 노드들로 확장될 수 있습니다. 마인드맵이 확장되어 가면서 계속 무거워지는 것을 방지하기 위해, 노드와 마인드맵의 관계를 약화시키고 노드와 노드 간의 관계를 중심으로 데이터를 관리하고자 하였습니다. 마인드맵은 가장 head 인 노드의 정보만을 보유하고, 그 이후로는 부모 노드와 자식 노드가 서로의 정보를 보유하는 양방향 일대다 트리 구조는 이러한 목적에 잘 맞았습니다.
 
-![node](/public/readme/node.png)
+![node](./public/readme/node.png)
 
 **Autopopulate 라이브러리**
 
@@ -252,7 +255,7 @@ hydration error를 발견했을 때는 프리렌더링 된 html 파일과 가상
 
 노드를 노드 간에서만 종속적인 구조로 구성한 것은 노드의 확장성에 긍정적인 영향을 미쳤습니다. 마인드맵의 구조가 복잡해지고 크기가 커지게 될 때, 한번에 모든 노드의 데이터를 전송받고 화면에 띄우기에는 클라이언트와 서버 양쪽 모두 부담스러운 측면이 있습니다. 따라서 한 번에 전송받는 데이터의 양을 노드 수 50개 또는 노드 깊이 5 으로 제한하고, 특정 노드의 하위 노드에 대한 추가 전송 요청이 있을 경우 대응하는 방식을 적용하였습니다.
 
-![node2](/public/readme/node2.png)
+![node2](./public/readme/node2.png)
 
 아직 불러오지 않은 데이터는 노드의 왼쪽 `+` 버튼을 표시하여 fetch 될 데이터가 남아있다는 걸 보여주는 방식을 택했습니다. `+` 버튼을 누르면 추가로 하위 노드의 정보를 가져와 화면에 표시하도록 작업하였습니다.
 
