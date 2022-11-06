@@ -218,8 +218,8 @@ MindMapInfo.propTypes = {
 const Icon = styled(flexCenter)`
   width: 40px;
   height: 35px;
-  cursor: pointer;
   transition: background-color 0.3s ease;
+  cursor: pointer;
 
   &:hover {
     &:hover {
@@ -244,40 +244,40 @@ const MindMapInfoWrapper = styled.div`
 
 const MindMapTitle = styled.input`
   width: 140%;
-  background-color: #4d6ef4;
+  padding: 0 10px;
   border: none;
   border-radius: 5px;
-  color: white;
+  background-color: #4d6ef4;
   font-size: 18px;
-  padding: 0 10px;
+  color: white;
 `;
 
 const MindMapPublicSelect = styled.select`
   width: 60%;
   height: 35px;
+  margin-left: 20px;
+  padding-left: 5px;
   border: none;
   border-radius: 5px;
   background: white;
-  color: gray;
   font-size: 14px;
-  padding-left: 5px;
-  margin-left: 20px;
+  color: gray;
 `;
 
 const MindMapPublicOption = styled.option`
   display: flex;
-  background: white;
+  min-height: 20px;
   padding: 0px 2px 1px;
+  background: white;
   color: black;
   white-space: pre;
-  min-height: 20px;
 `;
 
 const MindMapPrivateOption = styled.option`
   display: flex;
-  background: white;
+  min-height: 20px;
   padding: 0px 2px 1px;
+  background: white;
   color: black;
   white-space: pre;
-  min-height: 20px;
 `;

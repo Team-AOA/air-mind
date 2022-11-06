@@ -77,10 +77,10 @@ const NavBarContainer = styled.div`
   justify-content: center;
   align-items: flex-end;
   position: sticky;
+  top: 100px;
+  z-index: 1;
   width: 100%;
   height: 80px;
-  z-index: 1;
-  top: 100px;
   background-color: white;
 `;
 

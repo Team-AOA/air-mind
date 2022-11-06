@@ -85,21 +85,21 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-  height: 100%;
   width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
 `;
 
 const MindMapsWrapper = styled.div`
   display: grid;
-  padding: 2em 0 0;
-  width: 90%;
   grid-template-columns: repeat(auto-fit, minmax(330px, 350px));
   grid-template-rows: 320px 350px 320px;
   justify-content: center;
   column-gap: 20px;
   row-gap: 20px;
+  width: 90%;
+  padding: 2em 0 0;
 `;
 
 const ErrorMessage = styled.div``;

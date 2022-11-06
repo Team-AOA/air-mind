@@ -32,12 +32,6 @@ const Icons = styled.div`
   height: 50px;
 `;
 
-// const Icon = styled.img`
-//   width: 30px;
-//   height: 30px;
-//   border-radius: 50px;
-// `;
-
 NodeCoworkers.propTypes = {
   x: PropTypes.node.isRequired,
   y: PropTypes.node.isRequired,

@@ -75,8 +75,8 @@ const FoldButton = styled.div`
   align-items: center;
   width: 20px;
   height: 20px;
-  border-radius: 10px;
   border: 2px solid black;
+  border-radius: 10px;
   background-color: white;
   font-weight: 500;
 `;

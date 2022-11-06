@@ -275,10 +275,10 @@ const Menu = styled.div`
   align-items: center;
   width: 120px;
   height: 30px;
-  transform: translateY(73px);
   border-radius: 5px;
   border: 1px solid #e6e6e6;
   background-color: white;
+  transform: translateY(73px);
 
   .leftIcon {
     border-radius: 4px 0 0 4px;

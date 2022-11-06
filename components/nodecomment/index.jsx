@@ -156,9 +156,9 @@ const CommentContainer = styled(flexCenter)`
   flex-direction: column;
   justify-content: flex-start;
   position: absolute;
+  z-index: 1000;
   width: 400px;
   height: 500px;
-  z-index: 1000;
   background-color: rgba(255, 255, 255, 0.7);
   font-size: 13px;
   transform: ${props => (props.isOpen ? 'translateX(400)' : 'translateX(0)')};
@@ -222,9 +222,9 @@ const CommentList = styled.div`
 const CommentTextBar = styled.div`
   display: flex;
   width: 80%;
+  padding: 5px;
   border: 1px solid #eff0f5;
   border-radius: 10px;
-  padding: 5px;
 
   .submitButton {
     border: 1px solid #eff0f5;

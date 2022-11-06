@@ -62,15 +62,15 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.h1`
+  margin: 0;
   font-size: 30px;
   text-align: left;
-  margin: 0;
 `;
 
 const IconWrapper = styled(flexCenter)`
+  align-items: flex-start;
   min-width: 10rem;
   height: 80vh;
-  align-items: flex-start;
   transform: translateY(-30px);
 
   .googleLoginButton {

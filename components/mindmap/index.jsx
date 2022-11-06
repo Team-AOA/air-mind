@@ -173,14 +173,11 @@ const ImageModal = styled.div`
   align-items: center;
   justify-content: center;
   position: absolute;
+  z-index: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
-  /* background-color: blue; */
-  /* opacity: 30%; */
 
   img {
-    /* width: 100%; */
     height: inherit;
   }
 `;
@@ -200,10 +197,8 @@ const RightMenuContainer = styled.div`
 
 const RightMenuWrapper = styled(flexCenter)`
   justify-content: flex-start;
-  width: 300px;
-  /* height: 100vh; */
-
   z-index: 1000;
+  width: 300px;
 `;
 
 const SearchBar = styled.div`
@@ -217,9 +212,9 @@ const SearchBar = styled.div`
 `;
 
 const SearchInput = styled.input`
+  width: ${props => (props.searchMode ? '250px' : '-0')};
   border: none;
   border-bottom: ${props => (props.searchMode ? '1px solid black' : 'none')};
-  width: ${props => (props.searchMode ? '250px' : '-0')};
-  transition: all 1.5s ease-in-out;
   background-color: none;
+  transition: all 1.5s ease-in-out;
 `;

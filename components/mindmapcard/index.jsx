@@ -105,25 +105,15 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
 
   return (
     <Card>
-      <Wrapper onClick={mindMapLoader}>
+      <Wrapper onClick={mindMapLoader} data-testid="thumbnailWrapper">
         {mindMap.access === 'private' ? (
-          <LockPageWrapper>
+          <LockPageWrapper data-testid="lockWrapper">
             <LockIcon className="lockIcon" size={50} />
             <PrivatePageThumbnail />
-            <MindMapThumbnail
-              title={`${mindMap.title} preview`}
-              url={url}
-              className="thumbnail"
-              width={300}
-            />
+            <MindMapThumbnail url={url} className="thumbnail" width={300} />
           </LockPageWrapper>
         ) : (
-          <MindMapThumbnail
-            title={`${mindMap.title} preview`}
-            url={url}
-            className="thumbnail"
-            width={300}
-          />
+          <MindMapThumbnail url={url} className="thumbnail" width={300} />
         )}
       </Wrapper>
       <Footer>
@@ -164,9 +154,9 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
             )}
             <BottomButton>
               <AccessIcon access={mindMap.access}>{mindMap.access}</AccessIcon>
-              <DotButton onClick={modalShowOn}>
+              <OptionButton onClick={modalShowOn}>
                 <Option size={21} />
-              </DotButton>
+              </OptionButton>
             </BottomButton>
           </OptionModal>
           <Date className="date">{generatedateformat(mindMap?.createdAt)}</Date>
@@ -182,16 +172,16 @@ MindMapCard.propTypes = {
 };
 
 const Card = styled.div`
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: relative;
+  z-index: 0;
   width: 95%;
+  padding: 10px;
   border: 1px solid #e8e8e8;
   border-radius: 5px;
-  padding: 10px;
-  z-index: 0;
 
   &:hover {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -228,12 +218,12 @@ const LockPageWrapper = styled.div`
 `;
 
 const PrivatePageThumbnail = styled.div`
-  width: inherit;
-  height: inherit;
-  opacity: 0.15;
-  background-color: #0073ff;
   position: absolute;
   z-index: 1;
+  width: inherit;
+  height: inherit;
+  background-color: #0073ff;
+  opacity: 0.15;
 `;
 
 const Footer = styled.div`
@@ -250,7 +240,6 @@ const FoooterLeft = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
-
   height: 100%;
 
   .documentIcon {
@@ -266,6 +255,7 @@ const ShortInfo = styled.div`
   .infoTitle {
     overflow: hidden;
   }
+
   .infoAuthor {
     font-size: 80%;
     overflow: hidden;
@@ -278,16 +268,16 @@ const AuthorDate = styled.div`
 
   .infoAuthor {
     margin-left: 30px;
-    color: gray;
     font-size: 13px;
+    color: gray;
   }
 `;
 
 const TitleInput = styled.input`
   height: 20px;
+  margin: 3px 0;
   border: 1px solid #eff0f5;
   border-radius: 10px;
-  margin: 3px 0;
   background-color: rgba(255, 255, 255, 0.8);
 
   &:focus {
@@ -297,12 +287,12 @@ const TitleInput = styled.input`
 `;
 
 const TitleButton = styled.button`
-  margin-left: 3px;
+  z-index: 10;
   width: 25px;
   height: 23px;
+  margin-left: 3px;
   border: none;
   background-color: none;
-  z-index: 10;
   cursor: pointer;
 `;
 
@@ -313,17 +303,17 @@ const FoooterRight = styled.div`
 `;
 
 const OptionModal = styled.div`
-  height: 25px;
-  margin: 3px 0;
   display: flex;
   align-items: center;
   z-index: 100;
+  height: 25px;
+  margin: 3px 0;
 `;
 
 const Date = styled.div`
   margin-right: 10px;
-  color: gray;
   font-size: 13px;
+  color: gray;
 `;
 
 const OptionMenu = styled.div`
@@ -332,13 +322,13 @@ const OptionMenu = styled.div`
   align-items: flex-start;
   justify-content: center;
   position: absolute;
+  z-index: 100;
   width: 100px;
   height: 100px;
   margin: 10px;
   border: 1px solid black;
   border-radius: 10px;
   transform: translate(-30px, -70px);
-  z-index: 100;
 
   .open {
     border-top-left-radius: 10px;
@@ -362,8 +352,8 @@ const Menu = styled.div`
   height: inherit;
   padding: 5px 0;
   border-bottom: 1px solid black;
-  transition: all 0.5s;
   background-color: rgba(255, 255, 255, 0.5);
+  transition: all 0.5s;
   color: black;
 
   &:hover {
@@ -374,33 +364,34 @@ const Menu = styled.div`
 
 const BottomButton = styled.div`
   display: flex;
-  transform: translateX(-10px);
-  height: 20px;
   align-items: center;
+  height: 20px;
+  transform: translateX(-10px);
 `;
 
 const AccessIcon = styled.div`
+  padding: 0 5px;
+  border: 2px solid brown;
   border-radius: 10%;
   background-color: royalBlue;
   background-color: ${props =>
     props.access === 'private' ? 'red' : 'royalBlue'};
-  border: 2px solid brown;
-  padding: 0 5px;
   font-size: 80%;
   color: white;
 `;
 
-const DotButton = styled.div`
+const OptionButton = styled.button`
   display: flex;
-  cursor: pointer;
   justify-content: center;
-  align-self: center;
   align-items: center;
+  align-self: center;
   width: 30px;
   height: 20px;
+  border: none;
   border-radius: 10%;
   background-color: #f3f3f3;
   color: gray;
+  cursor: pointer;
 
   &:hover {
     background-color: rgb(255, 245, 209);

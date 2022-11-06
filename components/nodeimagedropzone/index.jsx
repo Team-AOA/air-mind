@@ -114,9 +114,9 @@ NodeImageDropZone.propTypes = {
 };
 
 const ImageDropArea = styled(flexCenter)`
+  flex-grow: 1;
   justify-content: center;
   flex-direction: column;
-  flex-grow: 1;
   position: relative;
 
   width: 85%;
@@ -133,15 +133,15 @@ const ImageDropArea = styled(flexCenter)`
   transform: ${props => (props.isImgDropZone ? 'scale(1.02)' : 'scale(1)')};
 
   input {
+    display: block !important;
+    overflow: hidden;
+    position: absolute !important;
+    width: 100px;
+    height: 1px;
+    padding: 0;
     border: 0;
     clip: rect(0, 0, 0, 0);
-    height: 1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute !important;
     white-space: nowrap;
-    width: 100px;
-    display: block !important;
   }
 
   label {
@@ -150,8 +150,8 @@ const ImageDropArea = styled(flexCenter)`
   }
 
   &:hover {
-    transform: scale(1.02);
     background-color: #d1ecfe;
+    transform: scale(1.02);
   }
 
   .dragIcon {
@@ -162,9 +162,9 @@ const ImageDropArea = styled(flexCenter)`
 const UploadButton = styled(Button)`
   width: 100px;
   height: 40px;
-  background-color: none;
-  border-radius: 5px;
   border: 1px solid #2c2c2c;
+  border-radius: 5px;
+  background-color: none;
   cursor: pointer;
 
   &:hover {
