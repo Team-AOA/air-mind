@@ -5,7 +5,6 @@
     "browser": true,
     "jest": true
   },
-  "plugins": ["testing-library", "jest-dom", "jest"],
   "parser": "@babel/eslint-parser",
   "extends": ["airbnb", "plugin:prettier/recommended"],
   "rules": {

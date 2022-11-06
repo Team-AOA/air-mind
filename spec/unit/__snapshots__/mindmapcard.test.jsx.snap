@@ -6,21 +6,21 @@ exports[`MindMapCard - public mindmap - not permission should open options menu 
   "baseElement": <body>
     <div>
       <div
-        class="mindmapcard__Card-sc-84on8m-0 dNdRVP"
+        class="mindmapcard__Card-sc-84on8m-0 hpspKf"
       >
         <div
           class="mindmapcard__Wrapper-sc-84on8m-1 gJOwoy"
           data-testid="thumbnailWrapper"
         >
           <div
-            class="mindmapthumbnail__Container-sc-1xbf7xy-0 kIBTVF"
+            class="mindmapthumbnail__Container-sc-1xbf7xy-0 bDHMdF"
           >
             <div
               class="mindmapthumbnail__Wrapper-sc-1xbf7xy-1 eeXXER"
               scale="Infinity"
             >
               <div
-                class="mindmapthumbnail__Loading-sc-1xbf7xy-3 KxHXJ"
+                class="mindmapthumbnail__Loading-sc-1xbf7xy-3 kHugRR"
                 data-testid="loading-element"
                 scale="Infinity"
               >
@@ -30,7 +30,7 @@ exports[`MindMapCard - public mindmap - not permission should open options menu 
               </div>
               <iframe
                 allow="src"
-                class="mindmapthumbnail__Thumbnail-sc-1xbf7xy-2 bqOizT"
+                class="mindmapthumbnail__Thumbnail-sc-1xbf7xy-2 gNiTir"
                 height="0"
                 loading="lazy"
                 sandbox="allow-scripts allow-same-origin"
@@ -85,14 +85,14 @@ exports[`MindMapCard - public mindmap - not permission should open options menu 
                 type="submit"
               >
                 <input
-                  class="mindmapcard__TitleInput-sc-84on8m-8 kvioQS"
+                  class="mindmapcard__TitleInput-sc-84on8m-8 gvpwYS"
                   readonly=""
                   value="test"
                 />
               </form>
             </div>
             <div
-              class="mindmapcard__AuthorDate-sc-84on8m-7 iGMegh"
+              class="mindmapcard__AuthorDate-sc-84on8m-7 emSSSV"
             >
               <div
                 class="infoAuthor"
@@ -105,37 +105,37 @@ exports[`MindMapCard - public mindmap - not permission should open options menu 
             class="mindmapcard__FoooterRight-sc-84on8m-10 eZGhkd"
           >
             <div
-              class="mindmapcard__OptionModal-sc-84on8m-11 JVABw"
+              class="mindmapcard__OptionModal-sc-84on8m-11 iFaUGY"
             >
               <div
-                class="mindmapcard__OptionMenu-sc-84on8m-13 hsNXDw"
+                class="mindmapcard__OptionMenu-sc-84on8m-13 gvLQTg"
               >
                 <div
-                  class="mindmapcard__Menu-sc-84on8m-14 hNhQIu open"
+                  class="mindmapcard__Menu-sc-84on8m-14 bBsKm open"
                 >
                   Open
                 </div>
                 <div
-                  class="mindmapcard__Menu-sc-84on8m-14 hNhQIu"
+                  class="mindmapcard__Menu-sc-84on8m-14 bBsKm"
                 >
                   Rename
                 </div>
                 <div
-                  class="mindmapcard__Menu-sc-84on8m-14 hNhQIu delete"
+                  class="mindmapcard__Menu-sc-84on8m-14 bBsKm delete"
                 >
                   Delete
                 </div>
               </div>
               <div
-                class="mindmapcard__BottomButton-sc-84on8m-15 gyLwej"
+                class="mindmapcard__BottomButton-sc-84on8m-15 dXbWHf"
               >
                 <div
-                  class="mindmapcard__AccessIcon-sc-84on8m-16 epRRbi"
+                  class="mindmapcard__AccessIcon-sc-84on8m-16 gocFsu"
                 >
                   public
                 </div>
                 <button
-                  class="mindmapcard__OptionButton-sc-84on8m-17 fOoMyN"
+                  class="mindmapcard__OptionButton-sc-84on8m-17 eTKMvJ"
                 >
                   <svg
                     fill="currentColor"
@@ -163,7 +163,7 @@ exports[`MindMapCard - public mindmap - not permission should open options menu 
               </div>
             </div>
             <div
-              class="mindmapcard__Date-sc-84on8m-12 iittMJ date"
+              class="mindmapcard__Date-sc-84on8m-12 gGzZCl date"
             >
               2022-10-26
             </div>
@@ -175,21 +175,21 @@ exports[`MindMapCard - public mindmap - not permission should open options menu 
   </body>,
   "container": <div>
     <div
-      class="mindmapcard__Card-sc-84on8m-0 dNdRVP"
+      class="mindmapcard__Card-sc-84on8m-0 hpspKf"
     >
       <div
         class="mindmapcard__Wrapper-sc-84on8m-1 gJOwoy"
         data-testid="thumbnailWrapper"
       >
         <div
-          class="mindmapthumbnail__Container-sc-1xbf7xy-0 kIBTVF"
+          class="mindmapthumbnail__Container-sc-1xbf7xy-0 bDHMdF"
         >
           <div
             class="mindmapthumbnail__Wrapper-sc-1xbf7xy-1 eeXXER"
             scale="Infinity"
           >
             <div
-              class="mindmapthumbnail__Loading-sc-1xbf7xy-3 KxHXJ"
+              class="mindmapthumbnail__Loading-sc-1xbf7xy-3 kHugRR"
               data-testid="loading-element"
               scale="Infinity"
             >
@@ -199,7 +199,7 @@ exports[`MindMapCard - public mindmap - not permission should open options menu 
             </div>
             <iframe
               allow="src"
-              class="mindmapthumbnail__Thumbnail-sc-1xbf7xy-2 bqOizT"
+              class="mindmapthumbnail__Thumbnail-sc-1xbf7xy-2 gNiTir"
               height="0"
               loading="lazy"
               sandbox="allow-scripts allow-same-origin"
@@ -254,14 +254,14 @@ exports[`MindMapCard - public mindmap - not permission should open options menu 
               type="submit"
             >
               <input
-                class="mindmapcard__TitleInput-sc-84on8m-8 kvioQS"
+                class="mindmapcard__TitleInput-sc-84on8m-8 gvpwYS"
                 readonly=""
                 value="test"
               />
             </form>
           </div>
           <div
-            class="mindmapcard__AuthorDate-sc-84on8m-7 iGMegh"
+            class="mindmapcard__AuthorDate-sc-84on8m-7 emSSSV"
           >
             <div
               class="infoAuthor"
@@ -274,37 +274,37 @@ exports[`MindMapCard - public mindmap - not permission should open options menu 
           class="mindmapcard__FoooterRight-sc-84on8m-10 eZGhkd"
         >
           <div
-            class="mindmapcard__OptionModal-sc-84on8m-11 JVABw"
+            class="mindmapcard__OptionModal-sc-84on8m-11 iFaUGY"
           >
             <div
-              class="mindmapcard__OptionMenu-sc-84on8m-13 hsNXDw"
+              class="mindmapcard__OptionMenu-sc-84on8m-13 gvLQTg"
             >
               <div
-                class="mindmapcard__Menu-sc-84on8m-14 hNhQIu open"
+                class="mindmapcard__Menu-sc-84on8m-14 bBsKm open"
               >
                 Open
               </div>
               <div
-                class="mindmapcard__Menu-sc-84on8m-14 hNhQIu"
+                class="mindmapcard__Menu-sc-84on8m-14 bBsKm"
               >
                 Rename
               </div>
               <div
-                class="mindmapcard__Menu-sc-84on8m-14 hNhQIu delete"
+                class="mindmapcard__Menu-sc-84on8m-14 bBsKm delete"
               >
                 Delete
               </div>
             </div>
             <div
-              class="mindmapcard__BottomButton-sc-84on8m-15 gyLwej"
+              class="mindmapcard__BottomButton-sc-84on8m-15 dXbWHf"
             >
               <div
-                class="mindmapcard__AccessIcon-sc-84on8m-16 epRRbi"
+                class="mindmapcard__AccessIcon-sc-84on8m-16 gocFsu"
               >
                 public
               </div>
               <button
-                class="mindmapcard__OptionButton-sc-84on8m-17 fOoMyN"
+                class="mindmapcard__OptionButton-sc-84on8m-17 eTKMvJ"
               >
                 <svg
                   fill="currentColor"
@@ -332,7 +332,7 @@ exports[`MindMapCard - public mindmap - not permission should open options menu 
             </div>
           </div>
           <div
-            class="mindmapcard__Date-sc-84on8m-12 iittMJ date"
+            class="mindmapcard__Date-sc-84on8m-12 gGzZCl date"
           >
             2022-10-26
           </div>
