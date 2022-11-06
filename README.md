@@ -10,7 +10,7 @@
 에어 마인드는 아이디어를 쉽게 분류할 수 있는 마인드맵을 만들 수 있는 웹사이트입니다.  
 주소를 공유하여 실시간으로 다른 유저들의 작업 상황을 확인하며 소통할 수 있어 아이디어 공유 및 협업이 가능하고, 작업의 생산성을 높일 수 있습니다.
 
-## Table of content
+## Table of contents
 
 - [Introduction](https://github.com/Team-AOA/air-mind#air-mind)
 - [Motivation](https://github.com/Team-AOA/air-mind#motivation)
