@@ -2,8 +2,8 @@
   <img src="./public/images/air_mind_logo.png" alt="airmind-logo" width="200px" height="200px" />
 </div>
   
-[Frontend Repository](https://github.com/Team-AOA/air-mind)
-[Backend Repository](https://github.com/Team-AOA/air-mind-server)
+- [Frontend Repository](https://github.com/Team-AOA/air-mind)
+- [Backend Repository](https://github.com/Team-AOA/air-mind-server)
 
 # Air Mind
 
@@ -12,14 +12,18 @@
 
 ## Table of content
 
-- Introduction
-- Motivation
-- Schedule
-- Layout
-- Installation
-- Stack
-- 기술 선정 이유
-- 기술 관련 고민
+- [Introduction](https://github.com/Team-AOA/air-mind#air-mind)
+- [Motivation](https://github.com/Team-AOA/air-mind#motivation)
+- [Build Status](https://github.com/Team-AOA/air-mind#build-status)
+- [Schedule](https://github.com/Team-AOA/air-mind#schedule-20221010--20221028)
+- [Screenshots](https://github.com/Team-AOA/air-mind#screenshots)
+- [Installation](https://github.com/Team-AOA/air-mind#installation)
+- [Tech/Framework used](https://github.com/Team-AOA/air-mind#techframework-used)
+- [Code Style](https://github.com/Team-AOA/air-mind#code-style)
+- [기술 선정 이유](https://github.com/Team-AOA/air-mind#%EA%B8%B0%EC%88%A0-%EC%84%A0%EC%A0%95-%EC%9D%B4%EC%9C%A0)
+- [Challenges](https://github.com/Team-AOA/air-mind#challenges)
+- [회고](https://github.com/Team-AOA/air-mind#%ED%9A%8C%EA%B3%A0)
+- [Member](https://github.com/Team-AOA/air-mind#member)
 
 ## Motivation
 
@@ -207,7 +211,7 @@ npm start
 
 ### NextJS
 
-마인드맵의 버전을 Public 버전과 Private 버전을 나누어 Public 버전은 검색에 노출되게 만들기 위해 NextJS를 적용하게 되었습니다. NextJS를 쓰지 않고, React의 helmet을 통해 SEO를 적용하는 방법도 있었지만, 더 SEO에 최적화되어 있고 SSR 방식을 제공하는 NextJS를 통해 새로운 스택에 도전해 보게 되었습니다.
+마인드맵의 버전을 Public 버전과 Private 버전으로 나누어 Public 버전은 검색에 노출되게 만들기 위해 NextJS를 적용하게 되었습니다. NextJS를 쓰지 않고, React의 helmet을 통해 SEO를 적용하는 방법도 있었지만, 더 SEO에 최적화되어 있고 SSR 방식을 제공하는 NextJS를 통해 새로운 스택에 도전해 보게 되었습니다.
 
 ### Recoil
 
