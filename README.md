@@ -5,17 +5,18 @@
 - [Frontend Repository](https://github.com/Team-AOA/air-mind)
 - [Backend Repository](https://github.com/Team-AOA/air-mind-server)
 
-## Air Mind
+# Air Mind
 
 에어 마인드는 아이디어를 쉽게 분류할 수 있는 마인드맵을 만들 수 있는 웹사이트입니다.  
 주소를 공유하여 실시간으로 다른 유저들의 작업 상황을 확인하며 소통할 수 있어 아이디어 공유 및 협업이 가능하고, 작업의 생산성을 높일 수 있습니다.
 
-### Table of contents
+
+## Table of contents
 
 - [Introduction](https://github.com/Team-AOA/air-mind#air-mind)
 - [Motivation](https://github.com/Team-AOA/air-mind#motivation)
 - [Build Status](https://github.com/Team-AOA/air-mind#build-status)
-- [Schedule](https://github.com/Team-AOA/air-mind#schedule-20221010--20221028)
+- [Schedule](https://github.com/Team-AOA/air-mind#schedule)
 - [Tech/Framework used](https://github.com/Team-AOA/air-mind#techframework-used)
 - [Code Style](https://github.com/Team-AOA/air-mind#code-style)
 - [기술 선정 이유](https://github.com/Team-AOA/air-mind#%EA%B8%B0%EC%88%A0-%EC%84%A0%EC%A0%95-%EC%9D%B4%EC%9C%A0)
@@ -25,17 +26,18 @@
 - [회고](https://github.com/Team-AOA/air-mind#%ED%9A%8C%EA%B3%A0)
 - [Member](https://github.com/Team-AOA/air-mind#member)
 
-### Motivation
+
+## Motivation
 
 처음 시작은 게시글과 태그를 마인드맵으로 연결하는 새로운 타입의 블로그를 만들어보면 어떨까? 라는 생각으로 시작하게 되었습니다. 이 아이디어를 발전시키는 과정에서 한 사람만을 위한 것이 아닌, 많은 유저가 함께 마인드맵을 사용하면서 협업할 수 있으면 더 좋을 것 같다는 생각에 협업 마인드맵을 기획하게 되었습니다. 실시간으로 공유할 수 있다는 의미를 담기 위해 “Air” 라는 이름을 담아 “Air Mind”라는 이름을 지었습니다.
 
-### Build Status
+## Build Status
 
 - 클라이언트: Netlify
 - 백엔드: Aws Beanstalk  
   (현재 배포 일시 정지 상태입니다. 추후 다시 오픈할 예정입니다.)
 
-### Schedule
+## Schedule
 
 #### Idea Brainstorming & Planning
 
@@ -50,7 +52,7 @@
   - 개발 진행
   - 마무리 (버그 수정 및 배포)
 
-### Tech/Framework used
+## Tech/Framework used
   <table>
     <tr>
       <th colspan="2">Frontend</th>
@@ -88,14 +90,14 @@
     </tr>
   </table>
 
-### Code Style
+## Code Style
 
 - ES Lint airbnb 룰을 적용했습니다. (`"extends": ["airbnb", "plugin:prettier/recommended"]`) code formatter로는 prettier를 사용했습니다.
   husky pre-commit 기능을 사용하여 커밋 전에 린트 속성에 어긋나지 않는지 검사하는 작업을 추가로 진행하였습니다.
 - 컴포넌트 선언 시 함수 선언식을 사용하였고 그 외에는 함수 표현식을 사용했습니다.
 - 전반적인 CSS 스타일은 NHN 컨벤션을 적용하였습니다.
 
-### 기술 선정 이유
+## 기술 선정 이유
 
 #### NextJS
 
@@ -113,7 +115,7 @@
 
 데이터가 많지 않은 초기 설정에는 괜찮지만, 노드가 수십 개씩 서로를 참조하는 상황이 생겼을 때 핸들링 하기 어려워질 거라 생각을 했고, D3라는 라이브러리를 사용하여 노드를 움직이는 설정 값을 주는 부분, 이벤트를 발생시키는 부분의 복잡도를 해소하고자 하였습니다.
 
-### Challenges
+## Challenges
 
 #### Next JS를 쓰면서 생겼던 이슈 해결
 
@@ -165,7 +167,7 @@ iframe으로 구현한 방법은 웹페이지 위에 또 다른 웹을 로드하
 
 스크린샷을 만든다는 게 쉽지 않다는 걸 느끼게 되었고 프로젝트 시간상 생각했던 방법을 쓰지 못하고 최선의 방법을 선택한 부분에서 매우 아쉬웠습니다. 다음에 시간이 생긴다면 canvas를 이용한 방법으로 다시 적용해보고 싶습니다. 그리고 프로젝트를 진행할 때 라이브러리 없이 혼자서 구현해보는 게 얼마나 중요한 건지 깨닫게 되었습니다.
 
-### Installation
+## Installation
 
 #### Frontend (Next JS)
 
@@ -235,7 +237,7 @@ FIREBASE_SERVICE_CLIENT_URL=<YOUR_FIREBASE_SERVICE_CLIENT_URL>
 npm start
 ```
 
-### Screenshots
+## Screenshots
 
 <table>
   <tr align="center">
@@ -349,7 +351,7 @@ npm start
   </tr>
 </table>
 
-### 회고
+## 회고
 
 #### 임태근
 
@@ -374,7 +376,7 @@ npm start
 
 첫 팀프로젝트에 임하기 전의 마음가짐과 지금의 마음가짐을 비교해봤을 때 한층 더 성장한 것 같습니다. 시작하기 전엔 혼자서 많은 부분을 내가 해내야 한다는 생각이 많았지만, 끝난 지금으로서는 혼자 해내야 하는 게 아닌 팀원 모두가 함께 헤쳐나간다는 생각으로 바뀌게 되었습니다. 그만큼 저희 팀원에게 배운 점도 많고 팀워크라는 것이 무엇인지 배우게 되는 값진 시간이었습니다.
 
-### Member
+## Member
 
 - [임태근](https://github.com/dkqp)
   Contact: ltg0513@gmail.com
