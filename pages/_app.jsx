@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Head from 'next/head';
+import { DefaultSeo } from 'next-seo';
 import { RecoilRoot } from 'recoil';
 import PropTypes from 'prop-types';
 import GlobalStyle from '../components/shared/globalstyle';
@@ -8,28 +8,27 @@ import GlobalStyle from '../components/shared/globalstyle';
 function MyApp({ Component, pageProps }) {
   return (
     <RecoilRoot>
-      <Head>
-        <title>에어마인드</title>
-        <meta
-          property="keywords"
-          content="마인드맵, 협업툴, 회의, 마인드맵 회의, 브레인스토밍, 실시간 회의, 실시간 마인드맵"
-        />
-        <meta
-          property="description"
-          content="실시간으로 마인드맵을 이용하여 회의를 진행하거나 아이디어를 공유할 수 있습니다."
-        />
-        <meta property="og:title" content="에어마인드" />
-        <meta
-          property="og:description"
-          content="실시간으로 마인드맵을 이용하여 회의를 진행하거나 아이디어를 공유할 수 있습니다."
-        />
-        <meta
-          property="og:image"
-          content="https://kr.object.ncloudstorage.com/air-mind-images/air_mind_logo.png1666976956732.png"
-        />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="620" />
-      </Head>
+      <DefaultSeo
+        title="에어마인드"
+        description="마인드맵, 협업툴, 회의, 마인드맵 회의, 브레인스토밍, 실시간 회의, 실시간 마인드맵,
+        실시간으로 마인드맵을 이용하여 회의를 진행하거나 아이디어를 공유할 수 있습니다."
+        canonical="https://aoa.air-mind.live/"
+        openGraph={{
+          url: 'https://aoa.air-mind.live/',
+          title: '에어마인드',
+          description:
+            '마인드맵, 협업툴, 회의, 마인드맵 회의, 브레인스토밍, 실시간 회의, 실시간 마인드맵,실시간으로 마인드맵을 이용하여 회의를 진행하거나 아이디어를 공유할 수 있습니다.',
+          images: [
+            {
+              url: 'https://kr.object.ncloudstorage.com/air-mind-images/air_mind_logo.png1666976956732.png',
+              width: 1200,
+              height: 620,
+              alt: '에어마인드 아이콘',
+            },
+          ],
+          siteName: '에어마인드',
+        }}
+      />
       <GlobalStyle />
       <Component {...pageProps} />
     </RecoilRoot>
