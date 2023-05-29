@@ -80,7 +80,9 @@ export default function NodeComment() {
 
       setNodeData(tempData);
     } catch (error) {
-      console.log(error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error(error);
+      }
     }
     setCurrentComment('');
   };

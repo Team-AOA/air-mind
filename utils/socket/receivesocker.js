@@ -115,7 +115,6 @@ export const receiveSocket = (
   socket.on('receiveFold', (isFold, nodeId) => {
     let isFoldLock = false;
     setIsFoldLock(prevIsFold => {
-      console.log('isFoldLock: ', prevIsFold);
       if (prevIsFold) {
         isFoldLock = true;
       }

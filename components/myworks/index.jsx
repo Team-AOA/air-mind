@@ -26,7 +26,9 @@ export default function MyWorks() {
 
         setMyMindMapData(data.mindMap);
       } catch (error) {
-        console.log(error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error(error);
+        }
         setCurrentError(error);
       }
     };

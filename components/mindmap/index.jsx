@@ -62,7 +62,9 @@ export default function MindMap({ mindMapId }) {
     setIsOpenNodeOptionMenu(false);
 
     socket.on('connect', () => {
-      console.log(' client socket connected');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('client socket connected');
+      }
     });
 
     socket.emit('joinMindMap', mindMapId);

@@ -75,7 +75,9 @@ export default function MindMapCard({ mindMap, renameTitleHandler }) {
     try {
       await deleteMindMapData(mindMap.author, mindMapId);
     } catch (error) {
-      console.log(error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error(error);
+      }
     }
 
     setModalShow(!modalShow);
