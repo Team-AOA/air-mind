@@ -9,9 +9,9 @@ import {
   foldLockInfo,
   mindMapInfo,
   nodesInfo,
-  socketInfo,
 } from '../../store/states';
 import countChildren from '../../utils/countchildren';
+import { socketObject as socket } from '../../utils/socket/receivesocker';
 
 export default function NodeFoldOption({ x, y, nodeId, isFold }) {
   const [nodeData, setNodeData] = useRecoilState(nodesInfo);
@@ -19,7 +19,6 @@ export default function NodeFoldOption({ x, y, nodeId, isFold }) {
   const { _id: mindMapId } = mindMap;
   const { _id: authorId } = mindMap.author;
   const currentUser = useRecoilValue(currentUserInfo);
-  const socket = useRecoilValue(socketInfo);
   const isFoldLock = useRecoilValue(foldLockInfo);
 
   const [numberOfChildren, setNumberOfChildren] = useState();

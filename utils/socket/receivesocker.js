@@ -1,6 +1,12 @@
+import { io } from 'socket.io-client';
+
 import deleteNodeHelper from '../deletenodehelper';
 
-const receiveSocket = (
+export const socketObject = io(process.env.NEXT_PUBLIC_BASE_URL, {
+  transports: ['websocket'],
+});
+
+export const receiveSocket = (
   socket,
   setNodeData,
   setMindMapData,
@@ -238,5 +244,3 @@ const receiveSocket = (
     });
   });
 };
-
-export default receiveSocket;

@@ -13,12 +13,12 @@ import NODE_COLOR from '../../constants/nodecolor';
 import NODE_SIZE from '../../constants/nodesize';
 import setMovePosition from '../../utils/d3/setmoveposition';
 import makeAncestors from '../../utils/makeancestors';
+import { socketObject as socket } from '../../utils/socket/receivesocker';
 import {
   isOpenNodeOptionModal,
   clickedNodeId,
   currentUserInfo,
   mindMapInfo,
-  socketInfo,
   searchInfo,
 } from '../../store/states';
 
@@ -34,7 +34,6 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
   const currentUser = useRecoilValue(currentUserInfo);
   const mindMap = useRecoilValue(mindMapInfo);
   const { _id: mindMapId } = mindMap;
-  const socket = useRecoilValue(socketInfo);
   const searched = useRecoilValue(searchInfo);
   const isSearched = searched.has(nodeId);
 
@@ -62,19 +61,19 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
   useEffect(() => {
     if (node && Object.keys(node)?.length > 0) {
       const nodeSelected = d3.select(groupRef.current);
+      const isLogin = currentUser && Object.keys(currentUser).length > 0;
 
-      if (currentUser && Object.keys(currentUser).length > 0) {
-        setMovePosition(
-          nodeSelected,
-          nodeX,
-          nodeY,
-          nodeId,
-          nodeData,
-          setNodeData,
-          mindMap,
-          socket,
-        );
-      }
+      setMovePosition(
+        isLogin,
+        nodeSelected,
+        nodeX,
+        nodeY,
+        nodeId,
+        nodeData,
+        setNodeData,
+        mindMap,
+        socket,
+      );
     }
   }, [node]);
 
@@ -92,6 +91,7 @@ export default function Node({ nodeId, nodeData, setNodeData, socketUsers }) {
 
   const onClickHandler = e => {
     e.stopPropagation();
+
     if (!nodeRightOptionMode) {
       setNodeRightOptionMode(true);
       setCurrentNodeId(nodeId);

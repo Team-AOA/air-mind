@@ -12,11 +12,11 @@ import { TbResize as SizeIcon } from 'react-icons/tb';
 import { RiDeleteBin6Line as RecycleBinIcon } from 'react-icons/ri';
 
 import flexCenter from '../shared/flexcentercontainer';
+import { socketObject as socket } from '../../utils/socket/receivesocker';
 
 import {
   isOpenNodeCommentModal,
   mindMapInfo,
-  socketInfo,
   nodesInfo,
   currentUserInfo,
   clickedNodeId,
@@ -50,123 +50,132 @@ export default function NodeHoverOption({
   const { _id: mindMapId } = mindMap;
   const { _id: authorId } = mindMap.author;
   const currentUser = useRecoilValue(currentUserInfo);
-  const socket = useRecoilValue(socketInfo);
 
   const [isSelectColorMode, setIsSelectColorMode] = useState(false);
   const [isSelectSizeMode, setIsSelectSizeMode] = useState(false);
 
   const onClickColorPalette = (e, item) => {
     e.stopPropagation();
-    if (currentUser && Object.keys(currentUser).length > 0) {
-      setNodeData(prev => {
-        const temp = { ...prev };
-        const tempSel = { ...temp[nodeId] };
+    setNodeData(prev => {
+      const temp = { ...prev };
+      const tempSel = { ...temp[nodeId] };
 
-        tempSel.attribute = {
-          ...tempSel.attribute,
-          color: item,
-        };
-        temp[nodeId] = tempSel;
+      tempSel.attribute = {
+        ...tempSel.attribute,
+        color: item,
+      };
+      temp[nodeId] = tempSel;
 
+      if (currentUser && Object.keys(currentUser).length > 0) {
         putNodesData(authorId, mindMapId, nodeId, temp[nodeId]);
+      }
 
-        return temp;
-      });
+      return temp;
+    });
 
-      socket.emit('colorChange', mindMapId, nodeId, item);
+    socket.emit('colorChange', mindMapId, nodeId, item);
 
-      setIsSelectColorMode(prev => !prev);
-    }
+    setIsSelectColorMode(prev => !prev);
   };
 
   const onClickResize = (e, change) => {
     e.stopPropagation();
-    if (currentUser && Object.keys(currentUser).length > 0) {
-      setNodeData(prev => {
-        const temp = { ...prev };
-        const tempSel = { ...temp[nodeId] };
+    setNodeData(prev => {
+      const temp = { ...prev };
+      const tempSel = { ...temp[nodeId] };
 
-        const currentSize = tempSel.attribute.size;
-        let newSize;
+      const currentSize = tempSel.attribute.size;
+      let newSize;
 
-        if (change === 'bigger') {
-          switch (currentSize) {
-            case 'SMALL':
-              newSize = 'MEDIUM';
-              break;
-            case 'MEDIUM':
-              newSize = 'LARGE';
-              break;
-            default:
-              newSize = 'LARGE';
-          }
-        } else {
-          switch (currentSize) {
-            case 'LARGE':
-              newSize = 'MEDIUM';
-              break;
-            case 'MEDIUM':
-              newSize = 'SMALL';
-              break;
-            default:
-              newSize = 'SMALL';
-          }
+      if (change === 'bigger') {
+        switch (currentSize) {
+          case 'SMALL':
+            newSize = 'MEDIUM';
+            break;
+          case 'MEDIUM':
+            newSize = 'LARGE';
+            break;
+          default:
+            newSize = 'LARGE';
         }
+      } else {
+        switch (currentSize) {
+          case 'LARGE':
+            newSize = 'MEDIUM';
+            break;
+          case 'MEDIUM':
+            newSize = 'SMALL';
+            break;
+          default:
+            newSize = 'SMALL';
+        }
+      }
 
-        tempSel.attribute = {
-          ...tempSel.attribute,
-          size: newSize,
-        };
-        temp[nodeId] = tempSel;
+      tempSel.attribute = {
+        ...tempSel.attribute,
+        size: newSize,
+      };
+      temp[nodeId] = tempSel;
 
+      if (currentUser && Object.keys(currentUser).length > 0) {
         putNodesData(authorId, mindMapId, nodeId, temp[nodeId]);
+      }
 
-        return temp;
-      });
+      return temp;
+    });
 
-      setIsSelectSizeMode(prev => !prev);
-    }
+    setIsSelectSizeMode(prev => !prev);
     socket.emit('sizeChange', mindMapId, nodeId, change);
   };
 
   const createNode = async (id, headId) => {
-    if (currentUser && Object.keys(currentUser).length > 0) {
-      const calculated = calculateNewNodePosition(id, headId);
-      const newNode = await postNodesData(authorId, mindMapId, nodeId, {
-        attribute: calculated,
-      });
+    if (!currentUser || !Object.keys(currentUser).length) {
+      alert('Please sign in to create a node.');
 
-      setNodeData(prev => {
-        const tempData = { ...prev };
-        const { _id: newId } = newNode.node;
-        const newParent = {
-          ...tempData[nodeId],
-          children: [...tempData[nodeId].children, newId],
-        };
-
-        tempData[nodeId] = newParent;
-        tempData[newId] = newNode.node;
-
-        return { ...prev, ...tempData };
-      });
-      socket.emit('addNode', mindMapId, newNode, nodeId);
+      return;
     }
+
+    const calculated = calculateNewNodePosition(id, headId);
+
+    const newNode = await postNodesData(authorId, mindMapId, nodeId, {
+      attribute: calculated,
+    });
+
+    setNodeData(prev => {
+      const tempData = { ...prev };
+      const { _id: newId } = newNode.node;
+      const newParent = {
+        ...tempData[nodeId],
+        children: [...tempData[nodeId].children, newId],
+      };
+
+      tempData[nodeId] = newParent;
+      tempData[newId] = newNode.node;
+
+      return { ...prev, ...tempData };
+    });
+    socket.emit('addNode', mindMapId, newNode, nodeId);
   };
 
   const deleteNode = async e => {
     e.stopPropagation();
 
+    if (!currentUser || !Object.keys(currentUser).length) {
+      alert('Please sign in to delete a node.');
+
+      return;
+    }
+
     const confirmCheck = window.confirm(DELETE_CONFIRM_MESSAGE);
+
     if (!confirmCheck) {
       return;
     }
 
-    if (currentUser && Object.keys(currentUser).length > 0) {
-      deleteNodeHelper(nodeId, nodeData, setNodeData);
-      await deleteNodesData(authorId, mindMapId, nodeId);
+    deleteNodeHelper(nodeId, nodeData, setNodeData);
+    await deleteNodesData(authorId, mindMapId, nodeId);
 
-      socket.emit('deleteNode', nodeId, nodeData, authorId, mindMapId);
-    }
+    socket.emit('deleteNode', nodeId, nodeData, authorId, mindMapId);
 
     setCurrentNodeId('');
     setNodeRightOptionMode(false);

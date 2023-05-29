@@ -1,81 +1,72 @@
 import { atom } from 'recoil';
-import { v4 as uuidv4 } from 'uuid';
-
-const v4 = uuidv4();
 
 const userInfo = atom({
-  key: `userInfo/${v4}`,
+  key: 'userInfo',
   default: {},
 });
 
 const currentUserInfo = atom({
-  key: `currentUserInfo/${v4}`,
+  key: 'currentUserInfo',
   default: {},
 });
 
 const errorInfo = atom({
-  key: `errorInfo/${v4}`,
+  key: 'errorInfo',
   default: '',
 });
 
 const mindMapInfo = atom({
-  key: `mindMapInfo/${v4}`,
+  key: 'mindMapInfo',
   default: {},
 });
 
 const mindMapListInfo = atom({
-  key: `mindMapListInfo/${v4}`,
+  key: 'mindMapListInfo',
   default: [],
 });
 
 const nodesInfo = atom({
-  key: `nodesInfo/${v4}`,
+  key: 'nodesInfo',
   default: {},
 });
 
 const isOpenNodeCommentModal = atom({
-  key: `isOpenNodeCommentModal/${v4}`,
+  key: 'isOpenNodeCommentModal',
   default: false,
 });
 
 const isOpenNodeOptionModal = atom({
-  key: `isOpenNodeOptionModal/${v4}`,
+  key: 'isOpenNodeOptionModal',
   default: false,
 });
 
 const clickedImgPath = atom({
-  key: `clickedImgPath/${v4}`,
+  key: 'clickedImgPath',
   default: '',
 });
 
 const clickedNodeId = atom({
-  key: `clickedNodeId/${v4}`,
+  key: 'clickedNodeId',
   default: '',
 });
 
-const socketInfo = atom({
-  key: `socketInfo/${v4}`,
-  default: {},
-  dangerouslyAllowMutability: true,
-});
-
 const deleteInfo = atom({
-  key: `deleteInfo/${v4}`,
+  key: 'deleteInfo',
   default: false,
 });
 
 const socketUserInfo = atom({
-  key: `socketUserInfo/${v4}`,
+  key: 'socketUserInfo',
   default: {},
 });
 
 const foldLockInfo = atom({
-  key: `foldLockInfo/${v4}`,
+  key: 'foldLockInfo',
   default: true,
 });
 
 const searchInfo = atom({
-  key: `searchInfo/${v4}`,
+  key: 'searchInfo',
   default: new Set(),
 });
 
@@ -89,7 +80,6 @@ export {
   isOpenNodeCommentModal,
   isOpenNodeOptionModal,
   clickedNodeId,
-  socketInfo,
   deleteInfo,
   socketUserInfo,
   foldLockInfo,

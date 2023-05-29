@@ -5,14 +5,16 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { useSetRecoilState, useRecoilState } from 'recoil';
-import { io } from 'socket.io-client';
 
 import Header from '../header';
 import NodeComment from '../nodecomment';
 import NodeDetail from '../nodedetail';
 import flexCenter from '../shared/flexcentercontainer';
 
-import receiveSocket from '../../utils/socket/receivesocker';
+import {
+  receiveSocket,
+  socketObject as socket,
+} from '../../utils/socket/receivesocker';
 import preventBodyScrolling from '../../utils/preventbodyscrolling';
 import makeSearched from '../../utils/makesearched';
 import {
@@ -23,7 +25,6 @@ import {
   isOpenNodeCommentModal,
   isOpenNodeOptionModal,
   clickedImgPath,
-  socketInfo,
   socketUserInfo,
   foldLockInfo,
   searchInfo,
@@ -48,7 +49,6 @@ export default function MindMap({ mindMapId }) {
   );
   const [clickedImagePath, setClickedImagePath] =
     useRecoilState(clickedImgPath);
-  const [socket, setSocket] = useRecoilState(socketInfo);
   const setSearched = useSetRecoilState(searchInfo);
   const setError = useSetRecoilState(errorInfo);
   const setSocketUserData = useSetRecoilState(socketUserInfo);
@@ -61,23 +61,12 @@ export default function MindMap({ mindMapId }) {
     setIsOpenNodeCommentMenu(false);
     setIsOpenNodeOptionMenu(false);
 
-    if (!socket || Object.keys(socket).length <= 0) {
-      setSocket(
-        io(process.env.NEXT_PUBLIC_BASE_URL, {
-          transports: ['websocket'],
-        }),
-      );
-
-      return () => {};
-    }
-
     socket.on('connect', () => {
       console.log(' client socket connected');
     });
 
     socket.emit('joinMindMap', mindMapId);
 
-    setSocket(socket);
     receiveSocket(
       socket,
       setNodeData,
@@ -90,7 +79,6 @@ export default function MindMap({ mindMapId }) {
     return () => {
       socket.emit('leaveMindMap', mindMapId);
       socket.off('broadcast');
-      setSocket({});
     };
   }, [socket]);
 

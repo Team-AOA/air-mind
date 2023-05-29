@@ -40,8 +40,6 @@ API.interceptors.response.use(
 
       if (process.env.NODE_ENV === 'development') {
         console.error(currentError);
-      } else {
-        console.log({ result: 'error', statusCode: error.response.status });
       }
 
       throw currentError;

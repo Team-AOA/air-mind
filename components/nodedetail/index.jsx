@@ -14,10 +14,10 @@ import {
   mindMapInfo,
   nodesInfo,
   userInfo,
-  socketInfo,
   currentUserInfo,
 } from '../../store/states';
 import debounce from '../../utils/debounce';
+import { socketObject as socket } from '../../utils/socket/receivesocker';
 import { putNodesData, deleteImagesData } from '../../service/noderequests';
 
 export default function NodeDetail() {
@@ -28,7 +28,6 @@ export default function NodeDetail() {
   const userData = useRecoilValue(userInfo);
   const mindMapData = useRecoilValue(mindMapInfo);
   const currentNodeId = useRecoilValue(clickedNodeId);
-  const socket = useRecoilValue(socketInfo);
   const currentUser = useRecoilValue(currentUserInfo);
   const setClickedImagePath = useSetRecoilState(clickedImgPath);
 
@@ -39,41 +38,49 @@ export default function NodeDetail() {
   const { _id: mindMapId } = mindMapData;
 
   const writeTitleHandler = e => {
-    if (currentUser && Object.keys(currentUser).length > 0) {
-      const tempData = { ...nodeData };
+    if (!currentUser || !Object.keys(currentUser).length > 0) {
+      alert('Please sign in to edit the node.');
 
-      tempData[currentNodeId] = {
-        ...tempData[currentNodeId],
-        title: e.target.value,
-      };
-
-      setNodeData(tempData);
-
-      debounce(() => {
-        putNodesData(userId, mindMapId, currentNodeId, tempData[currentNodeId]);
-      }, 1500);
-
-      socket.emit('titleChange', mindMapId, currentNodeId, e.target.value);
+      return;
     }
+
+    const tempData = { ...nodeData };
+
+    tempData[currentNodeId] = {
+      ...tempData[currentNodeId],
+      title: e.target.value,
+    };
+
+    setNodeData(tempData);
+
+    debounce(() => {
+      putNodesData(userId, mindMapId, currentNodeId, tempData[currentNodeId]);
+    }, 1500);
+
+    socket.emit('titleChange', mindMapId, currentNodeId, e.target.value);
   };
 
   const writeDescriptionHandler = e => {
-    if (currentUser && Object.keys(currentUser).length > 0) {
-      const tempData = { ...nodeData };
+    if (!currentUser || !Object.keys(currentUser).length > 0) {
+      alert('Please sign in to edit the node.');
 
-      tempData[currentNodeId] = {
-        ...tempData[currentNodeId],
-        content: e.target.value,
-      };
-
-      setNodeData(tempData);
-
-      debounce(() => {
-        putNodesData(userId, mindMapId, currentNodeId, tempData[currentNodeId]);
-      }, 1500);
-
-      socket.emit('contentChange', mindMapId, currentNodeId, e.target.value);
+      return;
     }
+
+    const tempData = { ...nodeData };
+
+    tempData[currentNodeId] = {
+      ...tempData[currentNodeId],
+      content: e.target.value,
+    };
+
+    setNodeData(tempData);
+
+    debounce(() => {
+      putNodesData(userId, mindMapId, currentNodeId, tempData[currentNodeId]);
+    }, 1500);
+
+    socket.emit('contentChange', mindMapId, currentNodeId, e.target.value);
   };
 
   const addImageHandler = imageArray => {

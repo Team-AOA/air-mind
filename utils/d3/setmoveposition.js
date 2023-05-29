@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 import { putNodesData } from '../../service/noderequests';
 
 export default function setMovePosition(
+  isLogin,
   ref,
   x,
   y,
@@ -46,7 +47,10 @@ export default function setMovePosition(
 
         const { _id: mindMapId } = mindMap;
         const { _id: userId } = mindMap.author;
-        putNodesData(userId, mindMapId, nodeId, node);
+
+        if (isLogin) {
+          putNodesData(userId, mindMapId, nodeId, node);
+        }
 
         socket.emit('nodePositionChange', mindMapId, nodeId, d.x, d.y);
       }

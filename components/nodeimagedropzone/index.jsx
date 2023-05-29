@@ -7,7 +7,8 @@ import { useRecoilValue } from 'recoil';
 import flexCenter from '../shared/flexcentercontainer';
 import { Button } from '../shared/button';
 
-import { currentUserInfo, socketInfo } from '../../store/states';
+import { socketObject as socket } from '../../utils/socket/receivesocker';
+import { currentUserInfo } from '../../store/states';
 import { postImagesData } from '../../service/noderequests';
 import { IMAGES_MAXIMUM_LENGTH_MESSAGE } from '../../constants/constants';
 
@@ -20,7 +21,6 @@ export default function NodeImageDropZone({
   const uploadFile = useRef();
 
   const currentUserData = useRecoilValue(currentUserInfo);
-  const socket = useRecoilValue(socketInfo);
 
   const [isImgDropZone, setIsImgDropZone] = useState(false);
   const handleOnImgDropZone = e => {
@@ -36,38 +36,44 @@ export default function NodeImageDropZone({
 
     setIsImgDropZone(true);
   };
-
   // eslint-disable-next-line consistent-return
   const handleDrop = async e => {
+    if (!currentUserData || !Object.keys(currentUserData).length > 0) {
+      alert('Please sign in to edit the node.');
+
+      return;
+    }
+
     e.preventDefault();
     e.stopPropagation();
+
     const images = e.dataTransfer
       ? [...e.dataTransfer.files]
       : [...e.target.files];
 
     if (images.length > 3) {
-      return alert(IMAGES_MAXIMUM_LENGTH_MESSAGE);
+      alert(IMAGES_MAXIMUM_LENGTH_MESSAGE);
+
+      return;
     }
     const formData = new FormData();
 
     images?.forEach(image => formData.append('images', image));
 
-    if (currentUserData && Object.keys(currentUserData).length > 0) {
-      try {
-        const response = await postImagesData(
-          userId,
-          mindMapId,
-          nodeId,
-          formData,
-        );
+    try {
+      const response = await postImagesData(
+        userId,
+        mindMapId,
+        nodeId,
+        formData,
+      );
+      setIsImgDropZone(false);
+      addImage(response.node.images);
+      socket.emit('addImages', mindMapId, nodeId, response.node.images);
+    } catch (error) {
+      if (error.code === 400) {
         setIsImgDropZone(false);
-        addImage(response.node.images);
-        socket.emit('addImages', mindMapId, nodeId, response.node.images);
-      } catch (error) {
-        if (error.code === 400) {
-          setIsImgDropZone(false);
-          return alert(error.message);
-        }
+        alert(error.message);
       }
     }
   };

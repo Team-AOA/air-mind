@@ -6,12 +6,12 @@ import styled from 'styled-components';
 import zoomPanning from '../../utils/d3/zoompanning';
 import makeNodeComponentList from '../../utils/d3/makenodecomponentlist';
 import decideSocketUserNode from '../../utils/decidesocketusernode';
+import { socketObject as socket } from '../../utils/socket/receivesocker';
 import {
   nodesInfo,
   socketUserInfo,
   isOpenNodeOptionModal,
   mindMapInfo,
-  socketInfo,
   isOpenNodeCommentModal,
 } from '../../store/states';
 
@@ -25,7 +25,6 @@ export default function NodeCanvas({ headNode }) {
   const socketUserData = useRecoilValue(socketUserInfo);
   const mindMapData = useRecoilValue(mindMapInfo);
   const { _id: mindMapId } = mindMapData;
-  const socket = useRecoilValue(socketInfo);
 
   const [nodeComponentList, setNodeComponentList] = useState([]);
   const [decidedSocketUser, setDecidedSocketUser] = useState({});

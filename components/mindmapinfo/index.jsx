@@ -12,7 +12,6 @@ import {
   errorInfo,
   mindMapInfo,
   currentUserInfo,
-  socketInfo,
   foldLockInfo,
   nodesInfo,
 } from '../../store/states';
@@ -30,6 +29,7 @@ import {
   FOLD_LOCK_MESSAGE,
 } from '../../constants/constants';
 import debounce from '../../utils/debounce';
+import { socketObject as socket } from '../../utils/socket/receivesocker';
 
 export default function MindMapInfo({ mindMapId }) {
   const [mindMapData, setMindMapData] = useRecoilState(mindMapInfo);
@@ -39,7 +39,6 @@ export default function MindMapInfo({ mindMapId }) {
   const userData = useRecoilValue(userInfo);
   const currentUser = useRecoilValue(currentUserInfo);
   const { _id: currentUserId } = currentUser;
-  const socket = useRecoilValue(socketInfo);
 
   const [title, setTitle] = useState(() =>
     mindMapData.title ? mindMapData.title : 'Untitled',

@@ -11,14 +11,15 @@ export default function MindMapPage({ title, mindMapId, nodeData }) {
       <Head>
         {nodeData.map(node => {
           const { _id: id } = node;
-          return (
+
+          return node.title ? (
             <meta
               title={title}
               key={id}
               name={node.title}
               content={node.content}
             />
-          );
+          ) : null;
         })}
       </Head>
       <MindMap mindMapId={mindMapId} />
@@ -30,9 +31,9 @@ export async function getServerSideProps(context) {
   const { mindMapId } = context.params;
   const data = await getMindMapAccessInfo('anonymous', mindMapId);
   const title = data.mindMap?.title || '';
-  const { headNode } = data.mindMap;
+  const { headNode } = data.mindMap || {};
   const { node } = await getNodesData('anonymous', mindMapId, headNode);
-  const nodeData = Object.values(node);
+  const nodeData = Object.values(node || {});
 
   return {
     props: {

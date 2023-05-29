@@ -15,9 +15,9 @@ import {
   nodesInfo,
   userInfo,
   currentUserInfo,
-  socketInfo,
 } from '../../store/states';
 import generatetimeformat from '../../utils/generatetime';
+import { socketObject as socket } from '../../utils/socket/receivesocker';
 import { postCommentsData } from '../../service/noderequests';
 import { NO_PERMISSION_MESSAGE } from '../../constants/constants';
 
@@ -32,7 +32,6 @@ export default function NodeComment() {
   const userData = useRecoilValue(userInfo);
   const currentNodeId = useRecoilValue(clickedNodeId);
   const currentUser = useRecoilValue(currentUserInfo);
-  const socket = useRecoilValue(socketInfo);
 
   const [currentComment, setCurrentComment] = useState('');
   const [keyTransfer, setKeyTransfer] = useState(false);
